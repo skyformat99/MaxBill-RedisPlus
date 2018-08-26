@@ -1,0 +1,41 @@
+.handle-left {
+    height: 100%;
+    float: left;
+    width: 240px;
+    border-right: 1px solid silver;
+}
+
+.handle-left-item {
+    color: #1296DB;
+    height: 50px;
+    display: block;
+    line-height: 50px;
+    border-bottom: 1px solid silver;
+}
+
+.handle-left-item i {
+    margin-left: 10px;
+}
+
+.handle-left-item cite {
+    margin-left: 5px;
+}
+
+.handle-left-item:hover {
+    cursor: pointer;
+    background-color: #EEEDEF;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 240px;
+}
+
+.handle-right-table {
+    width: 99.9%;
+    margin: 0 auto;
+}
+
+
+
+
