@@ -21,6 +21,16 @@ layui.use(['jquery', 'table', 'layer'], function () {
             {field: 'name', title: '名称', event: 'setSign'},
             {field: 'host', title: '主机', event: 'setSign'},
             {field: 'port', title: '端口', event: 'setSign'},
+            {
+                title: '密码', event: 'setSign',
+                templet: function (data) {
+                    if (data.pass == '') {
+                        return "";
+                    } else {
+                        return "******";
+                    }
+                }
+            },
             {field: 'time', title: '时间', event: 'setSign'},
         ]],
         response: {
@@ -32,7 +42,6 @@ layui.use(['jquery', 'table', 'layer'], function () {
         },
         page: false,
         done: function (res) {
-            layer.closeAll('loading');
             var tbody = $('#tableDiv').find('.layui-table-body').find("table").find("tbody");
             //单击行选中数据
             tbody.children("tr").on('click', function () {
@@ -40,12 +49,14 @@ layui.use(['jquery', 'table', 'layer'], function () {
                 var obj = res.data[id];
                 rowDataId = obj.id;
             });
-            //双击行连接服务
-            tbody.children("tr").on('click', function () {
+            // //双击行连接服务
+            tbody.children("tr").on('dblclick', function () {
                 var id = JSON.stringify(tbody.find(".layui-table-hover").data('index'));
                 var obj = res.data[id];
-
+                openConnect(obj.id);
             });
+            rowDataId = '';
+            layer.closeAll('loading');
         }
     });
 
@@ -73,7 +84,21 @@ function addConnectData() {
 function getConnectData() {
     layer.load(2);
     table.reload("dataList", {
-        done: function () {
+        done: function (res) {
+            var tbody = $('#tableDiv').find('.layui-table-body').find("table").find("tbody");
+            //单击行选中数据
+            tbody.children("tr").on('click', function () {
+                var id = JSON.stringify(tbody.find(".layui-table-hover").data('index'));
+                var obj = res.data[id];
+                rowDataId = obj.id;
+            });
+            // //双击行连接服务
+            tbody.children("tr").on('dblclick', function () {
+                var id = JSON.stringify(tbody.find(".layui-table-hover").data('index'));
+                var obj = res.data[id];
+                openConnect(obj.id);
+            });
+            rowDataId = '';
             layer.closeAll('loading');
         }
     });
@@ -120,6 +145,27 @@ function delConnectData() {
             if (data.code == 200) {
                 getConnectData();
             } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        }
+    });
+}
+
+
+/**
+ * 打开连接数据
+ */
+function openConnect(id) {
+    $.ajax({
+        type: "post",
+        url: basePath + '/api/connect/create',
+        data: {"id": id},
+        success: function (data) {
+            $(".status-message").html(data.data);
+            if (data.code != 200) {
                 layer.alert(data.msgs, {
                     skin: 'layui-layer-lan',
                     closeBtn: 0

@@ -40,10 +40,12 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <!--REDIS依赖包-->
+        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        -->
         <!--mybatis依赖-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -80,7 +82,12 @@
             <artifactId>druid</artifactId>
             <version>1.0.31</version>
         </dependency>
-
+        <!--Redis依赖-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.6.2</version>
+        </dependency>
         <!--单元测试依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
