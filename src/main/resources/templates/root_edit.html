@@ -1,0 +1,102 @@
+<#assign ctx=springMacroRequestContext.contextPath/>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="${ctx}/plugin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/styles/other.css"/>
+</head>
+<body>
+<input id="basePath" type="hidden" value="${ctx}"/>
+<input id="id" type="hidden" value="${data.id}"/>
+<form class="layui-form">
+    <br>
+    <div class="layui-form-item">
+        <label class="layui-form-label">连接名称:</label>
+        <div class="layui-input-inline div-input" style="margin-right:30px;">
+            <input type="text" class="layui-input" placeholder="连接名称" lay-verify="required" id="name" value="${data.name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">连接地址:</label>
+        <div class="layui-input-inline div-input" style="margin-right:30px;">
+            <input type="text" class="layui-input" placeholder="连接地址" lay-verify="required" id="host" value="${data.host}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">连接端口:</label>
+        <div class="layui-input-inline div-input" style="margin-right:30px;">
+            <input type="text" class="layui-input" placeholder="连接端口" lay-verify="required" id="port" value="${data.port}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">连接密码:</label>
+        <div class="layui-input-inline div-input" style="margin-right:30px;">
+            <input type="text" class="layui-input" placeholder="连接密码" id="pass">
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align:center; width:100%;position:fixed; bottom:0;">
+        <input type="button" value="保存" class="layui-btn layui-btn-sm" lay-filter="saveBtn" lay-submit
+               style="background: #4476A7"/>
+        <input type="button" id="backBtn" value="取消" class="layui-btn layui-btn-sm" style="background: #4476A7"/>
+    </div>
+</form>
+
+<script type="text/javascript" src="${ctx}/plugin/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
+<script>
+    var basePath = $("#basePath").val();
+    $(document).ready(function () {
+        layui.use('form', function () {
+            var form = layui.form;
+            //渲染表单
+            form.render();
+            //监听提交
+            form.on('submit(saveBtn)', function (data) {
+                saveConnect();
+                return false;
+            });
+        });
+        //注册监听事件
+        $("#backBtn").on("click", function () {
+            //关闭弹出层
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        });
+    });
+
+    function saveConnect() {
+        $.ajax({
+            type: "post",
+            url: basePath + '/api/connect/update',
+            data: {
+                "id":$("#id").val(),
+                "name": $("#name").val(),
+                "host": $("#host").val(),
+                "port": $("#port").val(),
+                "pass": $("#pass").val()
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    parent.getConnectData();
+                } else {
+                    layer.alert(data.msgs, {
+                        skin: 'layui-layer-lan',
+                        closeBtn: 0
+                    });
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -14,7 +14,7 @@
 }
 
 .handle-left-item i {
-    margin-left: 10px;
+    margin-left: 20px;
 }
 
 .handle-left-item cite {
@@ -22,8 +22,12 @@
 }
 
 .handle-left-item:hover {
-    cursor: pointer;
+
     background-color: #EEEDEF;
+}
+
+.handle-left-item cite:hover {
+    cursor: pointer;
 }
 
 .handle-right {
@@ -31,11 +35,9 @@
     margin-left: 240px;
 }
 
-.handle-right-table {
-    width: 99.9%;
-    margin: 0 auto;
+.layui-table-view {
+    margin: 0px;
 }
-
 
 
 
