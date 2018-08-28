@@ -5,6 +5,7 @@ import com.maxbill.base.bean.DataTable;
 import com.maxbill.base.bean.ResponseBean;
 import com.maxbill.base.bean.ZTreeBean;
 import com.maxbill.base.service.DataService;
+import com.maxbill.tool.DataUtil;
 import com.maxbill.tool.KeyUtil;
 import com.maxbill.tool.RedisUtil;
 import com.maxbill.tool.WebUtil;
@@ -107,6 +108,7 @@ public class ApiController {
             Jedis jedis = RedisUtil.openJedis(connect);
             if (null != jedis) {
                 WebUtil.setSessionAttribute("jedis", jedis);
+                WebUtil.setSessionAttribute("connect", connect);
                 responseBean.setData("已经连接到： " + connect.getName());
             } else {
                 responseBean.setCode(201);
@@ -123,7 +125,7 @@ public class ApiController {
 
     @RequestMapping("/connect/isopen")
     public Integer isopenConnect() {
-        Object jedis = WebUtil.getSessionAttribute("jedis");
+        Jedis jedis = DataUtil.getCurrentJedisObject();
         if (null != jedis) {
             return 1;
         } else {
@@ -135,7 +137,7 @@ public class ApiController {
     public ResponseBean treeData() {
         ResponseBean responseBean = new ResponseBean();
         try {
-            Jedis jedis = (Jedis) WebUtil.getSessionAttribute("jedis");
+            Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 ZTreeBean zTreeBean01 = new ZTreeBean();
                 zTreeBean01.setId(KeyUtil.getUUIDKey());

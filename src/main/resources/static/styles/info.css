@@ -1,0 +1,11 @@
+.handle-left {
+    height: 100%;
+    float: left;
+    width: 240px;
+    border-right: 1px solid silver;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 240px;
+}

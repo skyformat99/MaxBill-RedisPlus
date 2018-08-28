@@ -159,6 +159,7 @@ function delConnectData() {
  * 打开连接数据
  */
 function openConnect(id) {
+    layer.load(2);
     $.ajax({
         type: "post",
         url: basePath + '/api/connect/create',
@@ -171,6 +172,7 @@ function openConnect(id) {
                     closeBtn: 0
                 });
             }
+            layer.closeAll('loading');
         }
     });
 }

@@ -1,6 +1,8 @@
 package com.maxbill.base.controller;
 
+import com.maxbill.base.bean.Connect;
 import com.maxbill.base.service.DataService;
+import com.maxbill.tool.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +15,15 @@ public class RouteController {
     private DataService dataService;
 
     @GetMapping("/root")
-    public String toRoot() {
-        return "root";
+    public ModelAndView toRoot(ModelAndView mv) {
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (null != connect) {
+            mv.addObject("status", "已经连接到： " + connect.getName());
+        } else {
+            mv.addObject("status", "未连接服务");
+        }
+        mv.setViewName("root");
+        return mv;
     }
 
     @GetMapping("/root/save")
@@ -29,14 +38,30 @@ public class RouteController {
         return mv;
     }
 
+
     @GetMapping("/data")
-    public String toData() {
-        return "data";
+    public ModelAndView toData(ModelAndView mv) {
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (null != connect) {
+            mv.addObject("status", "已经连接到： " + connect.getName());
+        } else {
+            mv.addObject("status", "未连接服务");
+        }
+        mv.setViewName("data");
+        return mv;
     }
 
+
     @GetMapping("/info")
-    public String toInfo() {
-        return "info";
+    public ModelAndView toInfo(ModelAndView mv) {
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (null != connect) {
+            mv.addObject("status", "已经连接到： " + connect.getName());
+        } else {
+            mv.addObject("status", "未连接服务");
+        }
+        mv.setViewName("info");
+        return mv;
     }
 
     @GetMapping("/conf")
