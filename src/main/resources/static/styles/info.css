@@ -1,11 +1,36 @@
 .handle-left {
     height: 100%;
     float: left;
-    width: 240px;
+    width: 800px;
     border-right: 1px solid silver;
+}
+
+.grid-box {
+    height: 350px;
+}
+
+.grid-box span{
+    display: block;
+    margin-left: 20px;
+    height: 20px;
+    line-height: 20px;
+}
+
+.layui-fluid {
+    padding: 0;
+}
+
+.layui-colla-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.layui-colla-content {
+    line-height: 30px;
+    margin-left: 20px;
 }
 
 .handle-right {
     height: 100%;
-    margin-left: 240px;
+    margin-left: 800px;
 }

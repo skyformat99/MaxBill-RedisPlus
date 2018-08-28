@@ -3,6 +3,7 @@ package com.maxbill.base.controller;
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.DataUtil;
+import com.maxbill.tool.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +57,8 @@ public class RouteController {
     public ModelAndView toInfo(ModelAndView mv) {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
+            RedisUtil.getRedisLog(DataUtil.getCurrentJedisObject());
+            mv.addObject("info", RedisUtil.getRedisInfoList(DataUtil.getCurrentJedisObject()));
             mv.addObject("status", "已经连接到： " + connect.getName());
         } else {
             mv.addObject("status", "未连接服务");

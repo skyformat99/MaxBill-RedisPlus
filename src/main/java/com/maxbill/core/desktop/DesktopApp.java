@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class DesktopApp extends Application {
-
+    private final String uiType = "0";
     private final Integer prefWidth = 1300;
     private final Integer prefHeight = 800;
     private final Integer titlePrefWidth = 30;
@@ -28,8 +28,11 @@ public class DesktopApp extends Application {
 
     @Override
     public void start(Stage stage) {
-        //this.useMyselfStage(stage);
-        this.useDefaultStage(stage);
+        if (uiType.equals("0")) {
+            this.useDefaultStage(stage);
+        } else {
+            this.useMyselfStage(stage);
+        }
     }
 
     /**
