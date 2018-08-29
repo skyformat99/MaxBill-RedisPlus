@@ -4,6 +4,7 @@
 }
 
 #topView {
+    -fx-border-width: 0;
     -fx-background-color: white;
 }
 
@@ -19,33 +20,23 @@
 }
 
 #winAbate {
-    -fx-cursor: hand;
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: stretch stretch;
-    -fx-background-position: center center;
-    -fx-background-image: url('../image/abate-01.png');
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
 }
 
 #winClose {
-    -fx-cursor: hand;
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: stretch stretch;
-    -fx-background-position: 50% 50%;
-    -fx-background-image: url('../image/close-01.png');
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
 }
 
 #winAbate:hover {
     -fx-cursor: hand;
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: stretch stretch;
-    -fx-background-position: center center;
-    -fx-background-image: url('../image/abate-01.png');
+    -fx-background-radius: 5px;
+    -fx-background-color: #ECE9EF;
 }
 
 #winClose:hover {
     -fx-cursor: hand;
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: stretch stretch;
-    -fx-background-position: 50% 50%;
-    -fx-background-image: url('../image/close-01.png');
+    -fx-background-radius: 5px;
+    -fx-background-color: #ECE9EF;
 }
