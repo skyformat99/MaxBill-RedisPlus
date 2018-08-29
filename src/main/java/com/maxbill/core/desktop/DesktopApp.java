@@ -1,8 +1,9 @@
 package com.maxbill.core.desktop;
 
+import com.maxbill.MainApplication;
+import com.maxbill.tool.DataUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.springframework.context.ConfigurableApplicationContext;
+import redis.clients.jedis.Jedis;
 
 public class DesktopApp extends Application {
 
@@ -149,6 +152,7 @@ public class DesktopApp extends Application {
         winClose.setAlignment(Pos.BASELINE_CENTER);
         winClose.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                this.shutdown();
                 Platform.exit();
             }
         });
@@ -160,6 +164,22 @@ public class DesktopApp extends Application {
         AnchorPane.setRightAnchor(winClose, 5.0);
         topView.getChildren().add(titleView);
         return topView;
+    }
+
+    /**
+     * 关闭内置服务容器
+     */
+    private void shutdown() {
+        ConfigurableApplicationContext context = MainApplication.context;
+        if (null != context) {
+            //1.关闭redis服务
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                jedis.close();
+            }
+            //2.关闭容器服务
+            context.close();
+        }
     }
 
 }
