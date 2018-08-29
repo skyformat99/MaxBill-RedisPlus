@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class DesktopApp extends Application {
+
+    private double xOffset = 0;
+    private double yOffset = 0;
     private final String uiType = "1";
     private final Integer prefWidth = 1300;
     private final Integer prefHeight = 800;
@@ -57,7 +60,6 @@ public class DesktopApp extends Application {
         stage.setScene(new Scene(getWinRoot(stage)));
         stage.getIcons().add(new Image(appIcon));
         stage.setResizable(false);
-        stage.setAlwaysOnTop(true);
         stage.show();
     }
 
@@ -74,8 +76,19 @@ public class DesktopApp extends Application {
         VBox content = new VBox();
         content.getChildren().addAll(getWebView());
         winRoot.getChildren().addAll(getTopView(stage), content);
-        winRoot.setOnDragDone(event -> {
-            //TODO 拖拽逻辑
+        winRoot.setOnMousePressed((MouseEvent event) -> {
+            event.consume();
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        winRoot.setOnMouseDragged((MouseEvent event) -> {
+            event.consume();
+            stage.setX(event.getScreenX() - xOffset);
+            if (event.getScreenY() - yOffset < 0) {
+                stage.setY(0);
+            } else {
+                stage.setY(event.getScreenY() - yOffset);
+            }
         });
         return winRoot;
     }
