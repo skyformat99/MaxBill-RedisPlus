@@ -11,6 +11,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="${ctx}/plugin/layui/css/layui.css"/>
     <link rel="stylesheet" href="${ctx}/styles/style.css"/>
+    <link rel="stylesheet" href="${ctx}/styles/self.css"/>
 </head>
 <body>
 <input id="basePath" type="hidden" value="${ctx}"/>
@@ -29,7 +30,7 @@
             <a href="javascript:toPage('conf')" class="topbar-menu-item">
                 <img src="${ctx}/image/menu04.png"/><span>配置</span>
             </a>
-            <a href="javascript:toPage('exec')" class="topbar-menu-item curr">
+            <a href="javascript:toPage('self')" class="topbar-menu-item curr">
                 <img src="${ctx}/image/menu05.png"/><span>关于</span>
             </a>
         </div>
@@ -40,15 +41,35 @@
 
         </div>
         <div class="handle-right">
-
+            <form class="layui-form layui-form-pane" action="">
+                <div style="margin-top: 20px">
+                    <label class="layui-form-label">邮箱地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="mailAddr" autocomplete="off" lay-verify="email"
+                               placeholder="请输您的邮箱地址" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-text" style="margin-top: 20px">
+                    <label class="layui-form-label">邮件内容</label>
+                    <div class="layui-input-block">
+                        <textarea id="mailText" placeholder="请在此处输入您的建议或者意见内容..."
+                                  class="layui-textarea" lay-verify="required"></textarea>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;text-align: right">
+                    <button class="layui-btn" lay-submit="" lay-filter="sendMail">发送邮件</button>
+                </div>
+            </form>
         </div>
     </div>
     <div class="status">
-        <div class="status-message">未连接服务</div>
+        <div class="status-message">${status}</div>
         <div class="status-version">Version：1.0</div>
     </div>
 </div>
+
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
-<script type="text/javascript" src="${ctx}/script/index.js"></script>
+<script type="text/javascript" src="${ctx}/script/script.js"></script>
+<script type="text/javascript" src="${ctx}/script/self.js"></script>
 </body>
 </html>

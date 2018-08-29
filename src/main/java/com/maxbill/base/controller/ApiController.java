@@ -5,10 +5,7 @@ import com.maxbill.base.bean.DataTable;
 import com.maxbill.base.bean.ResponseBean;
 import com.maxbill.base.bean.ZTreeBean;
 import com.maxbill.base.service.DataService;
-import com.maxbill.tool.DataUtil;
-import com.maxbill.tool.KeyUtil;
-import com.maxbill.tool.RedisUtil;
-import com.maxbill.tool.WebUtil;
+import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -149,6 +146,24 @@ public class ApiController {
         } catch (Exception e) {
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
+    @RequestMapping("/self/sendMail")
+    public ResponseBean sendMail(String mailAddr,String mailText) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            boolean sendFlag = MailUtil.sendMail(mailAddr,mailText);
+            if (sendFlag) {
+                responseBean.setMsgs("发送成功");
+            } else {
+                responseBean.setMsgs("发送失败");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("发送异常，请检查网络");
         }
         return responseBean;
     }

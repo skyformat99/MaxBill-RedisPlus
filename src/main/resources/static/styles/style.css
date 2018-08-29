@@ -1,10 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .root {
@@ -107,4 +103,10 @@
     line-height: 30px;
     margin-right: 10px;
     text-align: right;
+}
+
+/*---------------------------*/
+
+.div-input {
+    border: 1px solid silver;
 }

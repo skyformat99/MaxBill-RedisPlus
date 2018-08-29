@@ -11,7 +11,7 @@ layui.use(['jquery', 'layer'], function () {
 });
 
 function toPage(page) {
-    if (page == 'root' || page == 'exec') {
+    if (page == 'root' || page == 'self') {
         window.location.href = basePath + '/' + page;
     } else {
         $.ajax({

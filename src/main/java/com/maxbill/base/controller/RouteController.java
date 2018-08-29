@@ -72,9 +72,16 @@ public class RouteController {
         return "conf";
     }
 
-    @GetMapping("/exec")
-    public String toExec() {
-        return "exec";
+    @GetMapping("/self")
+    public ModelAndView toSelf(ModelAndView mv) {
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (null != connect) {
+            mv.addObject("status", "已经连接到： " + connect.getName());
+        } else {
+            mv.addObject("status", "未连接服务");
+        }
+        mv.setViewName("self");
+        return mv;
     }
 
 }

@@ -1,0 +1,37 @@
+.handle-left {
+    height: 100%;
+    float: left;
+    width: 800px;
+    border-right: 1px solid silver;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 800px;
+}
+
+.layui-form-item {
+    clear: none;
+}
+
+.layui-form-pane {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.layui-form-pane .layui-form-label {
+    width: 90px;
+}
+
+.layui-textarea {
+    resize: none;
+    padding: 6px 15px;
+}
+
+.layui-form-pane .layui-input-block{
+    margin-left: 90px;
+}
+
+.layui-btn{
+    right: 0px;
+}
