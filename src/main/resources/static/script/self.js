@@ -19,6 +19,8 @@ function sendMail() {
             "mailText": $("#mailText").val()
         },
         success: function (data) {
+            $("#mailAddr").val('');
+            $("#mailText").val('');
             layer.closeAll('loading');
             layer.alert(data.msgs, {
                 skin: 'layui-layer-lan',
