@@ -57,7 +57,6 @@ public class RouteController {
     public ModelAndView toInfo(ModelAndView mv) {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
-            RedisUtil.getRedisLog(DataUtil.getCurrentJedisObject());
             mv.addObject("info", RedisUtil.getRedisInfoList(DataUtil.getCurrentJedisObject()));
             mv.addObject("status", "已经连接到： " + connect.getName());
         } else {

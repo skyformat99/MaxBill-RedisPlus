@@ -155,12 +155,20 @@ public class RedisUtil {
             statsBuf.append("服务输入网络流量: ").append(StringUtil.getValueString(stats[4])).append("</br>");
             statsBuf.append("服务输出网络流量: ").append(StringUtil.getValueString(stats[5])).append("</br>");
             statsBuf.append("拒绝连接客户端数: ").append(StringUtil.getValueString(stats[8])).append("</br>");
+            //处理器信息
+            String[] cpu = redisInfo.getCpu().split("\n");
+            StringBuffer cpuBuf = new StringBuffer();
+            cpuBuf.append("系统处理器占用率: ").append(StringUtil.getValueString(cpu[1])).append("</br>");
+            cpuBuf.append("用户处理器占用率: ").append(StringUtil.getValueString(cpu[2])).append("</br>");
+            cpuBuf.append("系统后台进程处理器占用率: ").append(StringUtil.getValueString(cpu[2])).append("</br>");
+            cpuBuf.append("用户后台进程处理器占用率: ").append(StringUtil.getValueString(cpu[4])).append("</br>");
             redisInfoTemp = new RedisInfo();
             redisInfoTemp.setServer(serverBuf.toString());
             redisInfoTemp.setClient(clientBuf.toString());
             redisInfoTemp.setMemory(memoryBuf.toString());
             redisInfoTemp.setPersistence(persistenceBuf.toString());
             redisInfoTemp.setStats(statsBuf.toString());
+            redisInfoTemp.setCpu(cpuBuf.toString());
         }
         return redisInfoTemp;
     }
@@ -169,16 +177,7 @@ public class RedisUtil {
     // 获取日志列表
     public static List<Slowlog> getRedisLog(Jedis jedis) {
         List<Slowlog> logList = jedis.slowlogGet(10);
-        System.out.println(logList);
         return logList;
-    }
-
-
-    // 获取占用内存大小
-    public Long getRedisMemoryInfo(Jedis jedis) {
-        Client client = jedis.getClient();
-        client.dbSize();
-        return client.getIntegerReply();
     }
 
 

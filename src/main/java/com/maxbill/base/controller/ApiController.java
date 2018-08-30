@@ -1,9 +1,6 @@
 package com.maxbill.base.controller;
 
-import com.maxbill.base.bean.Connect;
-import com.maxbill.base.bean.DataTable;
-import com.maxbill.base.bean.ResponseBean;
-import com.maxbill.base.bean.ZTreeBean;
+import com.maxbill.base.bean.*;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.maxbill.tool.RedisUtil.getRedisInfo;
 
 @RestController
 @RequestMapping("/api")
@@ -146,6 +148,35 @@ public class ApiController {
         } catch (Exception e) {
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+    @RequestMapping("/info/realInfo")
+    public ResponseBean realInfo() {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                Map resultMap = new HashMap();
+                resultMap.put("key", DateUtil.formatDate(new Date(), DateUtil.TIME_STR));
+                RedisInfo redisInfo = getRedisInfo(jedis);
+                String[] memory = redisInfo.getMemory().split("\n");
+                String val01 = StringUtil.getValueString(memory[1]).replace("\r", "");
+                String[] cpu = redisInfo.getCpu().split("\n");
+                String val02 = StringUtil.getValueString(cpu[1]).replace("\r", "");
+                String val03 = StringUtil.getValueString(cpu[2]).replace("\r", "");
+                resultMap.put("val01", val01);
+                resultMap.put("val02", val02);
+                resultMap.put("val03", val03);
+                responseBean.setData(resultMap);
+            } else {
+                responseBean.setCode(201);
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+            e.printStackTrace();
         }
         return responseBean;
     }

@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="${ctx}/styles/style.css"/>
     <link rel="stylesheet" href="${ctx}/styles/other.css"/>
     <link rel="stylesheet" href="${ctx}/styles/info.css"/>
-
 </head>
 <body>
 <input id="basePath" type="hidden" value="${ctx}"/>
@@ -40,35 +39,17 @@
     </div>
     <div class="handle">
         <div class="handle-left">
-            <div class="layui-fluid">
+            <div class="layui-fluid" style="border-bottom: 1px silver solid">
                 <div class="layui-row">
-                    <div class="layui-col-sm6">
+                    <div class="layui-col-sm12">
                         <div class="grid-box" id="chart01"></div>
-                    </div>
-                    <div class="layui-col-sm6">
-                        <div class="grid-box" id="chart02"></div>
                     </div>
                 </div>
             </div>
-            <div class="layui-fluid">
+            <div class="layui-fluid" style="border-top: 1px silver solid">
                 <div class="layui-row">
                     <div class="layui-col-sm12">
-                        <div class="grid-box">
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-                            <span>2018-08-28&nbsp;17:38:35&nbsp;&nbsp;&nbsp;&nbsp;0.1ms&nbsp;&nbsp;&nbsp;&nbsp;get&nbsp;&nbsp;711b53a320ad4a65970b74d6d22d7478</span>
-
-
-                        </div>
+                        <div class="grid-box" id="chart02"></div>
                     </div>
                 </div>
             </div>
@@ -95,6 +76,10 @@
                     <h2 class="layui-colla-title"><span calss="">连接的信息</span></h2>
                     <div class="layui-colla-content">${info.stats}</div>
                 </div>
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title"><span calss="">处理器信息</span></h2>
+                    <div class="layui-colla-content">${info.cpu}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -106,30 +91,6 @@
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script type="text/javascript" src="${ctx}/plugin/ecahrts/echarts.js"></script>
 <script type="text/javascript" src="${ctx}/script/script.js"></script>
-<script>
-    layui.use(['element', 'layer'], function () {
-    });
-    var chart01 = echarts.init(document.getElementById("chart01"));
-    var chart02 = echarts.init(document.getElementById("chart02"));
-    option = null;
-    option = {
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [{
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
-            type: 'line',
-            smooth: true
-        }]
-    };
-    if (option && typeof option === "object") {
-        chart01.setOption(option, true);
-        chart02.setOption(option, true);
-    }
-</script>
+<script type="text/javascript" src="${ctx}/script/info.js"></script>
 </body>
 </html>
