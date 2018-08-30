@@ -14,7 +14,10 @@ public class DruidConfig {
     @Bean
     public DataSource druidDataSource() {
         DruidDataSource datasource = new DruidDataSource();
-        datasource.setUrl("jdbc:derby:" + baseUrl + "/redis_studio;create=true");
+        datasource.setTestWhileIdle(false);
+        datasource.setTestOnBorrow(false);
+        datasource.setTestOnReturn(false);
+        datasource.setUrl("jdbc:derby:" + baseUrl + "/RedisPlus;create=true");
         datasource.setDriverClassName("org.apache.derby.jdbc.EmbeddedDriver");
         return datasource;
     }

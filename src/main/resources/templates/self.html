@@ -38,14 +38,64 @@
     </div>
     <div class="handle">
         <div class="handle-left">
-
+            <div class="app-logo"><img src="${ctx}/image/page-logo.png"/></div>
+            <div class="app-text">
+                RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linux 、Mac三大系统平台，RedisPlus提供更加高效、方便、快捷的使用体验，有着更加现代化的界面风格。
+                该软件参考了RedisStudio的界面逻辑，但是和RedisStudio软件完全没有关系，并不是官方推出的跨平台软件。该软件为开源免费使用（可商用），但是禁止二次开发打包发布盈利，违反必究！
+                该软件遵循Apache License 2.0开源协议，致力于为大家提供一个高效的Redis可视化管理软件。
+            </div>
+            <br>
+            <div class="app-info">
+                <table class="layui-table" lay-size="lg">
+                    <colgroup>
+                        <col width="150">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td>软件</td>
+                        <td>RedisPlus</td>
+                    </tr>
+                    <tr>
+                        <td>版本</td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>支持平台</td>
+                        <td>Windows 、Linux 、Mac</td>
+                    </tr>
+                    <tr>
+                        <td>软件类型</td>
+                        <td>个人开源软件</td>
+                    </tr>
+                    <tr>
+                        <td>开源协议</td>
+                        <td>
+                            <a href="http://www.apache.org/licenses/">Apache License Version 2.0, January 2004</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>开源地址</td>
+                        <td>https://gitee.com/MaxBill/RedisStudio</td>
+                    </tr>
+                    <tr>
+                        <td>软件作者</td>
+                        <td>MaxBill (maxbill1993@163.com)</td>
+                    </tr>
+                    <tr>
+                        <td>作者博客</td>
+                        <td>https://my.oschina.net/zss1993</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="handle-right">
-            <form class="layui-form layui-form-pane" action="">
+            <form class="layui-form layui-form-pane">
                 <div style="margin-top: 20px">
                     <label class="layui-form-label">邮箱地址</label>
                     <div class="layui-input-block">
-                        <input type="text" id="mailAddr" autocomplete="off" lay-verify="email"
+                        <input type="text" id="mailAddr" autocomplete="off" lay-verify="required|email"
                                placeholder="请输您的邮箱地址" class="layui-input">
                     </div>
                 </div>
@@ -59,7 +109,19 @@
                 <div style="margin-top: 20px;text-align: right">
                     <button class="layui-btn" lay-submit="" lay-filter="sendMail">发送邮件</button>
                 </div>
+                <hr class="layui-bg-green" style="margin-top: 20px;">
+                <div class="layui-card" style="background: #f2f2f2;margin-top: 20px;">
+                    <div class="layui-card-header">邮箱反馈注意事项：</div>
+                    <div class="layui-card-body">
+                        <li>1.邮箱地址是作者能联系你的方式，请认真填写！</li>
+                        <li>2.使用过程中发现BUG或者缺陷请在此反馈！</li>
+                        <li>3.使用过程中有好的建议请在此提出，作者会联系你确认需求！</li>
+                        <li>4.使用过程中有体验不佳的意见也可在此通道反馈！</li>
+                        <li>5.请不要使用次通道发送与该软件无关的信息，歇息合作！</li>
+                    </div>
+                </div>
             </form>
+
         </div>
     </div>
     <div class="status">
@@ -67,7 +129,6 @@
         <div class="status-version">Version：1.0</div>
     </div>
 </div>
-
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script type="text/javascript" src="${ctx}/script/script.js"></script>
 <script type="text/javascript" src="${ctx}/script/self.js"></script>

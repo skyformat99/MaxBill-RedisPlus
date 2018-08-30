@@ -152,10 +152,10 @@ public class ApiController {
 
 
     @RequestMapping("/self/sendMail")
-    public ResponseBean sendMail(String mailAddr,String mailText) {
+    public ResponseBean sendMail(String mailAddr, String mailText) {
         ResponseBean responseBean = new ResponseBean();
         try {
-            boolean sendFlag = MailUtil.sendMail(mailAddr,mailText);
+            boolean sendFlag = new MailUtil().sendMail(mailAddr, mailText);
             if (sendFlag) {
                 responseBean.setMsgs("发送成功");
             } else {

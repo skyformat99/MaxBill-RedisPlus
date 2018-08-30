@@ -28,7 +28,7 @@ public class DesktopApp extends Application {
     private final Integer prefHeight = 800;
     private final Integer titlePrefWidth = 30;
     private final Integer titlePrefHeight = 30;
-    private final String appName = "RedisStudio";
+    private final String appName = "RedisPlus";
     private final String appShow = "/static/styles/winui.css";
     private final String appPath = "http://127.0.0.1:9999/root";
     private final String appIcon = "/static/image/task-logo.png";

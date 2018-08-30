@@ -1,12 +1,10 @@
 var $;
 var layer;
-var table;
 var basePath;
 
 layui.use(['jquery', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;
-    table = layui.table;
     basePath = $("#basePath").val();
 });
 

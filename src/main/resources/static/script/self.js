@@ -1,21 +1,16 @@
-var $;
-var layer1;
 var form;
-var basePath;
 
-layui.use(['form', 'layedit', 'jquery', 'layer'], function () {
-    $ = layui.jquery;
-    form = layui.form;
-    layer1 = layui.layer;
-    basePath = $("#basePath").val();
+layui.use(['form'], function () {
+    var form = layui.form;
     //监听提交
     form.on('submit(sendMail)', function () {
         sendMail();
+        return false;
     });
 });
 
 function sendMail() {
-    layer1.load(2);
+    layer.load(2);
     $.ajax({
         type: "post",
         url: basePath + '/api/self/sendMail',
@@ -23,12 +18,9 @@ function sendMail() {
             "mailAddr": $("#mailAddr").val(),
             "mailText": $("#mailText").val()
         },
-        sync: false,
         success: function (data) {
-            console.log(data);
-            alert(data.msgs);
-            //layer.closeAll('loading');
-            layer1.alert(data.msgs, {
+            layer.closeAll('loading');
+            layer.alert(data.msgs, {
                 skin: 'layui-layer-lan',
                 closeBtn: 0
             });

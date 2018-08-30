@@ -5,6 +5,30 @@
     border-right: 1px solid silver;
 }
 
+.app-logo {
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.app-text {
+    width: 660px;
+    height: 120px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 25px;
+    background: #eaeaea;
+}
+
+.app-info {
+    width: 700px;
+    margin: 0 auto;
+}
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: #FFFFFF;
+}
+
 .handle-right {
     height: 100%;
     margin-left: 800px;
@@ -26,12 +50,23 @@
 .layui-textarea {
     resize: none;
     padding: 6px 15px;
+    height: 260px;
 }
 
-.layui-form-pane .layui-input-block{
+.layui-form-pane .layui-input-block {
     margin-left: 90px;
 }
 
-.layui-btn{
+.layui-btn {
     right: 0px;
+}
+
+hr {
+    clear: none;
+}
+
+.layui-card-body {
+    color: darkorange;
+    line-height: 25px;
+    border-top: 1px solid #D0D0D0;
 }
