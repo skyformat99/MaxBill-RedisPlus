@@ -5,15 +5,8 @@
     border-right: 1px solid silver;
 }
 
-.grid-box {
-    height: 350px;
-}
-
-.grid-box span{
-    display: block;
-    margin-left: 20px;
-    height: 20px;
-    line-height: 20px;
+.chart-box {
+    height: 350px
 }
 
 .layui-fluid {

@@ -9,6 +9,8 @@ public interface DataService {
 
     void createConnectTable() throws Exception;
 
+    int isExistsTable(String tableName);
+
     Connect selectConnectById(String id);
 
     List<Connect> selectConnect() throws Exception;

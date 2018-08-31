@@ -12,4 +12,5 @@ public class DataUtil {
     public static Jedis getCurrentJedisObject() {
         return (Jedis) WebUtil.getSessionAttribute("jedis");
     }
+
 }

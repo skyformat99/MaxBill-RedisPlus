@@ -170,6 +170,7 @@ function openConnect(id) {
     $.ajax({
         type: "post",
         url: basePath + '/api/connect/create',
+        timeout: 10000,
         data: {"id": id},
         success: function (data) {
             $(".status-message").html(data.data);

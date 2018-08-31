@@ -1,15 +1,16 @@
 var $;
 var keyArr = ['0', '0', '0', '0', '0'];
-var valueArr01 = [0, 0, 0, 0, 0];
-var valueArr02 = [0, 0, 0, 0, 0];
-var valueArr03 = [0, 0, 0, 0, 0];
-var chart01 = echarts.init(document.getElementById("chart01"), null, {renderer: 'svg'});
-var chart02 = echarts.init(document.getElementById("chart02"), null, {renderer: 'svg'});
-// var chart01 = echarts.init(document.getElementById("chart01"));
-// var chart02 = echarts.init(document.getElementById("chart02"));
+var valArr01 = [0, 0, 0, 0, 0];
+var valArr02 = [0, 0, 0, 0, 0];
+var valArr03 = [0, 0, 0, 0, 0];
+
+var chart01;
+var chart02;
 
 layui.use(['element', 'jquery'], function () {
     $ = layui.jquery;
+    realtimeInfo01();
+    realtimeInfo02();
     getRealtimeData();
 });
 
@@ -25,92 +26,100 @@ function getRealtimeData() {
                 var val01 = data.data.val01;
                 var val02 = data.data.val02;
                 var val03 = data.data.val03;
-                realtimeInfo01(moveKeyArray(keyArr, key), moveVal01Array(valueArr01, val01));
-                realtimeInfo02(moveKeyArray(keyArr, key), moveVal02Array(valueArr02, val02), moveVal03Array(valueArr03, val03));
-                setTimeout("getRealtimeData()", 3000)
+                moveKeyArray(keyArr, key);
+                moveVal01Array(valArr01, val01);
+                moveVal02Array(valArr02, val02);
+                moveVal03Array(valArr03, val03);
+                chart01.xAxis[0].setCategories(keyArr);
+                chart02.xAxis[0].setCategories(keyArr);
+                chart01.series[0].setData(valArr01);
+                chart02.series[0].setData(valArr02);
+                chart02.series[1].setData(valArr03);
+                setTimeout("getRealtimeData()", 2000)
             }
         }
     });
 }
 
-
-function realtimeInfo01(key, value) {
-    var option = {
+function realtimeInfo01() {
+    chart01 = Highcharts.chart('chart01', {
+        chart: {
+            type: 'area'
+        },
+        legend: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
         title: {
-            left: 'center',
-            top: '20px',
-            text: '已占用内存量实时监控',
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
+            y: 20,
+            margin: 20,
+            align: 'center',
+            text: '已占用内存量实时监控'
         },
         xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: key
+            allowDecimals: false
         },
         yAxis: {
-            type: 'value'
+            title: {
+                text: '占用量(kb)'
+            }
         },
         series: [{
-            data: value,
-            type: 'line',
-            areaStyle: {}
+            name: '占用量',
+            data: valArr01
         }]
-    };
-    if (option && typeof option === "object") {
-        chart01.setOption(option, true);
-    }
+    });
 }
 
-function realtimeInfo02(key, value01, value02) {
-    var option = {
+function realtimeInfo02() {
+    chart02 = Highcharts.chart('chart02', {
+        chart: {
+            type: 'line'
+        },
+        legend: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
         title: {
-            left: 'center',
-            top: '20px',
-            text: '已占用CPU信息实时监控',
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
+            y: 20,
+            margin: 20,
+            align: 'center',
+            text: '已占用CPU信息实时监控'
         },
         xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: key
+            categories: keyArr
         },
         yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name: '系统CPU占用',
-                type: 'line',
-                stack: '占用率',
-                data: value01
-            },
-            {
-                name: '用户CPU占用',
-                type: 'line',
-                stack: '占用率',
-                data: value02
+            title: {
+                text: '占用率(%)'
             }
-        ]
-    };
-    if (option && typeof option === "object") {
-        chart02.setOption(option, true);
-    }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true//数据标签
+                },
+                enableMouseTracking: true //鼠标跟踪
+            }
+        },
+        series: [{
+            name: '系统占用率',
+            data: valArr02
+        }, {
+            name: '用户占用率',
+            data: valArr03
+        }]
+    });
 }
 
 function moveKeyArray(dataArray, val) {
@@ -121,7 +130,6 @@ function moveKeyArray(dataArray, val) {
     valArray[3] = dataArray[4];
     valArray[4] = val;
     keyArr = valArray;
-    return valArray;
 }
 
 function moveVal01Array(dataArray, val) {
@@ -131,10 +139,8 @@ function moveVal01Array(dataArray, val) {
     valArray[2] = dataArray[3];
     valArray[3] = dataArray[4];
     valArray[4] = val;
-    valueArr01 = valArray;
-    return valArray;
+    valArr01 = valArray;
 }
-
 
 function moveVal02Array(dataArray, val) {
     var valArray = new Array(5);
@@ -143,8 +149,7 @@ function moveVal02Array(dataArray, val) {
     valArray[2] = dataArray[3];
     valArray[3] = dataArray[4];
     valArray[4] = val;
-    valueArr02 = valArray;
-    return valArray;
+    valArr02 = valArray;
 }
 
 function moveVal03Array(dataArray, val) {
@@ -154,7 +159,6 @@ function moveVal03Array(dataArray, val) {
     valArray[2] = dataArray[3];
     valArray[3] = dataArray[4];
     valArray[4] = val;
-    valueArr03 = valArray;
-    return valArray;
+    valArr03 = valArray;
 }
 

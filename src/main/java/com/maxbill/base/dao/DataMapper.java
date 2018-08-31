@@ -12,6 +12,9 @@ public interface DataMapper {
     @Update("create table t_connect(id varchar(100),name varchar(100),pass varchar(100),host varchar(100),port varchar(100),time varchar(100),primary key (id))")
     void createConnectTable() throws Exception;
 
+    @Select("SELECT COUNT(T.TABLENAME) FROM SYS.SYSTABLES T, SYS.SYSSCHEMAS S WHERE S.SCHEMANAME = 'APP' AND S.SCHEMAID = T.SCHEMAID AND T.TABLENAME=#{tableName}")
+    int isExistsTable(@Param("tableName") String tableName);
+
     @Select("select * from t_connect where id=#{id}")
     Connect selectConnectById(@Param("id") String id);
 

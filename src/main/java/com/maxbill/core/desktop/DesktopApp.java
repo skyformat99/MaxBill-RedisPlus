@@ -101,9 +101,11 @@ public class DesktopApp extends Application {
      */
     private WebView getWebView() {
         WebView webView = new WebView();
+        webView.setContextMenuEnabled(false);
         WebEngine webEngine = webView.getEngine();
         webView.setPrefSize(prefWidth, prefHeight);
         webEngine.load(appPath);
+        webEngine.setJavaScriptEnabled(true);
         return webView;
     }
 

@@ -284,9 +284,9 @@ public class ApiController {
                 String[] cpu = redisInfo.getCpu().split("\n");
                 String val02 = StringUtil.getValueString(cpu[1]).replace("\r", "");
                 String val03 = StringUtil.getValueString(cpu[2]).replace("\r", "");
-                resultMap.put("val01", val01);
-                resultMap.put("val02", val02);
-                resultMap.put("val03", val03);
+                resultMap.put("val01", Long.valueOf(val01));
+                resultMap.put("val02", Float.valueOf(val02));
+                resultMap.put("val03", Float.valueOf(val03));
                 responseBean.setData(resultMap);
             } else {
                 responseBean.setCode(201);

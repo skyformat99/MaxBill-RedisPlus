@@ -1,21 +1,13 @@
 package com.maxbill.base.controller;
 
 import com.maxbill.base.bean.Connect;
-import com.maxbill.base.bean.ExcelBean;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.DataUtil;
-import com.maxbill.tool.DateUtil;
-import com.maxbill.tool.ExcelUtil;
 import com.maxbill.tool.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 public class RouteController {
@@ -25,6 +17,7 @@ public class RouteController {
 
     @GetMapping("/root")
     public ModelAndView toRoot(ModelAndView mv) {
+        initSystem();
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
             mv.addObject("status", "已经连接到： " + connect.getName());
@@ -91,5 +84,16 @@ public class RouteController {
         return mv;
     }
 
+
+    private void initSystem() {
+        try {
+            int tableCount = this.dataService.isExistsTable("T_CONNECT");
+            if (tableCount == 0) {
+                this.dataService.createConnectTable();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

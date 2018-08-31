@@ -20,6 +20,10 @@ public class DataServiceImpl implements DataService {
         this.dataMapper.createConnectTable();
     }
 
+    public int isExistsTable(String tableName) {
+        return this.dataMapper.isExistsTable(tableName);
+    }
+
     public Connect selectConnectById(String id) {
         return this.dataMapper.selectConnectById(id);
     }
