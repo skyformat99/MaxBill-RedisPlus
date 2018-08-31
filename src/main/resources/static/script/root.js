@@ -154,6 +154,13 @@ function delConnectData() {
     });
 }
 
+/**
+ * 导出连接
+ */
+function expConnectData() {
+    window.location.href = basePath + '/api/connect/export';
+}
+
 
 /**
  * 打开连接数据
@@ -176,6 +183,8 @@ function openConnect(id) {
         }
     });
 }
+
+
 
 
 

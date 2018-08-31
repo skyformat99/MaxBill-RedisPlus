@@ -11,7 +11,6 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="${ctx}/plugin/layui/css/layui.css"/>
     <link rel="stylesheet" type="text/css" href="${ctx}/styles/style.css"/>
-    <link rel="stylesheet" type="text/css" href="${ctx}/styles/other.css"/>
     <link rel="stylesheet" type="text/css" href="${ctx}/styles/root.css"/>
 </head>
 <body>
@@ -43,6 +42,10 @@
             <span class="handle-left-item"><i class="layui-icon">&#xe666;</i><cite onclick="getConnectData()">刷新连接</cite></span>
             <span class="handle-left-item"><i class="layui-icon">&#xe642;</i><cite onclick="updConnectData()">编辑连接</cite></span>
             <span class="handle-left-item"><i class="layui-icon">&#xe640;</i><cite onclick="delConnectData()">移除连接</cite></span>
+            <!--
+            <span class="handle-left-item"><i class="layui-icon">&#xe681;</i><cite onclick="delConnectData()">导入连接</cite></span>
+            <span class="handle-left-item"><i class="layui-icon">&#xe601;</i><cite onclick="expConnectData()">导出连接</cite></span>
+            -->
         </div>
         <div class="handle-right" id="tableDiv">
             <table id="dataList" lay-filter="dataList"></table>

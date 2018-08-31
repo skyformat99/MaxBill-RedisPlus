@@ -1,0 +1,54 @@
+.handle-left {
+    height: 100%;
+    float: left;
+    width: 400px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-style: marquee-block;
+    border-right: 1px solid silver;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 400px;
+}
+
+.layui-table {
+    width: 99.8%;
+    margin: 0 auto;
+}
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: #FFFFFF;
+}
+
+.key-deal {
+    width: 99.8%;
+    height: 50px;
+    line-height: 50px;
+    margin: 0 auto;
+    border: #eaeaea 1px solid;
+}
+
+.key-info {
+    margin: 0 auto;
+}
+
+.key-vals {
+    width: 99.8%;
+    margin: 0 auto;
+}
+
+.key-vals-text {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: #eaeaea;
+}
+
+#value {
+    height: 439px;
+    line-height: 25px;
+    border: #eaeaea 1px solid;
+    padding: 10px;
+}

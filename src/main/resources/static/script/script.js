@@ -2,6 +2,13 @@ var $;
 var layer;
 var basePath;
 
+document.oncontextmenu = function () {
+    return false;
+};
+document.onselectstart = function () {
+    return false;
+};
+
 layui.use(['jquery', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;

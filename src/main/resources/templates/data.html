@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="${ctx}/plugin/layui/css/layui.css"/>
     <link rel="stylesheet" href="${ctx}/plugin/ztree/css/metroStyle/metroStyle.css"/>
     <link rel="stylesheet" href="${ctx}/styles/style.css"/>
-    <link rel="stylesheet" href="${ctx}/styles/other.css"/>
+    <link rel="stylesheet" href="${ctx}/styles/data.css"/>
 </head>
 <body>
 <input id="basePath" type="hidden" value="${ctx}"/>
@@ -39,10 +39,65 @@
     </div>
     <div class="handle">
         <div class="handle-left">
-            <ul id="keyTree" name="keyTree" class="ztree"></ul>
+            <ul id="keyTree0" name="keyTree0" class="ztree"></ul>
+            <ul id="keyTree1" name="keyTree1" class="ztree"></ul>
+            <ul id="keyTree2" name="keyTree2" class="ztree"></ul>
+            <ul id="keyTree3" name="keyTree3" class="ztree"></ul>
+            <ul id="keyTree4" name="keyTree4" class="ztree"></ul>
+            <ul id="keyTree5" name="keyTree5" class="ztree"></ul>
+            <ul id="keyTree6" name="keyTree6" class="ztree"></ul>
+            <ul id="keyTree7" name="keyTree7" class="ztree"></ul>
+            <ul id="keyTree8" name="keyTree8" class="ztree"></ul>
+            <ul id="keyTree9" name="keyTree9" class="ztree"></ul>
+            <ul id="keyTree10" name="keyTree10" class="ztree"></ul>
+            <ul id="keyTree11" name="keyTree11" class="ztree"></ul>
+            <ul id="keyTree12" name="keyTree12" class="ztree"></ul>
+            <ul id="keyTree13" name="keyTree13" class="ztree"></ul>
+            <ul id="keyTree14" name="keyTree14" class="ztree"></ul>
+            <ul id="keyTree15" name="keyTree15" class="ztree"></ul>
         </div>
         <div class="handle-right">
-
+            <div class="key-deal">
+                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="renameKey()">
+                    <i class="layui-icon">&#xe642;</i>重命名
+                </button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="deleteKey()">
+                    <i class="layui-icon">&#xe640;</i>删除
+                </button>
+                <button class="layui-btn layui-btn-primary layui-btn-sm" onclick="reloadKey()">
+                    <i class="layui-icon">&#xe666;</i>刷新
+                </button>
+            </div>
+            <div class="key-info">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="150">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td>key</td>
+                        <td><span id="key"></span></td>
+                    </tr>
+                    <tr>
+                        <td>类型</td>
+                        <td><span id="type"></span></td>
+                    </tr>
+                    <tr>
+                        <td>大小</td>
+                        <td><span id="size"></span></td>
+                    </tr>
+                    <tr>
+                        <td>TTL</td>
+                        <td><span id="ttl"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="key-vals">
+                    <div class="key-vals-text">value</div>
+                    <div id="value"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="status">

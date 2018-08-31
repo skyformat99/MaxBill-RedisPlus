@@ -1,13 +1,21 @@
 package com.maxbill.base.controller;
 
 import com.maxbill.base.bean.Connect;
+import com.maxbill.base.bean.ExcelBean;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.DataUtil;
+import com.maxbill.tool.DateUtil;
+import com.maxbill.tool.ExcelUtil;
 import com.maxbill.tool.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 public class RouteController {
@@ -29,13 +37,13 @@ public class RouteController {
 
     @GetMapping("/root/save")
     public String toRootSave() {
-        return "root_save";
+        return "save";
     }
 
     @GetMapping("/root/edit")
     public ModelAndView toRootEdit(ModelAndView mv, String id) {
         mv.addObject("data", this.dataService.selectConnectById(id));
-        mv.setViewName("root_edit");
+        mv.setViewName("edit");
         return mv;
     }
 
@@ -82,5 +90,6 @@ public class RouteController {
         mv.setViewName("self");
         return mv;
     }
+
 
 }

@@ -13,6 +13,8 @@ public class ZTreeBean {
 
     private String name;
 
+    private Integer index;
+
     private boolean checked = false;
 
     @JSONField(name = "isParent")

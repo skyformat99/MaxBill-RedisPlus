@@ -1,16 +1,19 @@
 package com.maxbill.tool;
 
 import com.maxbill.base.bean.Connect;
+import com.maxbill.base.bean.KeyBean;
 import com.maxbill.base.bean.RedisInfo;
 import com.maxbill.base.bean.ZTreeBean;
-import org.springframework.util.StringUtils;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.util.Slowlog;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RedisUtil {
@@ -64,6 +67,39 @@ public class RedisUtil {
     }
 
     /**
+     * 判断key是否存在
+     */
+    public static boolean existsKey(Jedis jedis, String key, Integer index) {
+        jedis.select(index);
+        return jedis.exists(key);
+    }
+
+    /**
+     * 重命名key
+     */
+    public static String renameKey(Jedis jedis, String oldKey, String newKey, Integer index) {
+        jedis.select(index);
+        return jedis.rename(oldKey, newKey);
+    }
+
+
+    /**
+     * 删除key
+     */
+    public static long deleteKey(Jedis jedis, String key, Integer index) {
+        jedis.select(index);
+        return jedis.del(key);
+    }
+
+    /**
+     * 获取库的key值
+     */
+    public static long dbSize(Jedis jedis, int index) {
+        jedis.select(index);
+        return jedis.dbSize();
+    }
+
+    /**
      * 释放Jedis连接
      */
     public static void closeJedis(Jedis jedis) {
@@ -71,17 +107,58 @@ public class RedisUtil {
     }
 
 
-    public static List<ZTreeBean> getKeyTree(Jedis jedis, ZTreeBean rootTree) {
+    /**
+     * 设置 list
+     */
+    public static <T> void setList(Jedis jedis, String key, List<T> list) {
+        jedis.set(key.getBytes(), ObjectUtil.serialize(list));
+    }
+
+    /**
+     * 获取list
+     */
+    public static <T> List<T> getList(Jedis jedis, String key) {
+        if (jedis == null || !jedis.exists(key.getBytes())) {
+            return null;
+        }
+        byte[] in = jedis.get(key.getBytes());
+        List<T> list = (List<T>) ObjectUtil.deserialize(in);
+        return list;
+    }
+
+    /**
+     * 设置map
+     */
+    public static <T> void setMap(Jedis jedis, String key, Map<String, T> map) {
+        jedis.set(key.getBytes(), ObjectUtil.serialize(map));
+    }
+
+    /**
+     * 获取map
+     */
+    public static <T> Map<String, T> getMap(Jedis jedis, String key) {
+        if (jedis == null || !jedis.exists(key.getBytes())) {
+            return null;
+        }
+        byte[] in = jedis.get(key.getBytes());
+        Map<String, T> map = (Map<String, T>) ObjectUtil.deserialize(in);
+        return map;
+    }
+
+
+    public static List<ZTreeBean> getKeyTree(Jedis jedis, int index, String pid) {
         List<ZTreeBean> treeList = new ArrayList<>();
-        treeList.add(rootTree);
+        jedis.select(index);
         Set<String> keySet = jedis.keys("*");
         ZTreeBean zTreeBean = null;
         if (null != keySet) {
             for (String key : keySet) {
                 zTreeBean = new ZTreeBean();
                 zTreeBean.setId(KeyUtil.getUUIDKey());
-                zTreeBean.setPId(rootTree.getId());
+                zTreeBean.setPId(pid);
                 zTreeBean.setName(key);
+                zTreeBean.setParent(false);
+                zTreeBean.setIndex(index);
                 treeList.add(zTreeBean);
             }
         }
@@ -174,6 +251,18 @@ public class RedisUtil {
     }
 
 
+    public static KeyBean getKeyInfo(Jedis jedis, String key, Integer index) {
+        KeyBean keyBean = new KeyBean();
+        jedis.select(index);
+        keyBean.setKey(key);
+        keyBean.setValue(jedis.get(key));
+        keyBean.setSize(keyBean.getValue().getBytes().length);
+        keyBean.setType(jedis.type(key));
+        keyBean.setTtl(jedis.ttl(key));
+        return keyBean;
+    }
+
+
     // 获取日志列表
     public static List<Slowlog> getRedisLog(Jedis jedis) {
         List<Slowlog> logList = jedis.slowlogGet(10);
@@ -192,15 +281,25 @@ public class RedisUtil {
 //        jedis.set("a-b-3", "3");
 //        jedis.keys("*");
 //        closeJedis(jedis);
+//        Connect connect = new Connect();
+//        connect.setHost("maxbill");
+//        connect.setPort("6379");
+//        connect.setPass("123456");
+//        Jedis jedis = openJedis(connect);
+//        for (int i = 0; i < 1000; i++) {
+//            jedis.set(i + "", i + "");
+//        }
+//        closeJedis(jedis);
         Connect connect = new Connect();
         connect.setHost("maxbill");
         connect.setPort("6379");
         connect.setPass("123456");
+        List<String> list = new ArrayList<>();
+        list.add("qqqqqqqqqqqq");
+        list.add("wwwwwwwwwwww");
+        list.add("eeeeeeeeeeee");
         Jedis jedis = openJedis(connect);
-        for (int i = 0; i < 1000; i++) {
-            jedis.set(i + "", i + "");
-        }
-        closeJedis(jedis);
+        setList(jedis, "list", list);
     }
 
 }
