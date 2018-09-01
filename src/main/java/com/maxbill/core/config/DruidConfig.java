@@ -19,7 +19,7 @@ public class DruidConfig {
         datasource.setTestWhileIdle(false);
         datasource.setTestOnBorrow(false);
         datasource.setTestOnReturn(false);
-        datasource.setUrl("jdbc:derby:" + baseUrl + "/.redis_plus;create=true");
+        datasource.setUrl("jdbc:derby:" + baseUrl + "/.redis_plus/data;create=true");
         datasource.setDriverClassName("org.apache.derby.jdbc.EmbeddedDriver");
         return datasource;
     }

@@ -109,14 +109,20 @@
     <build>
         <!--编译插件配置-->
         <plugins>
+            <!--maven application package-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--
+                <!--<configuration><fork>true</fork></configuration>-->
+            </plugin>
+            <!--javafx application package-->
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
                 <configuration>
-                    <fork>true</fork>
+                    <mainClass>com.maxbill.MainApplication</mainClass>
+                    <vendor>Spartajet</vendor>
                 </configuration>
-                -->
             </plugin>
         </plugins>
     </build>
