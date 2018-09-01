@@ -1,9 +1,8 @@
 package com.maxbill.tool;
 
-import com.maxbill.base.bean.Connect;
-import com.maxbill.base.bean.KeyBean;
-import com.maxbill.base.bean.RedisInfo;
-import com.maxbill.base.bean.ZTreeBean;
+import com.maxbill.base.bean.*;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.springframework.util.StringUtils;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -222,7 +221,14 @@ public class RedisUtil {
             //持久化信息
             String[] persistence = redisInfo.getPersistence().split("\n");
             StringBuffer persistenceBuf = new StringBuffer();
-            persistenceBuf.append("加载中数据: ").append(StringUtil.getValueString(persistence[1])).append("</br>");
+            persistenceBuf.append("是否正在载入持久化文件: ").append(StringUtil.getValueString(persistence[1])).append("</br>");
+            persistenceBuf.append("最近一次持久化文件耗时: ").append(StringUtil.getValueString(persistence[2])).append("</br>");
+            persistenceBuf.append("是否正在创建RDB的文件: ").append(StringUtil.getValueString(persistence[3])).append("</br>");
+            persistenceBuf.append("最近成功创建RDB时间戳: ").append(StringUtil.getValueString(persistence[4])).append("</br>");
+            persistenceBuf.append("最近创建RDB文件的结果: ").append(StringUtil.getValueString(persistence[5])).append("</br>");
+            persistenceBuf.append("当前创建RDB文件的耗时: ").append(StringUtil.getValueString(persistence[6])).append("</br>");
+            persistenceBuf.append("服务是否已经开启了AOF: ").append(StringUtil.getValueString(persistence[7])).append("</br>");
+            persistenceBuf.append("是否正在创建AOF的文件: ").append(StringUtil.getValueString(persistence[8])).append("</br>");
             //连接的信息
             String[] stats = redisInfo.getStats().split("\n");
             StringBuffer statsBuf = new StringBuffer();
@@ -262,34 +268,39 @@ public class RedisUtil {
         return keyBean;
     }
 
+    public static List<ConfigBean> getRedisConfig(Jedis jedis) {
+        List<ConfigBean> confList = new ArrayList<>();
+        List<String> configList = jedis.configGet("*");
+        for (int i = 0; i < configList.size(); i++) {
+            if (i % 2 != 0) {
+                ConfigBean configBean = new ConfigBean();
+                configBean.setKey(configList.get(i - 1));
+                String value = configList.get(i);
+                if (StringUtils.isEmpty(value)) {
+                    configBean.setValue("");
+                } else {
+                    configBean.setValue(value);
+                }
+                confList.add(configBean);
+            }
+        }
+        return confList;
+    }
+
+    public static void setRedisConfig(Jedis jedis, Map<String, String[]> confMap) {
+        for (String key : confMap.keySet()) {
+            jedis.configSet(key, confMap.get(key)[0]);
+        }
+    }
 
     // 获取日志列表
     public static List<Slowlog> getRedisLog(Jedis jedis) {
-        List<Slowlog> logList = jedis.slowlogGet(10);
+        List<Slowlog> logList = jedis.slowlogGet(100);
         return logList;
     }
 
 
     public static void main(String[] args) {
-//        Connect connect = new Connect();
-//        connect.setHost("maxbill");
-//        connect.setPort("6379");
-//        connect.setPass("123456");
-//        Jedis jedis = openJedis(connect);
-//        jedis.set("a-b-1", "1");
-//        jedis.set("a-b-2", "2");
-//        jedis.set("a-b-3", "3");
-//        jedis.keys("*");
-//        closeJedis(jedis);
-//        Connect connect = new Connect();
-//        connect.setHost("maxbill");
-//        connect.setPort("6379");
-//        connect.setPass("123456");
-//        Jedis jedis = openJedis(connect);
-//        for (int i = 0; i < 1000; i++) {
-//            jedis.set(i + "", i + "");
-//        }
-//        closeJedis(jedis);
         Connect connect = new Connect();
         connect.setHost("maxbill");
         connect.setPort("6379");

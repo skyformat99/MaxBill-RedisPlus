@@ -46,10 +46,11 @@ public class RouteController {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
             mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.setViewName("data");
         } else {
             mv.addObject("status", "未连接服务");
+            mv.setViewName("root");
         }
-        mv.setViewName("data");
         return mv;
     }
 
@@ -58,18 +59,28 @@ public class RouteController {
     public ModelAndView toInfo(ModelAndView mv) {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
+            RedisUtil.getRedisConfig(DataUtil.getCurrentJedisObject());
             mv.addObject("info", RedisUtil.getRedisInfoList(DataUtil.getCurrentJedisObject()));
             mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.setViewName("info");
         } else {
             mv.addObject("status", "未连接服务");
+            mv.setViewName("root");
         }
-        mv.setViewName("info");
         return mv;
     }
 
     @GetMapping("/conf")
-    public String toConf() {
-        return "conf";
+    public ModelAndView toConf(ModelAndView mv) {
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (null != connect) {
+            mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.setViewName("conf");
+        } else {
+            mv.addObject("status", "未连接服务");
+            mv.setViewName("root");
+        }
+        return mv;
     }
 
     @GetMapping("/self")

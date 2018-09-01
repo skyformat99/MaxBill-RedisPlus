@@ -71,6 +71,7 @@ function renameKey() {
             title: '输入新的key',
             formType: 3,
             value: currKey,
+            skin: 'layui-layer-lan',
             closeBtn: 0,
         },
         function (text, index) {

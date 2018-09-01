@@ -52,3 +52,31 @@
     border: #eaeaea 1px solid;
     padding: 10px;
 }
+
+.layui-layer-lan {
+    width: 280px;
+}
+
+.layui-layer-dialog .layui-layer-content {
+    position: relative;
+    padding: 20px;
+    line-height: 24px;
+    word-break: break-all;
+    overflow: hidden;
+    font-size: 14px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.layui-layer-content .layui-layer-input {
+    display: block;
+    width: 230px;
+    height: 36px;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 30px;
+    padding-left: 10px;
+    border: 1px solid #e6e6e6;
+    color: #333;
+}

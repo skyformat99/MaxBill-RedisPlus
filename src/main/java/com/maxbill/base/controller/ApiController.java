@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import redis.clients.jedis.Jedis;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static com.maxbill.tool.RedisUtil.getRedisInfo;
@@ -173,6 +174,9 @@ public class ApiController {
                     treeList.add(zTreeBean);
                 }
                 responseBean.setData(treeList);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
             responseBean.setCode(500);
@@ -190,6 +194,9 @@ public class ApiController {
             if (null != jedis) {
                 List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id);
                 responseBean.setData(treeList);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
             responseBean.setCode(500);
@@ -208,6 +215,7 @@ public class ApiController {
                 responseBean.setData(RedisUtil.getKeyInfo(jedis, key, index));
             } else {
                 responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,6 +245,7 @@ public class ApiController {
                 }
             } else {
                 responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,6 +270,7 @@ public class ApiController {
                 }
             } else {
                 responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
             responseBean.setCode(500);
@@ -289,7 +299,8 @@ public class ApiController {
                 resultMap.put("val03", Float.valueOf(val03));
                 responseBean.setData(resultMap);
             } else {
-                responseBean.setCode(201);
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
             responseBean.setCode(500);
@@ -298,6 +309,48 @@ public class ApiController {
         }
         return responseBean;
     }
+
+
+    @ResponseBody
+    @RequestMapping("/conf/confInfo")
+    public ResponseBean confInfo() {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                responseBean.setData(RedisUtil.getRedisConfig(jedis));
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("请求数据异常");
+        }
+        return responseBean;
+    }
+
+    @ResponseBody
+    @RequestMapping("/conf/editInfo")
+    public ResponseBean editInfo(HttpServletRequest request) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                RedisUtil.setRedisConfig(jedis, request.getParameterMap());
+                responseBean.setMsgs("修改配置成功");
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("请求数据异常");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseBean.setCode(500);
+            responseBean.setMsgs("修改配置异常");
+        }
+        return responseBean;
+    }
+
 
     @ResponseBody
     @RequestMapping("/self/sendMail")

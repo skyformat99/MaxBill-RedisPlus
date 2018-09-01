@@ -34,8 +34,8 @@
     margin-left: 800px;
 }
 
-.layui-form-item {
-    clear: none;
+.layui-form-div {
+    margin-top: 20px;
 }
 
 .layui-form-pane {

@@ -92,25 +92,25 @@
         </div>
         <div class="handle-right">
             <form class="layui-form layui-form-pane">
-                <div style="margin-top: 20px">
+                <div class="layui-form-div">
                     <label class="layui-form-label">邮箱地址</label>
                     <div class="layui-input-block">
                         <input type="text" id="mailAddr" autocomplete="off" lay-verify="required|email"
                                placeholder="请输您的邮箱地址" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-text" style="margin-top: 20px">
+                <div class="layui-form-div layui-form-text">
                     <label class="layui-form-label">邮件内容</label>
                     <div class="layui-input-block">
                         <textarea id="mailText" placeholder="请在此处输入您的建议或者意见内容..."
                                   class="layui-textarea" lay-verify="required"></textarea>
                     </div>
                 </div>
-                <div style="margin-top: 20px;text-align: right">
+                <div class="layui-form-div" style="text-align: right">
                     <button class="layui-btn" lay-submit="" lay-filter="sendMail">发送邮件</button>
                 </div>
-                <hr class="layui-bg-green" style="margin-top: 20px;">
-                <div class="layui-card" style="background: #f2f2f2;margin-top: 20px;">
+                <hr class="layui-form-div layui-bg-green">
+                <div class="layui-form-div layui-card" style="background: #f2f2f2;">
                     <div class="layui-card-header">邮箱反馈注意事项：</div>
                     <div class="layui-card-body">
                         <li>1.邮箱地址是作者能联系你的方式，请认真填写！</li>
