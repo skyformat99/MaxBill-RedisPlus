@@ -137,20 +137,39 @@ function delConnectData() {
         });
         return false;
     }
-    $.ajax({
-        type: "post",
-        url: basePath + '/api/connect/delete',
-        data: {"id": rowDataId},
-        success: function (data) {
-            if (data.code == 200) {
-                getConnectData();
-            } else {
-                layer.alert(data.msgs, {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
+    var index = layer.confirm('确认删除连接？', {
+        btn: ['确定', '取消'],
+        skin: 'layui-layer-lan',
+        closeBtn: 0
+    }, function () {
+        var xhr = $.ajax({
+            type: "post",
+            url: basePath + '/api/connect/delete',
+            data: {"id": rowDataId},
+            timeout: 10000,
+            success: function (data) {
+                layer.close(index);
+                if (data.code == 200) {
+                    getConnectData();
+                } else {
+                    layer.alert(data.msgs, {
+                        skin: 'layui-layer-lan',
+                        closeBtn: 0
+                    });
+                }
+            },
+            complete: function (XMLHttpRequest, status) {
+                //请求完成后最终执行参数
+                if (status == 'timeout') {
+                    //超时,status还有success,error等值的情况
+                    xhr.abort();
+                    layer.alert("请求超时，请检查网络连接", {
+                        skin: 'layui-layer-lan',
+                        closeBtn: 0
+                    });
+                }
             }
-        }
+        });
     });
 }
 
@@ -167,7 +186,7 @@ function expConnectData() {
  */
 function openConnect(id) {
     layer.load(2);
-    $.ajax({
+    var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/connect/create',
         timeout: 10000,
@@ -181,6 +200,17 @@ function openConnect(id) {
                 });
             }
             layer.closeAll('loading');
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
         }
     });
 }

@@ -44,14 +44,26 @@ function zTreeOnClick(event, treeId, treeNode) {
 };
 
 function loadKeyTree() {
-    $.ajax({
+    var xhr = $.ajax({
         type: "get",
         url: basePath + '/api/data/treeInit',
-        sync: false,
+        sync: true,
+        timeout: 15000,
         success: function (data) {
             for (var i = 0; i < 16; i++) {
                 $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
                 $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                xhr.abort();
+                //超时,status还有success,error等值的情况
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
             }
         }
     });
@@ -75,7 +87,7 @@ function renameKey() {
             closeBtn: 0,
         },
         function (text, index) {
-            $.ajax({
+            var xhr = $.ajax({
                 type: "post",
                 url: basePath + "/api/data/renameKey",
                 data: {
@@ -83,6 +95,7 @@ function renameKey() {
                     'newKey': text,
                     'index': currIndex
                 },
+                timeout: 10000,
                 sync: false,
                 success: function (data) {
                     layer.close(index);
@@ -91,7 +104,21 @@ function renameKey() {
                         getKeyInfo();
                         loadKeyTree();
                     } else {
-                        layer.alert(data.msgs);
+                        layer.alert(data.msgs, {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                },
+                complete: function (XMLHttpRequest, status) {
+                    //请求完成后最终执行参数
+                    if (status == 'timeout') {
+                        xhr.abort();
+                        //超时,status还有success,error等值的情况
+                        layer.alert("请求超时，请检查网络连接", {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
                     }
                 }
             });
@@ -113,13 +140,14 @@ function deleteKey() {
         skin: 'layui-layer-lan',
         closeBtn: 0
     }, function () {
-        $.ajax({
+        var xhr = $.ajax({
             type: "post",
             url: basePath + "/api/data/deleteKey",
             data: {
                 'key': currKey,
                 'index': currIndex
             },
+            timeout: 10000,
             sync: false,
             success: function (data) {
                 layer.close(index);
@@ -133,7 +161,21 @@ function deleteKey() {
                     $("#ttl").text("");
                     $("#value").text("");
                 } else {
-                    layer.alert(data.msgs);
+                    layer.alert(data.msgs, {
+                        skin: 'layui-layer-lan',
+                        closeBtn: 0
+                    });
+                }
+            },
+            complete: function (XMLHttpRequest, status) {
+                //请求完成后最终执行参数
+                if (status == 'timeout') {
+                    //超时,status还有success,error等值的情况
+                    xhr.abort();
+                    layer.alert("请求超时，请检查网络连接", {
+                        skin: 'layui-layer-lan',
+                        closeBtn: 0
+                    });
                 }
             }
         });
@@ -161,13 +203,14 @@ function getKeyInfo() {
         });
         return false;
     }
-    $.ajax({
+    var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/data/keysData',
         data: {
             'key': currKey,
             'index': currIndex
         },
+        timeout: 10000,
         sync: false,
         success: function (data) {
             var keyInfo = data.data;
@@ -177,6 +220,17 @@ function getKeyInfo() {
                 $("#size").text(keyInfo.size);
                 $("#ttl").text(keyInfo.ttl);
                 $("#value").text(keyInfo.value);
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
             }
         }
     });

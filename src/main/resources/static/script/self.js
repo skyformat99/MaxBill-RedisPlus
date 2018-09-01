@@ -11,13 +11,14 @@ layui.use(['form'], function () {
 
 function sendMail() {
     layer.load(2);
-    $.ajax({
+    var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/self/sendMail',
         data: {
             "mailAddr": $("#mailAddr").val(),
             "mailText": $("#mailText").val()
         },
+        timeout: 10000,
         success: function (data) {
             $("#mailAddr").val('');
             $("#mailText").val('');
@@ -26,6 +27,17 @@ function sendMail() {
                 skin: 'layui-layer-lan',
                 closeBtn: 0
             });
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
         }
     });
 }

@@ -19,10 +19,11 @@ layui.use(['form', 'jquery', 'layer'], function () {
 
 
 function getRedisInfo() {
-    $.ajax({
+    var xhr = $.ajax({
         type: "get",
         url: basePath + '/api/conf/confInfo',
         sync: false,
+        timeout: 10000,
         success: function (data) {
             var html = '';
             for (var i = 0; i < data.data.length; i++) {
@@ -34,6 +35,17 @@ function getRedisInfo() {
             }
             $("#tbody").html(html);
             setRedisInfo(data.data);
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
         }
     });
 }
@@ -52,7 +64,7 @@ function setRedisInfo(data) {
 
 
 function submitRedisInfo() {
-    $.ajax({
+    var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/conf/editInfo',
         data: $('#editRedisForm').serialize(),
@@ -67,6 +79,17 @@ function submitRedisInfo() {
                 });
             } else {
                 layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
                     skin: 'layui-layer-lan',
                     closeBtn: 0
                 });
