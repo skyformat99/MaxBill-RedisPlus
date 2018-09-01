@@ -1,0 +1,67 @@
+.handle-left {
+    float: left;
+    width: 700px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-style: marquee-block;
+    border-right: 1px solid silver;
+}
+
+.layui-table {
+    margin-top: 0px;
+}
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: #FFFFFF;
+}
+
+#tops-div {
+    width: 700px;
+    position: fixed;
+    z-index: 999;
+}
+
+#data-div {
+    height: 658px;
+    width: 100%;
+    margin-top: 40px;
+    overflow-y: scroll;
+    overflow-style: marquee-block;
+}
+
+#data-div .layui-table {
+    width: 682px;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 700px;
+}
+
+.config-top {
+    color: #8D8D8D;
+    height: 40px;
+    border-bottom: 1px solid #E6E6E6;
+    background-color: #F2F2F2;
+    margin-left: 1px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 40px;
+}
+
+.layui-form-div {
+    margin-top: 20px;
+}
+
+.layui-form-pane {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.layui-form-pane .layui-input-block {
+    margin-left: 230px;
+}
+
+.layui-form-pane .layui-form-label {
+    width: 230px;
+}
