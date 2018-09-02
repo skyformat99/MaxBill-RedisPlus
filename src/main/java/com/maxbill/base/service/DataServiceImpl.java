@@ -33,8 +33,6 @@ public class DataServiceImpl implements DataService {
     }
 
     public int insertConnect(Connect obj) throws Exception {
-        obj.setId(KeyUtil.getUUIDKey());
-        obj.setTime(DateUtil.formatDateTime(new Date()));
         return this.dataMapper.insertConnect(obj);
     }
 

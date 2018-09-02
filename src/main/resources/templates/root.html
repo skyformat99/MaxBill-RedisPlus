@@ -38,14 +38,12 @@
     </div>
     <div class="handle">
         <div class="handle-left">
-            <span class="handle-left-item"><i class="layui-icon">&#xe654;</i><cite onclick="addConnectData()">添加连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe666;</i><cite onclick="getConnectData()">刷新连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe642;</i><cite onclick="updConnectData()">编辑连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe640;</i><cite onclick="delConnectData()">移除连接</cite></span>
-            <!--
-            <span class="handle-left-item"><i class="layui-icon">&#xe681;</i><cite onclick="delConnectData()">导入连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe601;</i><cite onclick="expConnectData()">导出连接</cite></span>
-            -->
+            <span class="handle-left-item"><i class="layui-icon">&#xe654;</i><cite id="add" onclick="addConnectData()">添加连接</cite></span>
+            <span class="handle-left-item"><i class="layui-icon">&#xe666;</i><cite id="get" onclick="getConnectData()">刷新连接</cite></span>
+            <span class="handle-left-item"><i class="layui-icon">&#xe642;</i><cite id="upd" onclick="updConnectData()">编辑连接</cite></span>
+            <span class="handle-left-item"><i class="layui-icon">&#xe640;</i><cite id="del" onclick="delConnectData()">移除连接</cite></span>
+            <span class="handle-left-item"><i class="layui-icon">&#xe681;</i><cite id="imp" onclick="impConnectData()">导入连接</cite></span>
+            <span class="handle-left-item"><i class="layui-icon">&#xe601;</i><cite id="exp" onclick="expConnectData()">导出连接</cite></span>
         </div>
         <div class="handle-right" id="tableDiv">
             <table id="dataList" lay-filter="dataList"></table>

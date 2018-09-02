@@ -4,9 +4,10 @@ import com.maxbill.base.bean.*;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,26 +15,13 @@ import java.util.*;
 
 import static com.maxbill.tool.RedisUtil.getRedisInfo;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ApiController {
-
 
     @Autowired
     private DataService dataService;
 
-    @ResponseBody
-    @RequestMapping("/test")
-    public String test() {
-        try {
-            this.dataService.createConnectTable();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "test";
-    }
-
-    @ResponseBody
     @RequestMapping("/connect/select")
     public DataTable selectConnect() {
         DataTable tableData = new DataTable();
@@ -49,11 +37,13 @@ public class ApiController {
         return tableData;
     }
 
-    @ResponseBody
+
     @RequestMapping("/connect/insert")
     public ResponseBean insertConnect(Connect connect) {
         ResponseBean responseBean = new ResponseBean();
         try {
+            connect.setId(KeyUtil.getUUIDKey());
+            connect.setTime(DateUtil.formatDateTime(new Date()));
             int insFlag = this.dataService.insertConnect(connect);
             if (insFlag != 1) {
                 responseBean.setCode(201);
@@ -66,7 +56,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/connect/update")
     public ResponseBean updateConnect(Connect connect) {
         ResponseBean responseBean = new ResponseBean();
@@ -83,7 +73,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/connect/delete")
     public ResponseBean deleteConnect(String id) {
         ResponseBean responseBean = new ResponseBean();
@@ -100,7 +90,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/connect/create")
     public ResponseBean createConnect(String id) {
         ResponseBean responseBean = new ResponseBean();
@@ -124,7 +114,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/connect/isopen")
     public Integer isopenConnect() {
         Jedis jedis = DataUtil.getCurrentJedisObject();
@@ -135,9 +125,30 @@ public class ApiController {
         }
     }
 
+    @RequestMapping("/connect/import")
+    public ResponseBean importConnect(MultipartFile file) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            List<Connect> dataLIst = ExcelUtil.importExcel(file.getInputStream());
+            if (!dataLIst.isEmpty()) {
+                for (Connect connect : dataLIst) {
+                    this.dataService.insertConnect(connect);
+                }
+                responseBean.setMsgs("导入连接成功");
+            } else {
+                responseBean.setMsgs("导入连接为空");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("导入连接异常");
+        }
+        return responseBean;
+    }
+
 
     @RequestMapping("/connect/export")
-    public void exportConnect() {
+    public ResponseBean exportConnect() {
+        ResponseBean responseBean = new ResponseBean();
         try {
             ExcelBean excelBean = new ExcelBean();
             excelBean.setName("连接信息");
@@ -151,13 +162,20 @@ public class ApiController {
             excelBean.setRows(this.dataService.selectConnect());
             String filePath = System.getProperty("user.home") + "/";
             String fileName = DateUtil.formatDateTime(new Date()) + "-redis-connect" + ".xlsx";
-            ExcelUtil.exportExcel(excelBean, filePath + fileName);
+            boolean exportFlag = ExcelUtil.exportExcel(excelBean, filePath + fileName);
+            if (exportFlag) {
+                responseBean.setMsgs("成功导出连接至用户目录");
+            } else {
+                responseBean.setMsgs("导出连接失败");
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            responseBean.setCode(500);
+            responseBean.setMsgs("导出连接异常");
         }
+        return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/data/treeInit")
     public ResponseBean treeInit() {
         ResponseBean responseBean = new ResponseBean();
@@ -185,7 +203,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/data/treeData")
     public ResponseBean treeData(String id, Integer index) {
         ResponseBean responseBean = new ResponseBean();
@@ -205,7 +223,6 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
     @RequestMapping("/data/keysData")
     public ResponseBean keysData(String key, Integer index) {
         ResponseBean responseBean = new ResponseBean();
@@ -225,7 +242,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/data/renameKey")
     public ResponseBean renameKey(String oldKey, String newKey, Integer index) {
         ResponseBean responseBean = new ResponseBean();
@@ -255,7 +272,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/data/deleteKey")
     public ResponseBean deleteKey(String key, Integer index) {
         ResponseBean responseBean = new ResponseBean();
@@ -279,7 +296,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/info/realInfo")
     public ResponseBean realInfo() {
         ResponseBean responseBean = new ResponseBean();
@@ -311,7 +328,6 @@ public class ApiController {
     }
 
 
-    @ResponseBody
     @RequestMapping("/conf/confInfo")
     public ResponseBean confInfo() {
         ResponseBean responseBean = new ResponseBean();
@@ -330,7 +346,7 @@ public class ApiController {
         return responseBean;
     }
 
-    @ResponseBody
+
     @RequestMapping("/conf/editInfo")
     public ResponseBean editInfo(HttpServletRequest request) {
         ResponseBean responseBean = new ResponseBean();
@@ -352,7 +368,6 @@ public class ApiController {
     }
 
 
-    @ResponseBody
     @RequestMapping("/self/sendMail")
     public ResponseBean sendMail(String mailAddr, String mailText) {
         ResponseBean responseBean = new ResponseBean();

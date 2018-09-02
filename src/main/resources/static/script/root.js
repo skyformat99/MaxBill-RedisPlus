@@ -1,13 +1,15 @@
 var $;
 var layer;
 var table;
+var upload;
 var basePath;
 var rowDataId;
 
-layui.use(['jquery', 'table', 'layer'], function () {
+layui.use(['jquery', 'table', 'layer', 'upload'], function () {
     $ = layui.jquery;
     layer = layui.layer;
     table = layui.table;
+    upload = layui.upload;
     basePath = $("#basePath").val();
     //加载连接数据
     layer.load(2);
@@ -57,6 +59,27 @@ layui.use(['jquery', 'table', 'layer'], function () {
             });
             rowDataId = '';
             layer.closeAll('loading');
+        }
+    });
+
+
+    upload.render({
+        elem: '#imp',
+        url: basePath + '/api/connect/import',
+        size: 2000,
+        auto: true,
+        accept: 'file',
+        exts: 'xlsx',
+        multiple: false,
+        done: function (res) {
+            layer.open({
+                content: res.msgs,
+                skin: 'layui-layer-lan',
+                closeBtn: 0
+            });
+            if (res.code == 200) {
+                getConnectData();
+            }
         }
     });
 
@@ -174,10 +197,46 @@ function delConnectData() {
 }
 
 /**
+ * 导入连接
+ */
+function impConnectData() {
+    layer.msg('正在导入连接数据操作');
+}
+
+/**
  * 导出连接
  */
 function expConnectData() {
-    window.location.href = basePath + '/api/connect/export';
+    var index = layer.confirm('确认导出连接？', {
+        btn: ['确定', '取消'],
+        skin: 'layui-layer-lan',
+        closeBtn: 0
+    }, function () {
+        var xhr = $.ajax({
+            type: "post",
+            url: basePath + '/api/connect/export',
+            timeout: 10000,
+            success: function (data) {
+                layer.close(index);
+                layer.open({
+                    content: data.msgs,
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            },
+            complete: function (XMLHttpRequest, status) {
+                //请求完成后最终执行参数
+                if (status == 'timeout') {
+                    //超时,status还有success,error等值的情况
+                    xhr.abort();
+                    layer.alert("请求超时，请检查网络连接", {
+                        skin: 'layui-layer-lan',
+                        closeBtn: 0
+                    });
+                }
+            }
+        });
+    });
 }
 
 

@@ -28,7 +28,30 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--移除默认启动容器-->
+            <!--
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
+            -->
         </dependency>
+        <!--jetty容器-->
+        <!--
+        <dependency>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+            <groupId>org.springframework.boot</groupId>
+        </dependency>
+        -->
+        <!--undertow容器-->
+        <!--
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+        -->
         <!--模板引擎依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -133,6 +156,14 @@
                     <needMenu>true</needMenu>
                     <!-- 桌面图标 -->
                     <needShortcut>true</needShortcut>
+                    <!--JVM参数-->
+                    <jvmArgs>
+                        <jvmArg>-Xms50M</jvmArg>
+                        <jvmArg>-Xmx128M</jvmArg>
+                        <jvmArg>-XX:MaxPermSize=100M</jvmArg>
+                        <jvmArg>-XX:MaxPermSize=256M</jvmArg>
+                        <jvmArg>-Dvisualvm.display.name=RedisPlus</jvmArg>
+                    </jvmArgs>
                     <!--供应商-->
                     <vendor>MaxBill</vendor>
                 </configuration>
