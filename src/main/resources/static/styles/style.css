@@ -110,3 +110,8 @@
 .div-input {
     border: 1px solid silver;
 }
+
+.layui-layer-lan .layui-layer-btn a {
+    color: white !important;
+    background: #4476A7 !important;
+}
