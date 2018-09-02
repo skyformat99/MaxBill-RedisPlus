@@ -120,7 +120,6 @@ public class ApiController {
             RedisUtil.closeJedis(jedis);
             return 1;
         } else {
-            RedisUtil.closeJedis(jedis);
             return 0;
         }
     }

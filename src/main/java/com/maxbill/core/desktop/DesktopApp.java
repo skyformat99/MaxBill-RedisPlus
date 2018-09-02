@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -102,11 +103,12 @@ public class DesktopApp extends Application {
      */
     private WebView getWebView() {
         WebView webView = new WebView();
-        Font.loadFont(DesktopApp.class.getResource("/static/plugin/layui/font/iconfont.ttf").toExternalForm(), 12);
         webView.setContextMenuEnabled(false);
-        WebEngine webEngine = webView.getEngine();
         webView.setPrefSize(prefWidth, prefHeight);
         webView.setCache(false);
+        webView.setFontScale(1);
+        webView.setFontSmoothingType(FontSmoothingType.GRAY);
+        WebEngine webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
         webEngine.load(appPath);
         return webView;
@@ -177,12 +179,7 @@ public class DesktopApp extends Application {
     private void shutdown() {
         ConfigurableApplicationContext context = MainApplication.context;
         if (null != context) {
-            //1.关闭redis服务
-            Jedis jedis = DataUtil.getCurrentJedisObject();
-            if (null != jedis) {
-                jedis.close();
-            }
-            //2.关闭容器服务
+            //关闭容器服务
             context.close();
         }
     }
