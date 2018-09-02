@@ -5,7 +5,6 @@ import com.maxbill.base.service.DataService;
 import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
@@ -98,7 +97,6 @@ public class ApiController {
             Connect connect = this.dataService.selectConnectById(id);
             Jedis jedis = RedisUtil.openJedis(connect);
             if (null != jedis) {
-                WebUtil.setSessionAttribute("jedis", jedis);
                 WebUtil.setSessionAttribute("connect", connect);
                 responseBean.setData("已经连接到： " + connect.getName());
             } else {
@@ -119,8 +117,10 @@ public class ApiController {
     public Integer isopenConnect() {
         Jedis jedis = DataUtil.getCurrentJedisObject();
         if (null != jedis) {
+            RedisUtil.closeJedis(jedis);
             return 1;
         } else {
+            RedisUtil.closeJedis(jedis);
             return 0;
         }
     }
@@ -192,6 +192,7 @@ public class ApiController {
                     treeList.add(zTreeBean);
                 }
                 responseBean.setData(treeList);
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
@@ -205,13 +206,14 @@ public class ApiController {
 
 
     @RequestMapping("/data/treeData")
-    public ResponseBean treeData(String id, Integer index) {
+    public ResponseBean treeData(String id, int index) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id);
                 responseBean.setData(treeList);
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
@@ -224,12 +226,13 @@ public class ApiController {
     }
 
     @RequestMapping("/data/keysData")
-    public ResponseBean keysData(String key, Integer index) {
+    public ResponseBean keysData(String key, int index) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 responseBean.setData(RedisUtil.getKeyInfo(jedis, key, index));
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
@@ -244,7 +247,7 @@ public class ApiController {
 
 
     @RequestMapping("/data/renameKey")
-    public ResponseBean renameKey(String oldKey, String newKey, Integer index) {
+    public ResponseBean renameKey(String oldKey, String newKey, int index) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
@@ -260,6 +263,7 @@ public class ApiController {
                     responseBean.setCode(0);
                     responseBean.setMsgs("'" + oldKey + "' 该key不存在");
                 }
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
@@ -274,7 +278,7 @@ public class ApiController {
 
 
     @RequestMapping("/data/deleteKey")
-    public ResponseBean deleteKey(String key, Integer index) {
+    public ResponseBean deleteKey(String key, int index) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
@@ -285,6 +289,7 @@ public class ApiController {
                     responseBean.setCode(0);
                     responseBean.setMsgs("'" + key + "' 该key不存在");
                 }
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
@@ -315,6 +320,7 @@ public class ApiController {
                 resultMap.put("val02", Float.valueOf(val02));
                 resultMap.put("val03", Float.valueOf(val03));
                 responseBean.setData(resultMap);
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
@@ -335,6 +341,7 @@ public class ApiController {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 responseBean.setData(RedisUtil.getRedisConfig(jedis));
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
@@ -355,6 +362,7 @@ public class ApiController {
             if (null != jedis) {
                 RedisUtil.setRedisConfig(jedis, request.getParameterMap());
                 responseBean.setMsgs("修改配置成功");
+                RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("请求数据异常");

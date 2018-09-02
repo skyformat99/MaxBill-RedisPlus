@@ -59,16 +59,16 @@ public class RedisUtil {
      */
     public static Jedis openJedis(Connect connect) {
         //防止吃初始化时多线程竞争问题
-        lock.lock();
+//        lock.lock();
         initJedisPool(connect);
-        lock.unlock();
+//        lock.unlock();
         return jedisPool.getResource();
     }
 
     /**
      * 判断key是否存在
      */
-    public static boolean existsKey(Jedis jedis, String key, Integer index) {
+    public static boolean existsKey(Jedis jedis, String key, int index) {
         jedis.select(index);
         return jedis.exists(key);
     }
@@ -76,7 +76,7 @@ public class RedisUtil {
     /**
      * 重命名key
      */
-    public static String renameKey(Jedis jedis, String oldKey, String newKey, Integer index) {
+    public static String renameKey(Jedis jedis, String oldKey, String newKey, int index) {
         jedis.select(index);
         return jedis.rename(oldKey, newKey);
     }
@@ -85,7 +85,7 @@ public class RedisUtil {
     /**
      * 删除key
      */
-    public static long deleteKey(Jedis jedis, String key, Integer index) {
+    public static long deleteKey(Jedis jedis, String key, int index) {
         jedis.select(index);
         return jedis.del(key);
     }
@@ -257,7 +257,7 @@ public class RedisUtil {
     }
 
 
-    public static KeyBean getKeyInfo(Jedis jedis, String key, Integer index) {
+    public static KeyBean getKeyInfo(Jedis jedis, String key, int index) {
         KeyBean keyBean = new KeyBean();
         jedis.select(index);
         keyBean.setKey(key);

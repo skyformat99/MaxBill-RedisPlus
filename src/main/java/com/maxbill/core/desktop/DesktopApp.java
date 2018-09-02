@@ -12,6 +12,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -101,11 +102,13 @@ public class DesktopApp extends Application {
      */
     private WebView getWebView() {
         WebView webView = new WebView();
+        Font.loadFont(DesktopApp.class.getResource("/static/plugin/layui/font/iconfont.ttf").toExternalForm(), 12);
         webView.setContextMenuEnabled(false);
         WebEngine webEngine = webView.getEngine();
         webView.setPrefSize(prefWidth, prefHeight);
-        webEngine.load(appPath);
+        webView.setCache(false);
         webEngine.setJavaScriptEnabled(true);
+        webEngine.load(appPath);
         return webView;
     }
 
