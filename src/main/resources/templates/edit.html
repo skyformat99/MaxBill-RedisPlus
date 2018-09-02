@@ -21,19 +21,22 @@
     <div class="layui-form-item">
         <label class="layui-form-label">连接名称:</label>
         <div class="layui-input-inline div-input" style="margin-right:30px;">
-            <input type="text" class="layui-input" placeholder="连接名称" lay-verify="required" id="name" value="${data.name}">
+            <input type="text" class="layui-input" placeholder="连接名称" lay-verify="required" id="name"
+                   value="${data.name}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">连接地址:</label>
         <div class="layui-input-inline div-input" style="margin-right:30px;">
-            <input type="text" class="layui-input" placeholder="连接地址" lay-verify="required" id="host" value="${data.host}">
+            <input type="text" class="layui-input" placeholder="连接地址" lay-verify="required" id="host"
+                   value="${data.host}">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">连接端口:</label>
         <div class="layui-input-inline div-input" style="margin-right:30px;">
-            <input type="text" class="layui-input" placeholder="连接端口" lay-verify="required" id="port" value="${data.port}">
+            <input type="text" class="layui-input" placeholder="连接端口" lay-verify="required" id="port"
+                   value="${data.port}">
         </div>
     </div>
     <div class="layui-form-item">
@@ -53,6 +56,14 @@
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script>
     var basePath = $("#basePath").val();
+
+    document.oncontextmenu = function () {
+        return false;
+    };
+    document.onselectstart = function () {
+        return false;
+    };
+
     $(document).ready(function () {
         layui.use('form', function () {
             var form = layui.form;
@@ -77,7 +88,7 @@
             type: "post",
             url: basePath + '/api/connect/update',
             data: {
-                "id":$("#id").val(),
+                "id": $("#id").val(),
                 "name": $("#name").val(),
                 "host": $("#host").val(),
                 "port": $("#port").val(),

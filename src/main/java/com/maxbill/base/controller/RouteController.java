@@ -12,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RouteController {
 
+    private final String APP_VERSION = "Version: 1.0.0";
+
     @Autowired
     private DataService dataService;
 
@@ -20,10 +22,11 @@ public class RouteController {
         initSystem();
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
-            mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.addObject("message", "已经连接到： " + connect.getName());
         } else {
-            mv.addObject("status", "未连接服务");
+            mv.addObject("message", "未连接服务");
         }
+        mv.addObject("version", APP_VERSION);
         mv.setViewName("root");
         return mv;
     }
@@ -45,12 +48,13 @@ public class RouteController {
     public ModelAndView toData(ModelAndView mv) {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
-            mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.addObject("message", "已经连接到： " + connect.getName());
             mv.setViewName("data");
         } else {
-            mv.addObject("status", "未连接服务");
+            mv.addObject("message", "未连接服务");
             mv.setViewName("root");
         }
+        mv.addObject("version", APP_VERSION);
         return mv;
     }
 
@@ -61,12 +65,13 @@ public class RouteController {
         if (null != connect) {
             RedisUtil.getRedisConfig(DataUtil.getCurrentJedisObject());
             mv.addObject("info", RedisUtil.getRedisInfoList(DataUtil.getCurrentJedisObject()));
-            mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.addObject("message", "已经连接到： " + connect.getName());
             mv.setViewName("info");
         } else {
-            mv.addObject("status", "未连接服务");
+            mv.addObject("message", "未连接服务");
             mv.setViewName("root");
         }
+        mv.addObject("version", APP_VERSION);
         return mv;
     }
 
@@ -74,12 +79,13 @@ public class RouteController {
     public ModelAndView toConf(ModelAndView mv) {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
-            mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.addObject("message", "已经连接到： " + connect.getName());
             mv.setViewName("conf");
         } else {
-            mv.addObject("status", "未连接服务");
+            mv.addObject("message", "未连接服务");
             mv.setViewName("root");
         }
+        mv.addObject("version", APP_VERSION);
         return mv;
     }
 
@@ -87,10 +93,11 @@ public class RouteController {
     public ModelAndView toSelf(ModelAndView mv) {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
-            mv.addObject("status", "已经连接到： " + connect.getName());
+            mv.addObject("message", "已经连接到： " + connect.getName());
         } else {
-            mv.addObject("status", "未连接服务");
+            mv.addObject("message", "未连接服务");
         }
+        mv.addObject("version", APP_VERSION);
         mv.setViewName("self");
         return mv;
     }

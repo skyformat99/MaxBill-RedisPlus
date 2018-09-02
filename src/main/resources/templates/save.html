@@ -52,6 +52,14 @@
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script>
     var basePath = $("#basePath").val();
+
+    document.oncontextmenu = function () {
+        return false;
+    };
+    document.onselectstart = function () {
+        return false;
+    };
+
     $(document).ready(function () {
         layui.use('form', function () {
             var form = layui.form;
