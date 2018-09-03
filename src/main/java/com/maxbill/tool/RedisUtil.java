@@ -34,8 +34,10 @@ public class RedisUtil {
 
     private static boolean TEST_ON_RETURN = true;
 
+    //redis连接池
     private static JedisPool jedisPool;
 
+    //资源锁
     private static ReentrantLock lock = new ReentrantLock();
 
     private RedisUtil() {
@@ -51,7 +53,11 @@ public class RedisUtil {
         config.setMaxWaitMillis(MAX_WAIT);
         config.setTestOnBorrow(TEST_ON_BORROW);
         config.setTestOnReturn(TEST_ON_RETURN);
-        jedisPool = new JedisPool(config, connect.getHost(), Integer.valueOf(connect.getPort()), TIME_OUT, connect.getPass());
+        if (StringUtils.isEmpty(connect.getPass())) {
+            jedisPool = new JedisPool(config, connect.getHost(), Integer.valueOf(connect.getPort()), TIME_OUT);
+        } else {
+            jedisPool = new JedisPool(config, connect.getHost(), Integer.valueOf(connect.getPort()), TIME_OUT, connect.getPass());
+        }
     }
 
     /**
@@ -59,9 +65,9 @@ public class RedisUtil {
      */
     public static Jedis openJedis(Connect connect) {
         //防止吃初始化时多线程竞争问题
-//        lock.lock();
+        lock.lock();
         initJedisPool(connect);
-//        lock.unlock();
+        lock.unlock();
         return jedisPool.getResource();
     }
 

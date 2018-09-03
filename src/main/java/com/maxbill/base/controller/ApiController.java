@@ -105,6 +105,7 @@ public class ApiController {
                 responseBean.setData("未连接服务");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
             responseBean.setData("未连接服务");

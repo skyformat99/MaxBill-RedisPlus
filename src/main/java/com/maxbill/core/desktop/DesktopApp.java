@@ -32,12 +32,13 @@ public class DesktopApp extends Application {
     private final Integer titlePrefHeight = 30;
     private final String appName = "RedisPlus";
     private final String appShow = "/static/styles/winui.css";
+    private final String appFont = "/static/rcfont/redisplus.ttf";
     private final String appPath = "http://127.0.0.1:9999/root";
     private final String appIcon = "/static/image/task-logo.png";
 
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         if (uiType.equals("0")) {
             this.useDefaultStage(stage);
         } else {
@@ -60,7 +61,7 @@ public class DesktopApp extends Application {
     /**
      * 自定义标题栏实现
      */
-    public void useMyselfStage(Stage stage) {
+    public void useMyselfStage(Stage stage) throws Exception {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(new Scene(getWinRoot(stage)));
         stage.getIcons().add(new Image(appIcon));
@@ -71,7 +72,7 @@ public class DesktopApp extends Application {
     /**
      * 自定义主窗体
      */
-    private VBox getWinRoot(Stage stage) {
+    private VBox getWinRoot(Stage stage) throws Exception {
         //主题窗口
         VBox winRoot = new VBox();
         winRoot.setId("winRoot");
@@ -117,7 +118,7 @@ public class DesktopApp extends Application {
     /**
      * 自定顶部窗体
      */
-    private VBox getTopView(Stage stage) {
+    private VBox getTopView(Stage stage) throws Exception {
         // 顶部视图
         VBox topView = new VBox();
         topView.setId("topView");
@@ -132,6 +133,7 @@ public class DesktopApp extends Application {
         Label winTitle = new Label();
         winTitle.setPrefSize(100, titlePrefHeight);
         winTitle.setId("winTitle");
+        winTitle.setFont(Font.loadFont(this.getClass().getResource(appFont).openStream(), 12));
         winTitle.setText(appName);
         winTitle.setAlignment(Pos.BASELINE_LEFT);
         titleView.getChildren().add(winTitle);
@@ -140,6 +142,7 @@ public class DesktopApp extends Application {
         winAbate.setPrefSize(titlePrefWidth, titlePrefHeight);
         winAbate.setId("winAbate");
         winAbate.setText("一");
+        winAbate.setFont(Font.loadFont(this.getClass().getResource(appFont).openStream(), 12));
         winAbate.setScaleX(0.6);
         winAbate.setScaleY(0.6);
         winAbate.setAlignment(Pos.BASELINE_CENTER);
@@ -154,6 +157,7 @@ public class DesktopApp extends Application {
         winClose.setPrefSize(titlePrefWidth, titlePrefHeight);
         winClose.setId("winClose");
         winClose.setText("X");
+        winClose.setFont(Font.loadFont(this.getClass().getResource(appFont).openStream(), 12));
         winClose.setScaleX(0.6);
         winClose.setScaleY(0.6);
         winClose.setAlignment(Pos.BASELINE_CENTER);

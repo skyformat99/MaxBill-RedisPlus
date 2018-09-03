@@ -1,6 +1,12 @@
+@font-face {
+    font-family: 'redisplus';
+    src: url('../rcfont/redisplus.ttf') format('truetype');
+}
+
 * {
     margin: 0;
     padding: 0;
+    font-family: 'redisplus';
 }
 
 .root {
@@ -106,6 +112,10 @@
 }
 
 /*---------------------------*/
+
+.set-color {
+    background-color: #4476A7 !important;
+}
 
 .div-input {
     border: 1px solid silver;
