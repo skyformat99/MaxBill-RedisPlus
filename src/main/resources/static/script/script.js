@@ -2,6 +2,7 @@ var $;
 var layer;
 var basePath;
 
+
 document.oncontextmenu = function () {
     return false;
 };
@@ -13,6 +14,10 @@ layui.use(['jquery', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;
     basePath = $("#basePath").val();
+    //动态计算handle高度
+    var clientHeight = $(document).height();
+    var handleHeight = clientHeight - 100;
+    $(".handle").height(handleHeight);
 });
 
 function toPage(page) {

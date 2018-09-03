@@ -24,12 +24,23 @@
     -fx-font-weight: bold;
 }
 
+#winRaise {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
 #winClose {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
 
 #winAbate:hover {
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+    -fx-background-color: #ECE9EF;
+}
+
+#winRaise:hover {
     -fx-cursor: hand;
     -fx-background-radius: 5px;
     -fx-background-color: #ECE9EF;

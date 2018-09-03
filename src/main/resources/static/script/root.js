@@ -57,6 +57,13 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
                 var obj = res.data[id];
                 openConnect(obj.id);
             });
+            //悬浮提示信息
+            tbody.children("tr").on('mouseover', function () {
+                layer.tips('双击行连接服务...', this, {
+                    tips: [2, '#3595CC'],
+                    time: 1000
+                });
+            });
             rowDataId = '';
             layer.closeAll('loading');
         }
@@ -120,6 +127,13 @@ function getConnectData() {
                 var id = JSON.stringify(tbody.find(".layui-table-hover").data('index'));
                 var obj = res.data[id];
                 openConnect(obj.id);
+            });
+            //悬浮提示信息
+            tbody.children("tr").on('mouseover', function () {
+                layer.tips('双击行连接服务...', this, {
+                    tips: [2, '#3595CC'],
+                    time: 1000
+                });
             });
             rowDataId = '';
             layer.closeAll('loading');

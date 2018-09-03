@@ -6,7 +6,7 @@
 }
 
 .handle-left-item {
-    color: #1296DB;
+    color: #2F4056;
     height: 50px;
     display: block;
     line-height: 50px;
@@ -22,7 +22,6 @@
 }
 
 .handle-left-item:hover {
-
     background-color: #EEEDEF;
 }
 

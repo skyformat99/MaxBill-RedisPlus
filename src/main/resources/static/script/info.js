@@ -18,7 +18,6 @@ function getRealtimeData() {
     $.ajax({
         type: 'get',
         url: "/api/info/realInfo",
-        timeout: 5000,
         sync: false,
         success: function (data) {
             if (data.code == 200) {

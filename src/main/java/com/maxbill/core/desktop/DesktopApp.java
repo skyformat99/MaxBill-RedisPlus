@@ -5,6 +5,7 @@ import com.maxbill.tool.DataUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -16,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -25,6 +27,7 @@ public class DesktopApp extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
+    private boolean isMax = false;
     private final String uiType = "1";
     private final Integer prefWidth = 1300;
     private final Integer prefHeight = 800;
@@ -65,7 +68,8 @@ public class DesktopApp extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(new Scene(getWinRoot(stage)));
         stage.getIcons().add(new Image(appIcon));
-        stage.setResizable(false);
+        stage.setResizable(true);
+        //stage.setFullScreen(true);
         stage.show();
     }
 
@@ -152,6 +156,37 @@ public class DesktopApp extends Application {
             }
         });
         titleView.getChildren().add(winAbate);
+        // 最大化按钮
+        /*
+        Label winRaise = new Label();
+        winRaise.setPrefSize(titlePrefWidth, titlePrefHeight);
+        winRaise.setId("winRaise");
+        winRaise.setText("口");
+        winRaise.setFont(Font.loadFont(this.getClass().getResource(appFont).openStream(), 12));
+        winRaise.setScaleX(0.6);
+        winRaise.setScaleY(0.6);
+        winRaise.setAlignment(Pos.BASELINE_CENTER);
+        winRaise.setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                Rectangle2D rectangle2d = Screen.getPrimary().getVisualBounds();
+                isMax = !isMax;
+                if (isMax) {
+                    // 最大化
+                    stage.setX(rectangle2d.getMinX());
+                    stage.setY(rectangle2d.getMinY());
+                    stage.setWidth(rectangle2d.getWidth());
+                    stage.setHeight(rectangle2d.getHeight());
+                } else {
+                    // 缩放回原来的大小
+                    stage.setX(xOffset);
+                    stage.setY(xOffset);
+                    stage.setWidth(prefWidth);
+                    stage.setHeight(prefHeight);
+                }
+            }
+        });
+        titleView.getChildren().add(winRaise);
+        */
         // 关闭按钮
         Label winClose = new Label();
         winClose.setPrefSize(titlePrefWidth, titlePrefHeight);
@@ -169,6 +204,11 @@ public class DesktopApp extends Application {
         });
         titleView.getChildren().add(winClose);
         // 顶部布局
+        //AnchorPane.setLeftAnchor(winImage, 5.0);
+        //AnchorPane.setLeftAnchor(winTitle, 40.0);
+        //AnchorPane.setRightAnchor(winAbate, 60.0);
+        //AnchorPane.setRightAnchor(winRaise, 30.0);
+        //AnchorPane.setRightAnchor(winClose, 5.0);
         AnchorPane.setLeftAnchor(winImage, 5.0);
         AnchorPane.setLeftAnchor(winTitle, 40.0);
         AnchorPane.setRightAnchor(winAbate, 30.0);

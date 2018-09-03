@@ -1,5 +1,5 @@
 var currKey;
-var currIndex;
+var currIndex = -1;
 var basePath = $("#basePath").val();
 
 $(document).ready(function () {
@@ -40,6 +40,8 @@ function zTreeOnClick(event, treeId, treeNode) {
         currKey = treeNode.name;
         currIndex = treeNode.index;
         getKeyInfo();
+    } else {
+        currIndex = treeNode.index;
     }
 };
 
@@ -194,6 +196,63 @@ function reloadKey() {
     getKeyInfo();
 }
 
+function selectKey() {
+    var key = $("#key-input").val();
+    if (key == "") {
+        layer.alert("请输入要查询的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    alert(currIndex);
+    if (currIndex == -1) {
+        layer.alert("请选择一个要操作的库！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    var xhr = $.ajax({
+        type: "post",
+        url: basePath + '/api/data/keysData',
+        data: {
+            'key': key,
+            'index': currIndex
+        },
+        timeout: 10000,
+        sync: false,
+        success: function (data) {
+            var keyInfo = data.data;
+            if (data.code == 200 && keyInfo) {
+                currKey = key;
+                $("#key-input").val(currKey);
+                $("#key").text(keyInfo.key);
+                $("#type").text(keyInfo.type);
+                $("#size").text(keyInfo.size);
+                $("#ttl").text(keyInfo.ttl);
+                $("#value").text(keyInfo.value);
+            } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        }
+    });
+}
+
 //获取key信息
 function getKeyInfo() {
     if (currKey == "" || currKey == null) {
@@ -214,12 +273,18 @@ function getKeyInfo() {
         sync: false,
         success: function (data) {
             var keyInfo = data.data;
+            $("#key-input").val(currKey);
             if (data.code == 200 && keyInfo) {
                 $("#key").text(keyInfo.key);
                 $("#type").text(keyInfo.type);
                 $("#size").text(keyInfo.size);
                 $("#ttl").text(keyInfo.ttl);
                 $("#value").text(keyInfo.value);
+            } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
             }
         },
         complete: function (XMLHttpRequest, status) {

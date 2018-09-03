@@ -2,7 +2,7 @@
     height: 100%;
     float: left;
     width: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     overflow-style: marquee-line;
     border-right: 1px solid silver;
@@ -27,6 +27,7 @@
     height: 50px;
     line-height: 50px;
     margin: 0 auto;
+    padding-left: 10px;
     border: #eaeaea 1px solid;
 }
 
@@ -35,7 +36,7 @@
 }
 
 .key-vals {
-    width: 99.8%;
+    width: 99.9%;
     margin: 0 auto;
 }
 
@@ -43,7 +44,7 @@
     height: 30px;
     line-height: 30px;
     text-align: center;
-    background: #eaeaea;
+    background-color: #D0D0D0;
 }
 
 #value {
@@ -80,3 +81,17 @@
     border: 1px solid #e6e6e6;
     color: #333;
 }
+
+.query-input {
+    float: left;
+    margin-top: 11px;
+    border-radius: 3px;
+    padding-left: 10px;
+    height: 28px !important;
+    border: 1px solid silver;
+}
+
+.query-button {
+    margin-left: 1px !important;
+}
+

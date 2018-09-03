@@ -34,6 +34,10 @@
     margin-left: 800px;
 }
 
+.padding-top-div {
+    padding-top: 20px;
+}
+
 .layui-form-div {
     margin-top: 20px;
 }
@@ -70,3 +74,8 @@ hr {
     line-height: 25px;
     border-top: 1px solid #D0D0D0;
 }
+
+.layui-table {
+    margin-top: 0px;
+}
+

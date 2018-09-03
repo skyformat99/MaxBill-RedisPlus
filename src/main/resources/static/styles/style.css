@@ -12,12 +12,16 @@
 .root {
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 .topbar {
-    margin: 0;
-    padding: 0;
+    top: 0;
+    left: 0;
     height: 70px;
+    width: 100%;
+    position: fixed;
+    z-index: 1000;
     background-color: #CFE6F3;
 }
 
@@ -78,14 +82,19 @@
 }
 
 .handle {
-    height: 700px;
-    border: 1px solid white;
+    width: 100%;
+    /*height: 700px;*/
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin-top: 70px;
+    margin-bottom: 30px;
 }
 
 .status {
+    left: 0;
+    bottom: 0;
     height: 30px;
     width: 100%;
-    bottom: 0;
     position: fixed;
     background-color: #CFE6F3;
 }

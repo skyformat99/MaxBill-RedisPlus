@@ -231,7 +231,12 @@ public class ApiController {
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
-                responseBean.setData(RedisUtil.getKeyInfo(jedis, key, index));
+                if (RedisUtil.existsKey(jedis, key, index)) {
+                    responseBean.setData(RedisUtil.getKeyInfo(jedis, key, index));
+                } else {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("该key不存在");
+                }
                 RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
