@@ -60,7 +60,7 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
             //悬浮提示信息
             tbody.children("tr").on('mouseover', function () {
                 layer.tips('双击行连接服务...', this, {
-                    tips: [2, '#3595CC'],
+                    tips: [3, '#3595CC'],
                     time: 1000
                 });
             });
@@ -131,7 +131,7 @@ function getConnectData() {
             //悬浮提示信息
             tbody.children("tr").on('mouseover', function () {
                 layer.tips('双击行连接服务...', this, {
-                    tips: [2, '#3595CC'],
+                    tips: [3, '#3595CC'],
                     time: 1000
                 });
             });

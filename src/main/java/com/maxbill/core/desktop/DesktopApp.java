@@ -27,7 +27,7 @@ public class DesktopApp extends Application {
 
     private double xOffset = 0;
     private double yOffset = 0;
-    private boolean isMax = false;
+    //private boolean isMax = false;
     private final String uiType = "1";
     private final Integer prefWidth = 1300;
     private final Integer prefHeight = 800;
@@ -68,7 +68,7 @@ public class DesktopApp extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(new Scene(getWinRoot(stage)));
         stage.getIcons().add(new Image(appIcon));
-        stage.setResizable(true);
+        stage.setResizable(false);
         //stage.setFullScreen(true);
         stage.show();
     }
@@ -110,11 +110,10 @@ public class DesktopApp extends Application {
         WebView webView = new WebView();
         webView.setContextMenuEnabled(false);
         webView.setPrefSize(prefWidth, prefHeight);
-        webView.setCache(false);
-        webView.setFontScale(1);
         webView.setFontSmoothingType(FontSmoothingType.GRAY);
         WebEngine webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
+        System.out.println(webEngine.getUserAgent());
         webEngine.load(appPath);
         return webView;
     }

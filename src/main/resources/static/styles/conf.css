@@ -3,8 +3,7 @@
     width: 700px;
     overflow-y: hidden;
     overflow-x: hidden;
-    overflow-style: marquee-block;
-    border-right: 1px solid silver;
+    border-right: 1px solid #E6E6E6;
 }
 
 .layui-table {
@@ -26,11 +25,10 @@
     width: 100%;
     margin-top: 40px;
     overflow-y: scroll;
-    overflow-style: marquee-line;
 }
 
 #data-div .layui-table {
-    width: 682px;
+    width: 690px;
 }
 
 .handle-right {
@@ -40,13 +38,13 @@
 
 .config-top {
     color: #8D8D8D;
-    height: 40px;
-    border-bottom: 1px solid #E6E6E6;
-    background-color: #F2F2F2;
+    height: 39px;
     margin-left: 1px;
     text-align: center;
     font-size: 14px;
     line-height: 40px;
+    background-color: #F2F2F2;
+    border-bottom: 1px solid #E6E6E6;
 }
 
 .layui-form-div {

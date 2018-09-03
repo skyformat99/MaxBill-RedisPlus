@@ -2,7 +2,6 @@ var $;
 var layer;
 var basePath;
 
-
 document.oncontextmenu = function () {
     return false;
 };
