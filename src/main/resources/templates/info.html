@@ -41,14 +41,14 @@
             <div class="layui-fluid">
                 <div class="layui-row">
                     <div class="layui-col-sm12">
-                        <div id="chart01" class="chart-box"></div>
+                        <canvas id="chart01" class="chart-box" width="790" height="349"></canvas>
                     </div>
                 </div>
             </div>
             <div class="layui-fluid" style="border-top: 1px silver solid">
                 <div class="layui-row">
                     <div class="layui-col-sm12">
-                        <div id="chart02" class="chart-box"></div>
+                        <canvas id="chart02" class="chart-box" width="790" height="349"></canvas>
                     </div>
                 </div>
             </div>
@@ -87,10 +87,9 @@
         <div class="status-version">${version}</div>
     </div>
 </div>
-
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
-<script type="text/javascript" src="${ctx}/plugin/hcharts/highcharts.js"></script>
 <script type="text/javascript" src="${ctx}/script/script.js"></script>
 <script type="text/javascript" src="${ctx}/script/info.js"></script>
+<script type="text/javascript" src="${ctx}/script/chart.js"></script>
 </body>
 </html>

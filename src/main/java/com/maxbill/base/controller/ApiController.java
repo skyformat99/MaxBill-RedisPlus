@@ -319,11 +319,9 @@ public class ApiController {
                 String[] memory = redisInfo.getMemory().split("\n");
                 String val01 = StringUtil.getValueString(memory[1]).replace("\r", "");
                 String[] cpu = redisInfo.getCpu().split("\n");
-                String val02 = StringUtil.getValueString(cpu[1]).replace("\r", "");
-                String val03 = StringUtil.getValueString(cpu[2]).replace("\r", "");
-                resultMap.put("val01", Long.valueOf(val01));
+                String val02 = StringUtil.getValueString(cpu[2]).replace("\r", "");
+                resultMap.put("val01", Long.valueOf(val01) / 1024);
                 resultMap.put("val02", Float.valueOf(val02));
-                resultMap.put("val03", Float.valueOf(val03));
                 responseBean.setData(resultMap);
                 RedisUtil.closeJedis(jedis);
             } else {
@@ -397,5 +395,6 @@ public class ApiController {
         }
         return responseBean;
     }
+
 
 }
