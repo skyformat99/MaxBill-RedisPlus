@@ -1,7 +1,7 @@
 # RedisPlus
 
 #### 项目介绍
-RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linux 、Mac三大系统平台，RedisPlus提供更加高效、方便、快捷的使用体验，有着更加现代化的界面风格。该软件参考了RedisStudio的界面逻辑，但是和RedisStudio软件完全没有关系，并不是官方推出的跨平台软件。该软件为开源免费使用（可商用），但是禁止二次开发打包发布盈利，违反必究！ 该软件遵循Apache License 2.0开源协议，致力于为大家提供一个高效的Redis可视化管理软件。
+RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linux 、Mac三大系统平台，RedisPlus提供更加高效、方便、快捷的使用体验，有着更加现代化的界面风格。该软件参考了RedisStudio的界面逻辑，但是和RedisStudio软件完全没有关系，并不是官方推出的跨平台软件。该软件为开源免费使用（可商用），但是禁止二次开发打包发布盈利，违反必究！ 该软件遵循GPL开源协议，致力于为大家提供一个高效的Redis可视化管理软件。
  
 
 #### 技术选型</br>
