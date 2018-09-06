@@ -19,11 +19,12 @@ layui.use(['jquery', 'layer'], function () {
     $(".handle").height(handleHeight);
 });
 
+
 function toPage(page) {
     if (page == 'root' || page == 'self') {
         window.location.href = basePath + '/' + page;
     } else {
-        var xhr = $.ajax({
+        $.ajax({
             type: "post",
             url: basePath + '/api/connect/isopen',
             timeout: 10000,
@@ -33,17 +34,6 @@ function toPage(page) {
                     window.location.href = basePath + '/' + page;
                 } else {
                     layer.alert('请先连接一个可用的服务！', {
-                        skin: 'layui-layer-lan',
-                        closeBtn: 0
-                    });
-                }
-            },
-            complete: function (XMLHttpRequest, status) {
-                //请求完成后最终执行参数
-                if (status == 'timeout') {
-                    //超时,status还有success,error等值的情况
-                    xhr.abort();
-                    layer.alert("请求超时，请检查网络连接", {
                         skin: 'layui-layer-lan',
                         closeBtn: 0
                     });

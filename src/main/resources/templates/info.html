@@ -83,13 +83,16 @@
         </div>
     </div>
     <div class="status">
-        <div class="status-message">${message}</div>
+        <div class="status-message">
+            <img src="${ctx}/image/${marktip}.png"/>
+            <span class="conn ${marktip}">${message}</span>
+        </div>
         <div class="status-version">${version}</div>
     </div>
 </div>
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script type="text/javascript" src="${ctx}/script/script.js"></script>
-<script type="text/javascript" src="${ctx}/script/info.js"></script>
 <script type="text/javascript" src="${ctx}/script/chart.js"></script>
+<script type="text/javascript" src="${ctx}/script/info.js"></script>
 </body>
 </html>

@@ -100,12 +100,14 @@ public class ApiController {
                 WebUtil.setSessionAttribute("connect", connect);
                 responseBean.setData("已经连接到： " + connect.getName());
             } else {
+                WebUtil.setSessionAttribute("connect", null);
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接失败");
                 responseBean.setData("未连接服务");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            WebUtil.setSessionAttribute("connect", null);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
             responseBean.setData("未连接服务");
@@ -118,7 +120,6 @@ public class ApiController {
     public Integer isopenConnect() {
         Jedis jedis = DataUtil.getCurrentJedisObject();
         if (null != jedis) {
-            RedisUtil.closeJedis(jedis);
             return 1;
         } else {
             return 0;

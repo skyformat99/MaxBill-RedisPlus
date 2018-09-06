@@ -264,13 +264,22 @@ function openConnect(id) {
         url: basePath + '/api/connect/create',
         timeout: 10000,
         data: {"id": id},
+        sync: false,
         success: function (data) {
-            $(".status-message").html(data.data);
+            var imgObj = $(".status-message img");
+            var msgObj = $(".status-message .conn");
             if (data.code != 200) {
+                msgObj.removeClass("conn-ok");
+                msgObj.addClass("conn-no").text(data.data);
+                imgObj.attr("src", basePath + "/image/conn-no.png");
                 layer.alert(data.msgs, {
                     skin: 'layui-layer-lan',
                     closeBtn: 0
                 });
+            } else {
+                msgObj.removeClass("conn-no");
+                msgObj.addClass("conn-ok").text(data.data);
+                imgObj.attr("src", basePath + "/image/conn-ok.png");
             }
             layer.closeAll('loading');
         },

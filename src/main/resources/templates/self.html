@@ -42,7 +42,7 @@
             <div class="app-text">
                 RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linux 、Mac三大系统平台，RedisPlus提供更加高效、方便、快捷的使用体验，有着更加现代化的界面风格。
                 该软件参考了RedisStudio的界面逻辑，但是和RedisStudio软件完全没有关系，并不是官方推出的跨平台软件。该软件为开源免费使用（可商用），但是禁止二次开发打包发布盈利，违反必究！
-                该软件遵循GLP开源协议，致力于为大家提供一个高效的Redis可视化管理软件。
+                该软件遵循GPL开源协议，致力于为大家提供一个高效的Redis可视化管理软件。
             </div>
             <br>
             <div class="app-info">
@@ -70,7 +70,7 @@
                     </tr>
                     <tr>
                         <td>开源协议</td>
-                        <td>GLP开源协议</td>
+                        <td>GPL开源协议</td>
                     </tr>
                     <tr>
                         <td>开源地址</td>
@@ -115,14 +115,17 @@
                         <li>2.使用过程中发现BUG或者缺陷请在此反馈！</li>
                         <li>3.使用过程中有好的建议请在此提出，作者会联系你确认需求！</li>
                         <li>4.使用过程中有体验不佳的意见也可在此通道反馈！</li>
-                        <li>5.请不要使用次通道发送与该软件无关的信息，谢谢合作！</li>
+                        <li>5.请不要使用此通道发送与该软件无关的信息，谢谢合作！</li>
                     </div>
                 </div>
             </form>
         </div>
     </div>
     <div class="status">
-        <div class="status-message">${message}</div>
+        <div class="status-message">
+            <img src="${ctx}/image/${marktip}.png"/>
+            <span class="conn ${marktip}">${message}</span>
+        </div>
         <div class="status-version">${version}</div>
     </div>
 </div>

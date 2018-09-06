@@ -149,7 +149,7 @@
                     <mainClass>com.maxbill.MainApplication</mainClass>
                     <!-- 运行文件名 -->
                     <appName>RedisPlus</appName>
-                    <!--输出详细打包日志-->
+                    <!--启用自定义打包配置-->
                     <verbose>true</verbose>
                     <!-- 菜单 -->
                     <needMenu>true</needMenu>

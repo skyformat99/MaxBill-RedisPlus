@@ -9,10 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 public class RouteController {
 
-    private final String APP_VERSION = "Version: 1.0.0";
+    private final String APP_VERSION = "Version: 1.0.1";
 
     @Autowired
     private DataService dataService;
@@ -20,13 +23,7 @@ public class RouteController {
     @GetMapping("/root")
     public ModelAndView toRoot(ModelAndView mv) {
         initSystem();
-        Connect connect = DataUtil.getCurrentOpenConnect();
-        if (null != connect) {
-            mv.addObject("message", "已经连接到： " + connect.getName());
-        } else {
-            mv.addObject("message", "未连接服务");
-        }
-        mv.addObject("version", APP_VERSION);
+        mv.addAllObjects(setPageInfo());
         mv.setViewName("root");
         return mv;
     }
@@ -46,58 +43,30 @@ public class RouteController {
 
     @GetMapping("/data")
     public ModelAndView toData(ModelAndView mv) {
-        Connect connect = DataUtil.getCurrentOpenConnect();
-        if (null != connect) {
-            mv.addObject("message", "已经连接到： " + connect.getName());
-            mv.setViewName("data");
-        } else {
-            mv.addObject("message", "未连接服务");
-            mv.setViewName("root");
-        }
-        mv.addObject("version", APP_VERSION);
+        mv.addAllObjects(setPageInfo());
+        mv.setViewName("data");
         return mv;
     }
 
 
     @GetMapping("/info")
     public ModelAndView toInfo(ModelAndView mv) {
-        Connect connect = DataUtil.getCurrentOpenConnect();
-        if (null != connect) {
-            RedisUtil.getRedisConfig(DataUtil.getCurrentJedisObject());
-            mv.addObject("info", RedisUtil.getRedisInfoList(DataUtil.getCurrentJedisObject()));
-            mv.addObject("message", "已经连接到： " + connect.getName());
-            mv.setViewName("info");
-        } else {
-            mv.addObject("message", "未连接服务");
-            mv.setViewName("root");
-        }
-        mv.addObject("version", APP_VERSION);
+        mv.addObject("info", RedisUtil.getRedisInfoList(DataUtil.getCurrentJedisObject()));
+        mv.addAllObjects(setPageInfo());
+        mv.setViewName("info");
         return mv;
     }
 
     @GetMapping("/conf")
     public ModelAndView toConf(ModelAndView mv) {
-        Connect connect = DataUtil.getCurrentOpenConnect();
-        if (null != connect) {
-            mv.addObject("message", "已经连接到： " + connect.getName());
-            mv.setViewName("conf");
-        } else {
-            mv.addObject("message", "未连接服务");
-            mv.setViewName("root");
-        }
-        mv.addObject("version", APP_VERSION);
+        mv.addAllObjects(setPageInfo());
+        mv.setViewName("conf");
         return mv;
     }
 
     @GetMapping("/self")
     public ModelAndView toSelf(ModelAndView mv) {
-        Connect connect = DataUtil.getCurrentOpenConnect();
-        if (null != connect) {
-            mv.addObject("message", "已经连接到： " + connect.getName());
-        } else {
-            mv.addObject("message", "未连接服务");
-        }
-        mv.addObject("version", APP_VERSION);
+        mv.addAllObjects(setPageInfo());
         mv.setViewName("self");
         return mv;
     }
@@ -112,6 +81,20 @@ public class RouteController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Map setPageInfo() {
+        Map mvMap = new HashMap();
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (null != connect) {
+            mvMap.put("marktip", "conn-ok");
+            mvMap.put("message", "已经连接到： " + connect.getName());
+        } else {
+            mvMap.put("marktip", "conn-no");
+            mvMap.put("message", "未连接服务");
+        }
+        mvMap.put("version", APP_VERSION);
+        return mvMap;
     }
 
 }
