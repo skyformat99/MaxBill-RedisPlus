@@ -115,6 +115,11 @@ function ztreeOnClick(event, treeId, treeNode) {
     } else {
         currIndex = treeNode.index;
         //取消其他根节点点击样式
+        for (var i = 0; i < 15; i++) {
+            if (i != currIndex) {
+                $("#keyTree" + i + "_1_a").removeClass("curSelectedNode");
+            }
+        }
     }
 }
 
@@ -133,6 +138,8 @@ function loadKeyTree() {
         sync: true,
         timeout: 10000,
         success: function (data) {
+            //$.fn.zTree.init($("#keyTree"), zTreeSetting, data.data);
+            //$.fn.zTree.getZTreeObj("keyTree").expandAll(false);
             for (var i = 0; i < 16; i++) {
                 $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
                 $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
