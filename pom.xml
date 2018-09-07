@@ -74,13 +74,11 @@
             <version>1.3.0</version>
         </dependency>
         <!--开发工具依赖-->
-        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-        -->
         <!--lombok插件-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -137,7 +135,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--<configuration><fork>true</fork></configuration>-->
+                <configuration><fork>true</fork></configuration>
             </plugin>
             <!--javafx application package-->
             <plugin>

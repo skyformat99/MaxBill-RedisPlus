@@ -1,11 +1,14 @@
 var currKey;
 var currIndex = -1;
+var pageSize = 1000;
 var basePath = $("#basePath").val();
 
 $(document).ready(function () {
     loadKeyTree();
 });
 
+
+//树配置
 var zTreeSetting = {
     check: {
         enable: false,
@@ -16,41 +19,119 @@ var zTreeSetting = {
         }
     },
     view: {
-        showLine: false
+        showLine: false,
+        addDiyDom: showPageView
     },
     async: {
         enable: true,
         dataType: "json",
         url: basePath + '/api/data/treeData',
-        autoParam: ["id", "index"],
-        dataFilter: filter
+        autoParam: ["id", "index", "page", "count"],
+        dataFilter: dataFilter
     },
     callback: {
-        onClick: zTreeOnClick
+        onClick: ztreeOnClick,
+        onExpand: ztreeOnExpand
     }
 };
 
+//点击分页
+function goPage(treeNode, page) {
+    if (currIndex == -1) {
+        layer.alert("请选择一个要操作的库！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    treeNode.page = page;
+    if (treeNode.page < 1) {
+        treeNode.page = 1;
+    }
+    if (treeNode.page > treeNode.maxPage) {
+        treeNode.page = treeNode.maxPage;
+    }
+    var zTree = $.fn.zTree.getZTreeObj("keyTree" + currIndex);
+    zTree.reAsyncChildNodes(treeNode, "refresh");
+}
+
+//显示分页
+function showPageView(treeId, treeNode) {
+    if (treeNode.level > 0) {
+        return;
+    }
+    var pageDiv = $("#" + treeNode.tId + "_a");
+    if ($("#addBtn_" + treeNode.id).length > 0) {
+        return;
+    }
+    if (treeNode.count <= pageSize) {
+        return;
+    }
+    var pageBox = ""
+    pageBox += "<span class='button lastPage' id='lastBtn_" + treeNode.id + "' title='last page' onfocus='this.blur();'></span>";
+    pageBox += "<span class='button nextPage' id='nextBtn_" + treeNode.id + "' title='next page' onfocus='this.blur();'></span>";
+    pageBox += "<span class='button prevPage' id='prevBtn_" + treeNode.id + "' title='prev page' onfocus='this.blur();'></span>";
+    pageBox += "<span class='button firstPage' id='firstBtn_" + treeNode.id + "' title='first page' onfocus='this.blur();'></span>";
+    pageDiv.after(pageBox);
+    var first = $("#firstBtn_" + treeNode.id);
+    var prev = $("#prevBtn_" + treeNode.id);
+    var next = $("#nextBtn_" + treeNode.id);
+    var last = $("#lastBtn_" + treeNode.id);
+    treeNode.maxPage = Math.round(treeNode.count / pageSize - .5) + (treeNode.count % pageSize == 0 ? 0 : 1);
+    first.bind("click", function () {
+        if (!treeNode.isAjaxing) {
+            goPage(treeNode, 1);
+        }
+    });
+    prev.bind("click", function () {
+        if (!treeNode.isAjaxing) {
+            goPage(treeNode, treeNode.page - 1);
+        }
+    });
+    next.bind("click", function () {
+        if (!treeNode.isAjaxing) {
+            goPage(treeNode, treeNode.page + 1);
+        }
+    });
+    last.bind("click", function () {
+        if (!treeNode.isAjaxing) {
+            goPage(treeNode, treeNode.maxPage);
+        }
+    });
+};
+
+
 //过滤异步加载ztree时返回的数据
-function filter(treeId, parentNode, childNodes) {
+function dataFilter(treeId, parentNode, childNodes) {
     return childNodes.data;
 }
 
-function zTreeOnClick(event, treeId, treeNode) {
+//树节点点击事件
+function ztreeOnClick(event, treeId, treeNode) {
     if (!treeNode.isParent) {
         currKey = treeNode.name;
         currIndex = treeNode.index;
         getKeyInfo();
     } else {
         currIndex = treeNode.index;
+        //取消其他根节点点击样式
     }
-};
+}
 
+//树节点展开事件
+function ztreeOnExpand(event, treeId, treeNode) {
+    if (treeNode.isParent) {
+        currIndex = treeNode.index;
+    }
+}
+
+//初始化16个根库
 function loadKeyTree() {
     var xhr = $.ajax({
         type: "get",
         url: basePath + '/api/data/treeInit',
         sync: true,
-        timeout: 15000,
+        timeout: 10000,
         success: function (data) {
             for (var i = 0; i < 16; i++) {
                 $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
@@ -70,6 +151,7 @@ function loadKeyTree() {
         }
     });
 }
+
 
 //重命名key
 function renameKey() {
@@ -205,7 +287,6 @@ function selectKey() {
         });
         return false;
     }
-    alert(currIndex);
     if (currIndex == -1) {
         layer.alert("请选择一个要操作的库！", {
             skin: 'layui-layer-lan',

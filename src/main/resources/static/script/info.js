@@ -36,18 +36,30 @@ function getRealtimeData() {
             moveData(1, data01, key, val01);
             moveData(2, data02, key, val02);
             new sChart('chart01', 'line', data01, {
-                title: '已占用内存量实时监控',
+                title: '已占用内存量实时监控 (MB)',
+                autoWidth: true,
+                showValue: true,
+                topPadding: 50,
+                bottomPadding: 30,
+                leftPadding: 50,
+                rightPadding: 30,
                 bgColor: '#FFFFFF',
-                titleColor: '#00887C',
-                fillColor: 'red',
-                contentColor: 'rgba(46,199,201,0.3)'
+                titleColor: '#1766A2',
+                fillColor: '#1766A2',
+                contentColor: '#e6e6e6'
             });
             new sChart('chart02', 'line', data02, {
-                title: '已占用CPU信息实时监控',
+                title: '主进程核心态累计CPU耗时 (s)',
+                autoWidth: true,
+                showValue: true,
+                topPadding: 50,
+                bottomPadding: 30,
+                leftPadding: 50,
+                rightPadding: 30,
                 bgColor: '#FFFFFF',
                 titleColor: '#00887C',
-                fillColor: 'red',
-                contentColor: 'rgba(46,199,201,0.3)'
+                fillColor: '#00887C',
+                contentColor: '#e6e6e6'
             });
             setTimeout("getRealtimeData()", 2000);
         }

@@ -285,6 +285,7 @@ function openConnect(id) {
         },
         complete: function (XMLHttpRequest, status) {
             //请求完成后最终执行参数
+            layer.closeAll('loading');
             if (status == 'timeout') {
                 //超时,status还有success,error等值的情况
                 xhr.abort();

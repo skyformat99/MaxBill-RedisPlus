@@ -5,6 +5,10 @@
     border-right: 1px solid silver;
 }
 
+.chart-div {
+    width: 765px;
+}
+
 .chart-box {
     display: block;
 }

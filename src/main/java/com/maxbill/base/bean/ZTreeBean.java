@@ -15,6 +15,10 @@ public class ZTreeBean {
 
     private Integer index;
 
+    private Integer page;
+
+    private Long count;
+
     private boolean checked = false;
 
     @JSONField(name = "isParent")

@@ -185,10 +185,13 @@ public class ApiController {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 for (int i = 0; i < 16; i++) {
+                    long dbSize = RedisUtil.dbSize(jedis, i);
                     ZTreeBean zTreeBean = new ZTreeBean();
                     zTreeBean.setId(KeyUtil.getUUIDKey());
-                    zTreeBean.setName("DB" + i + " (" + RedisUtil.dbSize(jedis, i) + ")");
+                    zTreeBean.setName("DB" + i + " (" + dbSize + ")");
                     zTreeBean.setParent(true);
+                    zTreeBean.setCount(dbSize);
+                    zTreeBean.setPage(1);
                     zTreeBean.setIndex(i);
                     treeList.add(zTreeBean);
                 }
@@ -207,19 +210,25 @@ public class ApiController {
 
 
     @RequestMapping("/data/treeData")
-    public ResponseBean treeData(String id, int index) {
+    public ResponseBean treeData(String id, int index, int page, int count) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id);
-                responseBean.setData(treeList);
+                int startIndex = (page - 1) * 1000;
+                int endIndex = page * 1000;
+                if (endIndex > count) {
+                    endIndex = count;
+                }
+                responseBean.setData(treeList.subList(startIndex, endIndex));
                 RedisUtil.closeJedis(jedis);
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -320,8 +329,8 @@ public class ApiController {
                 String[] memory = redisInfo.getMemory().split("\n");
                 String val01 = StringUtil.getValueString(memory[1]).replace("\r", "");
                 String[] cpu = redisInfo.getCpu().split("\n");
-                String val02 = StringUtil.getValueString(cpu[2]).replace("\r", "");
-                resultMap.put("val01", Long.valueOf(val01) / 1024);
+                String val02 = StringUtil.getValueString(cpu[1]).replace("\r", "");
+                resultMap.put("val01", (float) (Math.round((Float.valueOf(val01) / 1048576) * 100)) / 100);
                 resultMap.put("val02", Float.valueOf(val02));
                 responseBean.setData(resultMap);
                 RedisUtil.closeJedis(jedis);

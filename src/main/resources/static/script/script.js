@@ -14,9 +14,9 @@ layui.use(['jquery', 'layer'], function () {
     layer = layui.layer;
     basePath = $("#basePath").val();
     //动态计算handle高度
-    var clientHeight = $(document).height();
-    var handleHeight = clientHeight - 100;
-    $(".handle").height(handleHeight);
+    // var clientHeight = $(document).height();
+    // var handleHeight = clientHeight - 100;
+    // $(".handle").height(handleHeight);
 });
 
 

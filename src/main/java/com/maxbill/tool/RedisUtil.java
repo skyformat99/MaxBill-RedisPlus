@@ -2,6 +2,7 @@ package com.maxbill.tool;
 
 import com.maxbill.base.bean.*;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
@@ -113,48 +114,51 @@ public class RedisUtil {
 
 
     /**
-     * 设置 list
+     * 设置list
      */
-    public static <T> void setList(Jedis jedis, String key, List<T> list) {
+    public static void setList(Jedis jedis, String key, List<T> list) {
         jedis.set(key.getBytes(), ObjectUtil.serialize(list));
     }
 
-    /**
-     * 获取list
-     */
-    public static <T> List<T> getList(Jedis jedis, String key) {
-        if (jedis == null || !jedis.exists(key.getBytes())) {
-            return null;
-        }
-        byte[] in = jedis.get(key.getBytes());
-        List<T> list = (List<T>) ObjectUtil.deserialize(in);
-        return list;
-    }
-
-    /**
-     * 设置map
-     */
-    public static <T> void setMap(Jedis jedis, String key, Map<String, T> map) {
-        jedis.set(key.getBytes(), ObjectUtil.serialize(map));
-    }
-
-    /**
-     * 获取map
-     */
-    public static <T> Map<String, T> getMap(Jedis jedis, String key) {
-        if (jedis == null || !jedis.exists(key.getBytes())) {
-            return null;
-        }
-        byte[] in = jedis.get(key.getBytes());
-        Map<String, T> map = (Map<String, T>) ObjectUtil.deserialize(in);
-        return map;
-    }
+//    /**
+//     * 获取list
+//     */
+//    public static <T> List<T> getList(Jedis jedis, String key) {
+//        if (jedis == null || !jedis.exists(key.getBytes())) {
+//            return null;
+//        }
+//        byte[] in = jedis.get(key.getBytes());
+//        List<T> list = (List<T>) ObjectUtil.deserialize(in);
+//        return list;
+//    }
+//
+//    /**
+//     * 设置map
+//     */
+//    public static <T> void setMap(Jedis jedis, String key, Map<String, T> map) {
+//        jedis.set(key.getBytes(), ObjectUtil.serialize(map));
+//    }
+//
+//    /**
+//     * 获取map
+//     */
+//    public static <T> Map<String, T> getMap(Jedis jedis, String key) {
+//        if (jedis == null || !jedis.exists(key.getBytes())) {
+//            return null;
+//        }
+//        byte[] in = jedis.get(key.getBytes());
+//        Map<String, T> map = (Map<String, T>) ObjectUtil.deserialize(in);
+//        return map;
+//    }
 
 
     public static List<ZTreeBean> getKeyTree(Jedis jedis, int index, String pid) {
         List<ZTreeBean> treeList = new ArrayList<>();
+        long startTime = System.currentTimeMillis();
         jedis.select(index);
         Set<String> keySet = jedis.keys("*");
+        long endTime = System.currentTimeMillis();
+        System.err.println("查询keys耗时：" + (endTime - startTime));
         ZTreeBean zTreeBean = null;
         if (null != keySet) {
             for (String key : keySet) {
@@ -177,6 +181,7 @@ public class RedisUtil {
         Client client = jedis.getClient();
         client.info();
         String info = client.getBulkReply();
+        System.out.println(info);
         String[] infos = info.split("#");
         if (null != infos && infos.length > 0) {
             redisInfo = new RedisInfo();
@@ -190,7 +195,6 @@ public class RedisUtil {
             redisInfo.setCluster(infos[8]);
             redisInfo.setKeyspace(infos[9]);
         }
-        //jedis.close();
         return redisInfo;
     }
 
@@ -212,10 +216,10 @@ public class RedisUtil {
             //客户端信息
             String[] client = redisInfo.getClient().split("\n");
             StringBuffer clientBuf = new StringBuffer();
-            clientBuf.append("当前连接: ").append(StringUtil.getValueString(client[1])).append("</br>");
-            clientBuf.append("阻塞连接: ").append(StringUtil.getValueString(client[2])).append("</br>");
-            clientBuf.append("最大输入缓存: ").append(StringUtil.getValueString(client[3])).append("</br>");
-            clientBuf.append("最长输入列表: ").append(StringUtil.getValueString(client[4])).append("</br>");
+            clientBuf.append("当前已连接客户端数量: ").append(StringUtil.getValueString(client[1])).append("</br>");
+            clientBuf.append("当前连接的客户端当中，最长输出列表: ").append(StringUtil.getValueString(client[2])).append("</br>");
+            clientBuf.append("当前连接的客户端当中，最大输入缓存: ").append(StringUtil.getValueString(client[3])).append("</br>");
+            clientBuf.append("当前等待阻塞命令的客户端的数量: ").append(StringUtil.getValueString(client[4])).append("</br>");
             //内存的信息
             String[] memory = redisInfo.getMemory().split("\n");
             StringBuffer memoryBuf = new StringBuffer();
@@ -247,10 +251,10 @@ public class RedisUtil {
             //处理器信息
             String[] cpu = redisInfo.getCpu().split("\n");
             StringBuffer cpuBuf = new StringBuffer();
-            cpuBuf.append("系统处理器占用率: ").append(StringUtil.getValueString(cpu[1])).append("</br>");
-            cpuBuf.append("用户处理器占用率: ").append(StringUtil.getValueString(cpu[2])).append("</br>");
-            cpuBuf.append("系统后台进程处理器占用率: ").append(StringUtil.getValueString(cpu[2])).append("</br>");
-            cpuBuf.append("用户后台进程处理器占用率: ").append(StringUtil.getValueString(cpu[4])).append("</br>");
+            cpuBuf.append("服务主进程在核心态累计CPU耗时: ").append(StringUtil.getValueString(cpu[1])).append("</br>");
+            cpuBuf.append("服务主进程在用户态累计CPU耗时: ").append(StringUtil.getValueString(cpu[2])).append("</br>");
+            cpuBuf.append("服务后台进程在核心态累计CPU耗时: ").append(StringUtil.getValueString(cpu[3])).append("</br>");
+            cpuBuf.append("服务后台进程在用户态累计CPU耗时: ").append(StringUtil.getValueString(cpu[4])).append("</br>");
             redisInfoTemp = new RedisInfo();
             redisInfoTemp.setServer(serverBuf.toString());
             redisInfoTemp.setClient(clientBuf.toString());
@@ -310,13 +314,20 @@ public class RedisUtil {
         Connect connect = new Connect();
         connect.setHost("maxbill");
         connect.setPort("6379");
-        connect.setPass("123456");
-        List<String> list = new ArrayList<>();
-        list.add("qqqqqqqqqqqq");
-        list.add("wwwwwwwwwwww");
-        list.add("eeeeeeeeeeee");
+        connect.setPass("");
         Jedis jedis = openJedis(connect);
-        setList(jedis, "list", list);
+        jedis.select(0);
+        for (int i = 1; i <= 10; i++) {
+            jedis.set("test" + i, "test" + i);
+        }
+        System.out.println("exec finish");
+        //List list = new ArrayList<>();
+        //list.add("1111111111111111111111111111");
+        //list.add("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        //list.add("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
+        //list.add("!@#$%^&*()_+=-|}{?><  QQQQQQ");
+        //setList(jedis, "list-test", list);
+        jedis.close();
     }
 
 }
