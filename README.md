@@ -71,13 +71,6 @@ v2.0.0
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174352_3738f4fe_1252126.png "深度截图_com.maxbill.MainApplication_20180904174116.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174402_2b5060d0_1252126.png "深度截图_com.maxbill.MainApplication_20180904174134.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0907/123200_ed3b67c9_1252126.png "深度截图_com.maxbill.MainApplication_20180907123037.png")
 
-
-#### 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
 
