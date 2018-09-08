@@ -1,0 +1,27 @@
+<#assign ctx=springMacroRequestContext.contextPath/>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="${ctx}/styles/style.css"/>
+    <link rel="stylesheet" href="${ctx}/styles/error.css"/>
+</head>
+<body>
+<div id="wrapper" class="fluid">
+    <div id="error-wrapper">
+        <div id="error-root"></div>
+        <div id="error-code">ERROR <span>${code}</span></div>
+        <h1 id="error-msgs">抱歉，应用出现内部错误！</h1>
+        <p id="error-text">劳烦用反馈通道描述您遇到的错误,以便更好解决问题</p>
+        <p id="error-back"><a href="${ctx}/root">知道了</a></p>
+    </div>
+</div>
+<script type="text/javascript" src="${ctx}/script/script.js"></script>
+</body>
+</html>
