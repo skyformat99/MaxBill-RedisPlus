@@ -189,6 +189,7 @@ public class ApiController {
                     ZTreeBean zTreeBean = new ZTreeBean();
                     zTreeBean.setId(KeyUtil.getUUIDKey());
                     zTreeBean.setName("DB" + i + " (" + dbSize + ")");
+                    zTreeBean.setPattern("");
                     zTreeBean.setParent(true);
                     zTreeBean.setCount(dbSize);
                     zTreeBean.setPage(1);
@@ -209,13 +210,42 @@ public class ApiController {
     }
 
 
-    @RequestMapping("/data/treeData")
-    public ResponseBean treeData(String id, int index, int page, int count) {
+    @RequestMapping("/data/likeInit")
+    public ResponseBean likeInit(int index, String pattern) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
-                List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id);
+                long keysCount = RedisUtil.getKeysCount(jedis, index, pattern);
+                ZTreeBean zTreeBean = new ZTreeBean();
+                zTreeBean.setId(KeyUtil.getUUIDKey());
+                zTreeBean.setName("DB" + index + " (" + keysCount + ")");
+                zTreeBean.setParent(true);
+                zTreeBean.setCount(keysCount);
+                zTreeBean.setPage(1);
+                zTreeBean.setPattern(pattern);
+                zTreeBean.setIndex(index);
+                responseBean.setData(zTreeBean);
+                RedisUtil.closeJedis(jedis);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
+    @RequestMapping("/data/treeData")
+    public ResponseBean treeData(String id, int index, int page, int count, String pattern) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id, pattern);
                 int startIndex = (page - 1) * 1000;
                 int endIndex = page * 1000;
                 if (endIndex > count) {

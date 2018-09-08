@@ -26,7 +26,7 @@ var zTreeSetting = {
         enable: true,
         dataType: "json",
         url: basePath + '/api/data/treeData',
-        autoParam: ["id", "index", "page", "count"],
+        autoParam: ["id", "index", "page", "count", "pattern"],
         dataFilter: dataFilter
     },
     callback: {
@@ -68,10 +68,10 @@ function showPageView(treeId, treeNode) {
         return;
     }
     var pageBox = ""
-    pageBox += "<span class='button lastPage' id='lastBtn_" + treeNode.id + "' title='last page' onfocus='this.blur();'></span>";
-    pageBox += "<span class='button nextPage' id='nextBtn_" + treeNode.id + "' title='next page' onfocus='this.blur();'></span>";
-    pageBox += "<span class='button prevPage' id='prevBtn_" + treeNode.id + "' title='prev page' onfocus='this.blur();'></span>";
-    pageBox += "<span class='button firstPage' id='firstBtn_" + treeNode.id + "' title='first page' onfocus='this.blur();'></span>";
+    pageBox += "<span class='button lastPage' id='lastBtn_" + treeNode.id + "' title='尾页' onfocus='this.blur();'></span>";
+    pageBox += "<span class='button nextPage' id='nextBtn_" + treeNode.id + "' title='下一页' onfocus='this.blur();'></span>";
+    pageBox += "<span class='button prevPage' id='prevBtn_" + treeNode.id + "' title='上一页' onfocus='this.blur();'></span>";
+    pageBox += "<span class='button firstPage' id='firstBtn_" + treeNode.id + "' title='首页' onfocus='this.blur();'></span>";
     pageDiv.after(pageBox);
     var first = $("#firstBtn_" + treeNode.id);
     var prev = $("#prevBtn_" + treeNode.id);
@@ -138,8 +138,6 @@ function loadKeyTree() {
         sync: true,
         timeout: 10000,
         success: function (data) {
-            //$.fn.zTree.init($("#keyTree"), zTreeSetting, data.data);
-            //$.fn.zTree.getZTreeObj("keyTree").expandAll(false);
             for (var i = 0; i < 16; i++) {
                 $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
                 $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
@@ -159,6 +157,41 @@ function loadKeyTree() {
     });
 }
 
+//模糊匹配
+function loadPatternTree() {
+    if (currIndex == -1) {
+        layer.alert("请选择一个要操作的库！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    var xhr = $.ajax({
+        type: "post",
+        url: basePath + '/api/data/likeInit',
+        sync: true,
+        data: {
+            "index": currIndex,
+            "pattern": $("#key-like-input").val()
+        },
+        timeout: 10000,
+        success: function (data) {
+            $.fn.zTree.init($("#keyTree" + currIndex), zTreeSetting, data.data);
+            $.fn.zTree.getZTreeObj("keyTree" + currIndex).expandAll(false);
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                xhr.abort();
+                //超时,status还有success,error等值的情况
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        }
+    });
+}
 
 //重命名key
 function renameKey() {

@@ -21,6 +21,15 @@
     background-color: #FFFFFF;
 }
 
+.key-like {
+    width: 99.8%;
+    height: 50px;
+    line-height: 50px;
+    margin: 0 auto;
+    padding-left: 11px;
+    border: #eaeaea 1px solid;
+}
+
 .key-deal {
     width: 99.8%;
     height: 50px;
@@ -81,6 +90,16 @@
     color: #333;
 }
 
+.query-like-input {
+    float: left;
+    margin-top: 11px;
+    border-radius: 3px;
+    padding-left: 10px;
+    width: 300px !important;
+    height: 28px !important;
+    border: 1px solid silver;
+}
+
 .query-input {
     float: left;
     margin-top: 11px;
@@ -90,12 +109,47 @@
     border: 1px solid silver;
 }
 
+.query-like-button {
+    width: 70px !important;
+    margin-left: 1px !important;
+}
+
 .query-button {
     margin-left: 1px !important;
 }
 
+.ztree li span.button.firstPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -16px;
+    vertical-align: top;
+    *vertical-align: middle
+}
 
-.ztree li span.button.firstPage {float:right; margin-left:2px; margin-right: 0; background-position:-144px -16px; vertical-align:top; *vertical-align:middle}
-.ztree li span.button.prevPage {float:right; margin-left:2px; margin-right: 0; background-position:-144px -48px; vertical-align:top; *vertical-align:middle}
-.ztree li span.button.nextPage {float:right; margin-left:2px; margin-right: 0; background-position:-144px -64px; vertical-align:top; *vertical-align:middle}
-.ztree li span.button.lastPage {float:right; margin-left:2px; margin-right: 0; background-position:-144px -32px; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.prevPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -48px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.nextPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -64px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.lastPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -32px;
+    vertical-align: top;
+    *vertical-align: middle
+}

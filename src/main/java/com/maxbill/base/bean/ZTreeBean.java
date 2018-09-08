@@ -13,6 +13,8 @@ public class ZTreeBean {
 
     private String name;
 
+    private String pattern;
+
     private Integer index;
 
     private Integer page;

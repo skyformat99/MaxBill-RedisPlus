@@ -151,12 +151,27 @@ public class RedisUtil {
 //        return map;
 //    }
 
+    public static long getKeysCount(Jedis jedis, int index, String pattern) {
+        long startTime = System.currentTimeMillis();
+        jedis.select(index);
+        if (StringUtils.isEmpty(pattern)) {
+            pattern = "*";
+        }
+        Set<String> keySet = jedis.keys(pattern);
+        long endTime = System.currentTimeMillis();
+        System.err.println("查询keys耗时：" + (endTime - startTime));
+        return keySet.size();
+    }
 
-    public static List<ZTreeBean> getKeyTree(Jedis jedis, int index, String pid) {
+
+    public static List<ZTreeBean> getKeyTree(Jedis jedis, int index, String pid, String pattern) {
         List<ZTreeBean> treeList = new ArrayList<>();
         long startTime = System.currentTimeMillis();
         jedis.select(index);
-        Set<String> keySet = jedis.keys("*");
+        if (StringUtils.isEmpty(pattern)) {
+            pattern = "*";
+        }
+        Set<String> keySet = jedis.keys(pattern);
         long endTime = System.currentTimeMillis();
         System.err.println("查询keys耗时：" + (endTime - startTime));
         ZTreeBean zTreeBean = null;
