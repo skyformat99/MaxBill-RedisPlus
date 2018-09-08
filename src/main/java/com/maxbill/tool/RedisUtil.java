@@ -190,95 +190,139 @@ public class RedisUtil {
     }
 
 
-    // 获取redis 服务器信息
+    // 解析服务器信息
     public static RedisInfo getRedisInfo(Jedis jedis) {
         RedisInfo redisInfo = null;
         Client client = jedis.getClient();
         client.info();
         String info = client.getBulkReply();
         System.out.println(info);
-        String[] infos = info.split("#");
+        String[] infos = info.split("# ");
         if (null != infos && infos.length > 0) {
             redisInfo = new RedisInfo();
-            redisInfo.setServer(infos[1]);
-            redisInfo.setClient(infos[2]);
-            redisInfo.setMemory(infos[3]);
-            redisInfo.setPersistence(infos[4]);
-            redisInfo.setStats(infos[5]);
-            redisInfo.setReplication(infos[6]);
-            redisInfo.setCpu(infos[7]);
-            redisInfo.setCluster(infos[8]);
-            redisInfo.setKeyspace(infos[9]);
+            for (int i = 0; i < infos.length; i++) {
+                String infoStr = infos[i];
+                if (infoStr.startsWith("Server")) {
+                    redisInfo.setServer(infoStr);
+                }
+                if (infoStr.startsWith("Clients")) {
+                    redisInfo.setClient(infoStr);
+                }
+                if (infoStr.startsWith("Memory")) {
+                    redisInfo.setMemory(infoStr);
+                }
+                if (infoStr.startsWith("Persistence")) {
+                    redisInfo.setPersistence(infoStr);
+                }
+                if (infoStr.startsWith("Stats")) {
+                    redisInfo.setStats(infoStr);
+                }
+                if (infoStr.startsWith("Replication")) {
+                    redisInfo.setReplication(infoStr);
+                }
+                if (infoStr.startsWith("CPU")) {
+                    redisInfo.setCpu(infoStr);
+                }
+                if (infoStr.startsWith("Cluster")) {
+                    redisInfo.setCluster(infoStr);
+                }
+                if (infoStr.startsWith("Keyspace")) {
+                    redisInfo.setKeyspace(infoStr);
+                }
+            }
         }
         return redisInfo;
     }
 
-    // 获取redis 服务器信息
+
+    public static String getRedisInfo(Jedis jedis, String command) {
+        return jedis.info(command);
+    }
+
+    // 获取redis服务器信息
     public static RedisInfo getRedisInfoList(Jedis jedis) {
-        RedisInfo redisInfo = getRedisInfo(jedis);
-        RedisInfo redisInfoTemp = null;
-        if (null != redisInfo) {
+        RedisInfo redisInfoBean = getRedisInfo(jedis);
+        RedisInfo redisInfo = null;
+        if (null != redisInfoBean) {
             //服务端信息
-            String[] server = redisInfo.getServer().split("\n");
-            StringBuffer serverBuf = new StringBuffer();
-            serverBuf.append("服务版本: ").append(StringUtil.getValueString(server[1])).append("</br>");
-            serverBuf.append("服务模式: ").append(StringUtil.getValueString(server[5])).append("</br>");
-            serverBuf.append("系统版本: ").append(StringUtil.getValueString(server[6])).append("</br>");
-            serverBuf.append("系统类型: ").append(StringUtil.getValueString(server[7])).append("</br>");
-            serverBuf.append("进程编号: ").append(StringUtil.getValueString(server[9])).append("</br>");
-            serverBuf.append("服务端口: ").append(StringUtil.getValueString(server[11])).append("</br>");
-            serverBuf.append("运行时间: ").append(StringUtil.getValueString(server[12])).append("</br>");
+            StringBuffer serverBuf = new StringBuffer("");
+            String serverInfo = redisInfoBean.getServer();
+            if (!StringUtils.isEmpty(serverInfo)) {
+                String[] server = serverInfo.split("\n");
+                serverBuf.append("服务版本: ").append(StringUtil.getValueString(server[1])).append("</br>");
+                serverBuf.append("服务模式: ").append(StringUtil.getValueString(server[5])).append("</br>");
+                serverBuf.append("系统版本: ").append(StringUtil.getValueString(server[6])).append("</br>");
+                serverBuf.append("系统类型: ").append(StringUtil.getValueString(server[7])).append("</br>");
+                serverBuf.append("进程编号: ").append(StringUtil.getValueString(server[9])).append("</br>");
+                serverBuf.append("服务端口: ").append(StringUtil.getValueString(server[11])).append("</br>");
+                serverBuf.append("运行时间: ").append(StringUtil.getValueString(server[12])).append("</br>");
+            }
             //客户端信息
-            String[] client = redisInfo.getClient().split("\n");
-            StringBuffer clientBuf = new StringBuffer();
-            clientBuf.append("当前已连接客户端数量: ").append(StringUtil.getValueString(client[1])).append("</br>");
-            clientBuf.append("当前连接的客户端当中，最长输出列表: ").append(StringUtil.getValueString(client[2])).append("</br>");
-            clientBuf.append("当前连接的客户端当中，最大输入缓存: ").append(StringUtil.getValueString(client[3])).append("</br>");
-            clientBuf.append("当前等待阻塞命令的客户端的数量: ").append(StringUtil.getValueString(client[4])).append("</br>");
+            StringBuffer clientBuf = new StringBuffer("");
+            String clientInfo = redisInfoBean.getClient();
+            if (!StringUtils.isEmpty(clientInfo)) {
+                String[] client = clientInfo.split("\n");
+                clientBuf.append("当前已连接客户端数量: ").append(StringUtil.getValueString(client[1])).append("</br>");
+                clientBuf.append("当前连接的客户端当中，最长输出列表: ").append(StringUtil.getValueString(client[2])).append("</br>");
+                clientBuf.append("当前连接的客户端当中，最大输入缓存: ").append(StringUtil.getValueString(client[3])).append("</br>");
+                clientBuf.append("当前等待阻塞命令的客户端的数量: ").append(StringUtil.getValueString(client[4])).append("</br>");
+            }
             //内存的信息
-            String[] memory = redisInfo.getMemory().split("\n");
-            StringBuffer memoryBuf = new StringBuffer();
-            memoryBuf.append("已占用内存量: ").append(StringUtil.getValueString(memory[1])).append("</br>");
-            memoryBuf.append("分配内存总量: ").append(StringUtil.getValueString(memory[3])).append("</br>");
-            memoryBuf.append("内存高峰值: ").append(StringUtil.getValueString(memory[5])).append("</br>");
-            memoryBuf.append("内存碎片率: ").append(StringUtil.getValueString(memory[7])).append("</br>");
-            memoryBuf.append("内存分配器: ").append(StringUtil.getValueString(memory[8])).append("</br>");
+            StringBuffer memoryBuf = new StringBuffer("");
+            String memoryInfo = redisInfoBean.getMemory();
+            if (!StringUtils.isEmpty(memoryInfo)) {
+                String[] memory = memoryInfo.split("\n");
+                memoryBuf.append("已占用内存量: ").append(StringUtil.getValueString(memory[1])).append("</br>");
+                memoryBuf.append("分配内存总量: ").append(StringUtil.getValueString(memory[3])).append("</br>");
+                memoryBuf.append("内存高峰值: ").append(StringUtil.getValueString(memory[5])).append("</br>");
+                memoryBuf.append("内存碎片率: ").append(StringUtil.getValueString(memory[7])).append("</br>");
+                memoryBuf.append("内存分配器: ").append(StringUtil.getValueString(memory[8])).append("</br>");
+            }
             //持久化信息
-            String[] persistence = redisInfo.getPersistence().split("\n");
-            StringBuffer persistenceBuf = new StringBuffer();
-            persistenceBuf.append("是否正在载入持久化文件: ").append(StringUtil.getValueString(persistence[1])).append("</br>");
-            persistenceBuf.append("最近一次持久化文件耗时: ").append(StringUtil.getValueString(persistence[2])).append("</br>");
-            persistenceBuf.append("是否正在创建RDB的文件: ").append(StringUtil.getValueString(persistence[3])).append("</br>");
-            persistenceBuf.append("最近成功创建RDB时间戳: ").append(StringUtil.getValueString(persistence[4])).append("</br>");
-            persistenceBuf.append("最近创建RDB文件的结果: ").append(StringUtil.getValueString(persistence[5])).append("</br>");
-            persistenceBuf.append("当前创建RDB文件的耗时: ").append(StringUtil.getValueString(persistence[6])).append("</br>");
-            persistenceBuf.append("服务是否已经开启了AOF: ").append(StringUtil.getValueString(persistence[7])).append("</br>");
-            persistenceBuf.append("是否正在创建AOF的文件: ").append(StringUtil.getValueString(persistence[8])).append("</br>");
+            StringBuffer persistenceBuf = new StringBuffer("");
+            String persistenceInfo = redisInfoBean.getPersistence();
+            if (!StringUtils.isEmpty(persistenceInfo)) {
+                String[] persistence = persistenceInfo.split("\n");
+                persistenceBuf.append("是否正在载入持久化文件: ").append(StringUtil.getValueString(persistence[1])).append("</br>");
+                persistenceBuf.append("最近一次持久化文件耗时: ").append(StringUtil.getValueString(persistence[2])).append("</br>");
+                persistenceBuf.append("是否正在创建RDB的文件: ").append(StringUtil.getValueString(persistence[3])).append("</br>");
+                persistenceBuf.append("最近成功创建RDB时间戳: ").append(StringUtil.getValueString(persistence[4])).append("</br>");
+                persistenceBuf.append("最近创建RDB文件的结果: ").append(StringUtil.getValueString(persistence[5])).append("</br>");
+                persistenceBuf.append("当前创建RDB文件的耗时: ").append(StringUtil.getValueString(persistence[6])).append("</br>");
+                persistenceBuf.append("服务是否已经开启了AOF: ").append(StringUtil.getValueString(persistence[7])).append("</br>");
+                persistenceBuf.append("是否正在创建AOF的文件: ").append(StringUtil.getValueString(persistence[8])).append("</br>");
+            }
             //连接的信息
-            String[] stats = redisInfo.getStats().split("\n");
             StringBuffer statsBuf = new StringBuffer();
-            statsBuf.append("已连接客户端总数: ").append(StringUtil.getValueString(stats[1])).append("</br>");
-            statsBuf.append("执行过的命令总数: ").append(StringUtil.getValueString(stats[2])).append("</br>");
-            statsBuf.append("服务每秒执行数量: ").append(StringUtil.getValueString(stats[3])).append("</br>");
-            statsBuf.append("服务输入网络流量: ").append(StringUtil.getValueString(stats[4])).append("</br>");
-            statsBuf.append("服务输出网络流量: ").append(StringUtil.getValueString(stats[5])).append("</br>");
-            statsBuf.append("拒绝连接客户端数: ").append(StringUtil.getValueString(stats[8])).append("</br>");
+            String statsInfo = redisInfoBean.getStats();
+            if (!StringUtils.isEmpty(statsInfo)) {
+                String[] stats = statsInfo.split("\n");
+                statsBuf.append("已连接客户端总数: ").append(StringUtil.getValueString(stats[1])).append("</br>");
+                statsBuf.append("执行过的命令总数: ").append(StringUtil.getValueString(stats[2])).append("</br>");
+                statsBuf.append("服务每秒执行数量: ").append(StringUtil.getValueString(stats[3])).append("</br>");
+                statsBuf.append("服务输入网络流量: ").append(StringUtil.getValueString(stats[4])).append("</br>");
+                statsBuf.append("服务输出网络流量: ").append(StringUtil.getValueString(stats[5])).append("</br>");
+                statsBuf.append("拒绝连接客户端数: ").append(StringUtil.getValueString(stats[8])).append("</br>");
+            }
             //处理器信息
-            String[] cpu = redisInfo.getCpu().split("\n");
             StringBuffer cpuBuf = new StringBuffer();
-            cpuBuf.append("服务主进程在核心态累计CPU耗时: ").append(StringUtil.getValueString(cpu[1])).append("</br>");
-            cpuBuf.append("服务主进程在用户态累计CPU耗时: ").append(StringUtil.getValueString(cpu[2])).append("</br>");
-            cpuBuf.append("服务后台进程在核心态累计CPU耗时: ").append(StringUtil.getValueString(cpu[3])).append("</br>");
-            cpuBuf.append("服务后台进程在用户态累计CPU耗时: ").append(StringUtil.getValueString(cpu[4])).append("</br>");
-            redisInfoTemp = new RedisInfo();
-            redisInfoTemp.setServer(serverBuf.toString());
-            redisInfoTemp.setClient(clientBuf.toString());
-            redisInfoTemp.setMemory(memoryBuf.toString());
-            redisInfoTemp.setPersistence(persistenceBuf.toString());
-            redisInfoTemp.setStats(statsBuf.toString());
-            redisInfoTemp.setCpu(cpuBuf.toString());
+            String cpuInfo = redisInfoBean.getCpu();
+            if (!StringUtils.isEmpty(cpuInfo)) {
+                String[] cpu = cpuInfo.split("\n");
+                cpuBuf.append("服务主进程在核心态累计CPU耗时: ").append(StringUtil.getValueString(cpu[1])).append("</br>");
+                cpuBuf.append("服务主进程在用户态累计CPU耗时: ").append(StringUtil.getValueString(cpu[2])).append("</br>");
+                cpuBuf.append("服务后台进程在核心态累计CPU耗时: ").append(StringUtil.getValueString(cpu[3])).append("</br>");
+                cpuBuf.append("服务后台进程在用户态累计CPU耗时: ").append(StringUtil.getValueString(cpu[4])).append("</br>");
+            }
+            redisInfo = new RedisInfo();
+            redisInfo.setServer(serverBuf.toString());
+            redisInfo.setClient(clientBuf.toString());
+            redisInfo.setMemory(memoryBuf.toString());
+            redisInfo.setPersistence(persistenceBuf.toString());
+            redisInfo.setStats(statsBuf.toString());
+            redisInfo.setCpu(cpuBuf.toString());
         }
-        return redisInfoTemp;
+        return redisInfo;
     }
 
 
