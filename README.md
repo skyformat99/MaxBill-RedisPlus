@@ -13,6 +13,8 @@ RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linu
 
 1.微云地址：https://share.weiyun.com/5UIOsxY
 
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0909/193019_c3515fa2_1252126.png "屏幕截图.png")
+
 #### 版本说明
 
 版本的命名规则以x.y.z形式，重大版本更新发布会更改x位主版本，例如v2.0.0 版本会增加集群、支持ssh通道连接、国际化等功能；一般解决了多个缺陷后，会发布一个小版本，更改y位，例如v1.1.0解决了1.0.0 的问题后发布的小版本；z位的更改不会发布版本，这是缺陷修复或者小需求增加的正常迭代。
@@ -41,7 +43,9 @@ v1.1.0
 
 10.key过多加载卡死问题修复   （已修复，可处理百万级别）
 
-11.打包windows平台和mac平台安装包
+11.打包windows平台安装包  （已完成）
+
+12.打包mac平台安装包
 
 12.修复1.0.0问题，性能优化（持续进行）
 
@@ -63,12 +67,16 @@ v2.0.0
  
 
 #### 技术选型
-1.支持跨平台，使用java开发</br>
-2.使用javafx的桌面元素</br>
-3.使用derby内嵌数据库</br>
-4.内置服务使用springboot开发</br>
 
-应用截图</br>
+1.支持跨平台，使用java开发
+
+2.使用javafx的桌面元素
+
+3.使用derby内嵌数据库
+
+4.内置服务使用springboot开发
+
+#### 应用截图
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174302_dfd839b5_1252126.png "深度截图_com.maxbill.MainApplication_20180904174001.png")
 
@@ -83,5 +91,3 @@ v2.0.0
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174352_3738f4fe_1252126.png "深度截图_com.maxbill.MainApplication_20180904174116.png")
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/0907/123200_ed3b67c9_1252126.png "深度截图_com.maxbill.MainApplication_20180907123037.png")
-
-
