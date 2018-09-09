@@ -13,7 +13,7 @@ RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linu
 
 1.微云地址：https://share.weiyun.com/5UIOsxY
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0909/195712_9aac1ba4_1252126.png "193019_c3515fa2_1252126.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0909/200121_021d84e3_1252126.png "屏幕截图.png")
 
 
 #### 版本说明
