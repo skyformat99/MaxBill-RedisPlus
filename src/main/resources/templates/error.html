@@ -9,19 +9,25 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" type="text/css" href="${ctx}/styles/style.css"/>
     <link rel="stylesheet" href="${ctx}/styles/error.css"/>
 </head>
 <body>
 <div id="wrapper" class="fluid">
     <div id="error-wrapper">
         <div id="error-root"></div>
-        <div id="error-code">ERROR <span>${code}</span></div>
+        <div id="error-code">ERROR <span>${code!'302'}</span></div>
         <h1 id="error-msgs">抱歉，应用出现内部错误！</h1>
-        <p id="error-text">劳烦用反馈通道描述您遇到的错误,以便更好解决问题</p>
+        <p id="error-text">劳烦使用反馈通道联系作者解决问题，谢谢合作！</p>
         <p id="error-back"><a href="${ctx}/root">知道了</a></p>
     </div>
 </div>
-<script type="text/javascript" src="${ctx}/script/script.js"></script>
+<script>
+    document.oncontextmenu = function () {
+        return false;
+    };
+    document.onselectstart = function () {
+        return false;
+    };
+</script>
 </body>
 </html>

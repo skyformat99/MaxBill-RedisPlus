@@ -4,9 +4,10 @@ import com.maxbill.core.desktop.DesktopApp;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ConfigurableApplicationContext;
 
-
+@ServletComponentScan
 @SpringBootApplication
 @MapperScan("com.maxbill.base.dao")
 public class MainApplication extends DesktopApp {
