@@ -157,10 +157,10 @@
                     <needShortcut>true</needShortcut>
                     <!--JVM参数-->
                     <jvmArgs>
-                        <jvmArg>-Xms50M</jvmArg>
-                        <jvmArg>-Xmx128M</jvmArg>
-                        <jvmArg>-XX:MaxPermSize=100M</jvmArg>
-                        <jvmArg>-XX:MaxPermSize=256M</jvmArg>
+                        <jvmArg>-Xms256M</jvmArg>
+                        <jvmArg>-Xmx512M</jvmArg>
+                        <jvmArg>-XX:MaxPermSize=512M</jvmArg>
+                        <jvmArg>-XX:-UseGCOverheadLimit</jvmArg>
                         <jvmArg>-Dvisualvm.display.name=RedisPlus</jvmArg>
                     </jvmArgs>
                     <!--安装配置项-->

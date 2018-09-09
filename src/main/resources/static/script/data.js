@@ -1,6 +1,6 @@
 var currKey;
 var currIndex = -1;
-var pageSize = 1000;
+var pageSize = 100;
 var basePath = $("#basePath").val();
 
 $(document).ready(function () {

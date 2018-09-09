@@ -246,8 +246,8 @@ public class ApiController {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id, pattern);
-                int startIndex = (page - 1) * 1000;
-                int endIndex = page * 1000;
+                int startIndex = (page - 1) * 100;
+                int endIndex = page * 100;
                 if (endIndex > count) {
                     endIndex = count;
                 }
