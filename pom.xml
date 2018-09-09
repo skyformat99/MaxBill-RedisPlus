@@ -135,7 +135,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration><fork>true</fork></configuration>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
             </plugin>
             <!--javafx application package-->
             <plugin>
@@ -143,15 +145,15 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.8.3</version>
                 <configuration>
-                    <!-- 启动类 -->
+                    <!--启动类-->
                     <mainClass>com.maxbill.MainApplication</mainClass>
-                    <!-- 运行文件名 -->
+                    <!--运行文件名-->
                     <appName>RedisPlus</appName>
                     <!--启用自定义打包配置-->
                     <verbose>true</verbose>
-                    <!-- 菜单 -->
+                    <!--菜单-->
                     <needMenu>true</needMenu>
-                    <!-- 桌面图标 -->
+                    <!--桌面图标-->
                     <needShortcut>true</needShortcut>
                     <!--JVM参数-->
                     <jvmArgs>
@@ -161,6 +163,10 @@
                         <jvmArg>-XX:MaxPermSize=256M</jvmArg>
                         <jvmArg>-Dvisualvm.display.name=RedisPlus</jvmArg>
                     </jvmArgs>
+                    <!--安装配置项-->
+                    <bundleArguments>
+                        <installdirChooser>true</installdirChooser>
+                    </bundleArguments>
                     <!--供应商-->
                     <vendor>MaxBill</vendor>
                 </configuration>

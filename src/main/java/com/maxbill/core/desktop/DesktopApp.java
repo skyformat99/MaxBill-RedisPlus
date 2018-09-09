@@ -69,6 +69,7 @@ public class DesktopApp extends Application {
         stage.setScene(new Scene(getWinRoot(stage)));
         stage.getIcons().add(new Image(appIcon));
         stage.setResizable(false);
+        stage.setTitle(appName);
         //stage.setFullScreen(true);
         stage.show();
     }
@@ -198,7 +199,8 @@ public class DesktopApp extends Application {
         winClose.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                 this.shutdown();
-                Platform.exit();
+                //Platform.exit();
+                System.exit(0);
             }
         });
         titleView.getChildren().add(winClose);
