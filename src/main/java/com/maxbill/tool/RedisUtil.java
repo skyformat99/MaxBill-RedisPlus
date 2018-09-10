@@ -1,8 +1,10 @@
 package com.maxbill.tool;
 
+import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.*;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.poi.hssf.record.formula.functions.T;
+import org.springframework.util.SocketUtils;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
@@ -10,10 +12,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.util.Slowlog;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RedisUtil {
@@ -111,45 +110,6 @@ public class RedisUtil {
     public static void closeJedis(Jedis jedis) {
         jedis.close();
     }
-
-
-    /**
-     * 设置list
-     */
-    public static void setList(Jedis jedis, String key, List<T> list) {
-        jedis.set(key.getBytes(), ObjectUtil.serialize(list));
-    }
-
-//    /**
-//     * 获取list
-//     */
-//    public static <T> List<T> getList(Jedis jedis, String key) {
-//        if (jedis == null || !jedis.exists(key.getBytes())) {
-//            return null;
-//        }
-//        byte[] in = jedis.get(key.getBytes());
-//        List<T> list = (List<T>) ObjectUtil.deserialize(in);
-//        return list;
-//    }
-//
-//    /**
-//     * 设置map
-//     */
-//    public static <T> void setMap(Jedis jedis, String key, Map<String, T> map) {
-//        jedis.set(key.getBytes(), ObjectUtil.serialize(map));
-//    }
-//
-//    /**
-//     * 获取map
-//     */
-//    public static <T> Map<String, T> getMap(Jedis jedis, String key) {
-//        if (jedis == null || !jedis.exists(key.getBytes())) {
-//            return null;
-//        }
-//        byte[] in = jedis.get(key.getBytes());
-//        Map<String, T> map = (Map<String, T>) ObjectUtil.deserialize(in);
-//        return map;
-//    }
 
     public static long getKeysCount(Jedis jedis, int index, String pattern) {
         long startTime = System.currentTimeMillis();
@@ -525,10 +485,71 @@ public class RedisUtil {
         KeyBean keyBean = new KeyBean();
         jedis.select(index);
         keyBean.setKey(key);
-        keyBean.setValue(jedis.get(key));
-        keyBean.setSize(keyBean.getValue().getBytes().length);
         keyBean.setType(jedis.type(key));
         keyBean.setTtl(jedis.ttl(key));
+        //none (key不存在)
+        //string (字符串)
+        //list (列表)
+        //set (集合)
+        //zset (有序集)
+        //hash (哈希表)
+        System.out.println(keyBean.getType());
+        switch (keyBean.getType()) {
+            case "set":
+                Set<String> set = jedis.smembers(key);
+                StringBuffer setBuf = new StringBuffer();
+                for (String info : set) {
+                    setBuf.append(info).append(",");
+                }
+                String textSet = setBuf.toString();
+                keyBean.setText(textSet.substring(0, textSet.length() - 1));
+                keyBean.setJson(JSON.toJSONString(set));
+                keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
+                break;
+            case "none":
+                keyBean.setText("");
+                break;
+            case "list":
+                List<String> list = jedis.lrange(key, 0, -1);
+                Collections.reverse(list);
+                StringBuffer listBuf = new StringBuffer();
+                for (String info : list) {
+                    listBuf.append(info).append(",");
+                }
+                String textList = listBuf.toString();
+                keyBean.setText(textList.substring(0, textList.length() - 1));
+                keyBean.setJson(JSON.toJSONString(list));
+                keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
+                break;
+            case "zset":
+                Set<String> zset = jedis.zrange(key, 0, -1);
+                StringBuffer zsetBuf = new StringBuffer();
+                for (String info : zset) {
+                    zsetBuf.append(info).append(",");
+                }
+                String textZset = zsetBuf.toString();
+                keyBean.setText(textZset.substring(0, textZset.length() - 1));
+                keyBean.setJson(JSON.toJSONString(zset));
+                keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
+                break;
+            case "hash":
+                Map<String, String> map = jedis.hgetAll(key);
+                StringBuffer mapBuf = new StringBuffer();
+                for (Map.Entry entry : map.entrySet()) {
+                    mapBuf.append(entry.getKey()).append(":").append(entry.getValue()).append(",");
+                }
+                String textMap = mapBuf.toString();
+                keyBean.setText(textMap.substring(0, textMap.length() - 1));
+                keyBean.setJson(JSON.toJSONString(map));
+                keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
+                break;
+            case "string":
+                keyBean.setText(jedis.get(key));
+                keyBean.setJson(JSON.toJSONString(keyBean.getText()));
+                keyBean.setRaws(keyBean.getText());
+                break;
+        }
+        keyBean.setSize(keyBean.getText().getBytes().length);
         return keyBean;
     }
 
@@ -580,21 +601,74 @@ public class RedisUtil {
 
     public static void main(String[] args) {
         Connect connect = new Connect();
-        connect.setHost("maxbill");
+        connect.setHost("127.0.0.1");
         connect.setPort("6379");
-        connect.setPass("");
+        connect.setPass("123456");
         Jedis jedis = openJedis(connect);
         jedis.select(0);
-        for (int i = 1; i <= 10; i++) {
-            jedis.set("test" + i, "test" + i);
+        for (int i = 1; i <= 100; i++) {
+            jedis.set("testStr" + i, "testStr" + i);
         }
+        /*-------------------String Test------------------------*/
+        jedis.set("testString1", "testString");
+        StringBuffer buf = new StringBuffer();
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
+        jedis.set("testString2", buf.toString());
+        /*-------------------List Test--------------------------*/
+        jedis.del("testList");
+        jedis.lpush("testList", "list01");
+        jedis.lpush("testList", "list02");
+        jedis.lpush("testList", "list03");
+        jedis.lpush("testList", "list04");
+        jedis.lpush("testList", "list05");
+        /*-------------------Map Test---------------------------*/
+        Map map = new HashMap();
+        map.put("map01", "map01-value");
+        map.put("map02", "map02-value");
+        map.put("map03", "map03-value");
+        map.put("map04", "map04-value");
+        map.put("map05", "map05-value");
+        jedis.hmset("testMap", map);
+        /*-------------------Set Test---------------------------*/
+        jedis.sadd("testSet", "set-value01");
+        jedis.sadd("testSet", "set-value02");
+        jedis.sadd("testSet", "set-value03");
+        jedis.sadd("testSet", "set-value04");
+        jedis.sadd("testSet", "set-value05");
+        /*-------------------Zset Test--------------------------*/
+        jedis.zadd("testZset", 1, "set-value01");
+        jedis.zadd("testZset", 2, "set-value02");
+        jedis.zadd("testZset", 3, "set-value03");
+        jedis.zadd("testZset", 4, "set-value04");
+        jedis.zadd("testZset", 5, "set-value05");
         System.out.println("exec finish");
-        //List list = new ArrayList<>();
-        //list.add("1111111111111111111111111111");
-        //list.add("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        //list.add("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
-        //list.add("!@#$%^&*()_+=-|}{?><  QQQQQQ");
-        //setList(jedis, "list-test", list);
         jedis.close();
     }
 

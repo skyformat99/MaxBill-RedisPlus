@@ -25,8 +25,8 @@
     width: 99.8%;
     height: 50px;
     line-height: 50px;
-    margin: 0 auto;
     padding-left: 11px;
+    margin-right: 17px;
     border: #eaeaea 1px solid;
 }
 
@@ -48,6 +48,13 @@
     margin: 0 auto;
 }
 
+.key-vals-tool {
+    height: 40px;
+    line-height: 30px;
+    text-align: left;
+    background-color: #CFE6F3;
+}
+
 .key-vals-text {
     height: 30px;
     line-height: 30px;
@@ -55,11 +62,19 @@
     background-color: #D0D0D0;
 }
 
-#value {
-    height: 439px;
+.key-vals-show {
+    height: 398px;
     line-height: 25px;
     border: #eaeaea 1px solid;
     padding: 10px;
+    display: block;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.key-vals-hide {
+    display: none;
 }
 
 .layui-layer-lan {
@@ -75,6 +90,10 @@
     font-size: 14px;
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.my-layui-col {
+    padding-left: 15px;
 }
 
 .layui-layer-content .layui-layer-input {
@@ -110,7 +129,7 @@
 }
 
 .query-like-button {
-    width: 70px !important;
+    width: 68px !important;
     margin-left: 1px !important;
 }
 

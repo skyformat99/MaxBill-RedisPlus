@@ -4,6 +4,32 @@ var pageSize = 100;
 var basePath = $("#basePath").val();
 
 $(document).ready(function () {
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+        form.on('radio()', function (data) {
+            switch (data.value) {
+                case "1":
+                    $("#text").removeClass("key-vals-hide");
+                    $("#text").addClass("key-vals-show");
+                    $("#json").addClass("key-vals-hide");
+                    $("#raws").addClass("key-vals-hide");
+                    break;
+                case "2":
+                    $("#json").removeClass("key-vals-hide");
+                    $("#text").addClass("key-vals-hide");
+                    $("#json").addClass("key-vals-show");
+                    $("#raws").addClass("key-vals-hide");
+                    break;
+                case "3":
+                    $("#raws").removeClass("key-vals-hide");
+                    $("#text").addClass("key-vals-hide");
+                    $("#json").addClass("key-vals-hide");
+                    $("#raws").addClass("key-vals-show");
+                    break;
+            }
+        });
+    });
     loadKeyTree();
 });
 
@@ -400,7 +426,9 @@ function getKeyInfo() {
                 $("#type").text(keyInfo.type);
                 $("#size").text(keyInfo.size);
                 $("#ttl").text(keyInfo.ttl);
-                $("#value").text(keyInfo.value);
+                $("#text").html(keyInfo.text);
+                $("#json").html(getFormatJson(keyInfo.json));
+                $("#raws").html(keyInfo.raws);
             } else {
                 layer.alert(data.msgs, {
                     skin: 'layui-layer-lan',

@@ -5,14 +5,20 @@ import lombok.Data;
 @Data
 public class KeyBean {
 
+    private long ttl;
+
+    private long size;
+
     private String key;
 
     private String type;
 
-    private long size;
+    private String text;
 
-    private long ttl;
+    private String json;
 
-    private String value;
+    private String raws;
+
+    private String hexs;
 
 }

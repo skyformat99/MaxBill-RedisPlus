@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" href="${ctx}/plugin/layui/css/layui.css"/>
-<#--<link rel="stylesheet" href="${ctx}/plugin/ztree/css/metroStyle/metroStyle.css"/>-->
     <link rel="stylesheet" href="${ctx}/plugin/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
     <link rel="stylesheet" href="${ctx}/styles/style.css"/>
     <link rel="stylesheet" href="${ctx}/styles/data.css"/>
@@ -105,8 +104,24 @@
                     </tbody>
                 </table>
                 <div class="key-vals">
+                    <div class="key-vals-tool">
+                        <form class="layui-form" action="">
+                            <div class="layui-col-md2 my-layui-col">
+                                <input type="radio" name="vals" value="1" title="text" checked>
+                            </div>
+                            <div class="layui-col-md2 my-layui-col">
+                                <input type="radio" name="vals" value="2" title="json">
+                            </div>
+                            <div class="layui-col-md2 my-layui-col">
+                                <input type="radio" name="vals" value="3" title="raws">
+                            </div>
+                            <div class="layui-col-md6"></div>
+                        </form>
+                    </div>
                     <div class="key-vals-text">value</div>
-                    <div id="value"></div>
+                    <div id="text" class="key-vals-show"></div>
+                    <div id="json" class="key-vals-hide"></div>
+                    <div id="raws" class="key-vals-hide"></div>
                 </div>
             </div>
         </div>
@@ -124,6 +139,7 @@
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script type="text/javascript" src="${ctx}/plugin/ztree/zTree.js"></script>
 <script type="text/javascript" src="${ctx}/script/script.js"></script>
+<script type="text/javascript" src="${ctx}/script/json.js"></script>
 <script type="text/javascript" src="${ctx}/script/data.js"></script>
 </body>
 </html>
