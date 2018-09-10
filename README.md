@@ -79,16 +79,16 @@ v2.0.0
 
 #### 应用截图
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174302_dfd839b5_1252126.png "深度截图_com.maxbill.MainApplication_20180904174001.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170248_649a1236_1252126.png "深度截图_com.maxbill.MainApplication_20180910165852.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174311_9991de81_1252126.png "深度截图_com.maxbill.MainApplication_20180904174021.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170300_cb981a5e_1252126.png "深度截图_com.maxbill.MainApplication_20180910165912.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174321_53591727_1252126.png "深度截图_com.maxbill.MainApplication_20180904174037.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170311_eb17fbe6_1252126.png "深度截图_com.maxbill.MainApplication_20180910165927.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174331_3baf9be8_1252126.png "深度截图_com.maxbill.MainApplication_20180904174051.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170329_84730ddd_1252126.png "深度截图_com.maxbill.MainApplication_20180910170015.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174341_dcfb9cb9_1252126.png "深度截图_com.maxbill.MainApplication_20180904174106.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170344_a3eaf178_1252126.png "深度截图_com.maxbill.MainApplication_20180910170046.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174352_3738f4fe_1252126.png "深度截图_com.maxbill.MainApplication_20180904174116.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170358_e8bf24bb_1252126.png "深度截图_com.maxbill.MainApplication_20180910170105.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0907/123200_ed3b67c9_1252126.png "深度截图_com.maxbill.MainApplication_20180907123037.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170408_3460dafd_1252126.png "深度截图_com.maxbill.MainApplication_20180910170121.png")
