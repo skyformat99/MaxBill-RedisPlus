@@ -8,6 +8,18 @@ import java.util.regex.Pattern;
 public class StringUtil {
 
     /**
+     * 拆分key:value形式字符返回key
+     */
+    public static String getKeyString(String tempStr) {
+        if (!StringUtils.isEmpty(tempStr) && appearStringNumber(tempStr, ":") == 1) {
+            String[] tempStrArray = tempStr.split(":");
+            return tempStrArray[0];
+        } else {
+            return "";
+        }
+    }
+
+    /**
      * 拆分key:value形式字符返回value
      */
     public static String getValueString(String tempStr) {
