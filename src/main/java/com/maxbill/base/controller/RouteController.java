@@ -16,7 +16,7 @@ import java.util.Map;
 @Controller
 public class RouteController {
 
-    private final String APP_VERSION = "Version: 1.0.7";
+    private final String APP_VERSION = "Version: 1.0.8";
 
     @Autowired
     private DataService dataService;

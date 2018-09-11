@@ -16,7 +16,8 @@ public class DataUtil {
     public static Jedis getCurrentJedisObject() {
         Connect connect = getCurrentOpenConnect();
         if (null != connect) {
-            return RedisUtil.openJedis(connect);
+            //return RedisUtil.openJedis(connect);
+            return RedisUtil.getJedis();
         } else {
             return null;
         }

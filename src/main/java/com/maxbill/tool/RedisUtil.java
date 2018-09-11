@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.*;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.poi.hssf.record.formula.functions.T;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.SocketUtils;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Client;
@@ -17,11 +19,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class RedisUtil {
 
+    static Logger log = LoggerFactory.getLogger("RedisUtil");
+
     //可用连接实例的最大数目，默认值为8；
-    private static int MAX_TOTAL = 100;
+    private static int MAX_TOTAL = 50;
 
     //控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
-    private static int MAX_IDLE = 50;
+    private static int MAX_IDLE = 10;
 
     //等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException；
     private static int MAX_WAIT = 5000;
@@ -61,15 +65,43 @@ public class RedisUtil {
     }
 
     /**
+     * 释放当前Redis连接池
+     */
+    private static void freeJedisPool() {
+        if (null != jedisPool && !jedisPool.isClosed()) {
+            jedisPool.destroy();
+        }
+    }
+
+    /**
      * 从JedisPool中获取Jedis
      */
     public static Jedis openJedis(Connect connect) {
+        //销毁旧的连接池
+        freeJedisPool();
         //防止吃初始化时多线程竞争问题
         lock.lock();
         initJedisPool(connect);
         lock.unlock();
         return jedisPool.getResource();
     }
+
+    /**
+     * 从JedisPool中获取Jedis
+     */
+    public static Jedis getJedis() {
+        return jedisPool.getResource();
+    }
+
+    /**
+     * 释放Jedis连接
+     */
+    public static void closeJedis(Jedis jedis) {
+        if (null != jedis) {
+            jedis.close();
+        }
+    }
+
 
     /**
      * 判断key是否存在
@@ -104,12 +136,6 @@ public class RedisUtil {
         return jedis.dbSize();
     }
 
-    /**
-     * 释放Jedis连接
-     */
-    public static void closeJedis(Jedis jedis) {
-        jedis.close();
-    }
 
     public static long getKeysCount(Jedis jedis, int index, String pattern) {
         long startTime = System.currentTimeMillis();
@@ -119,7 +145,7 @@ public class RedisUtil {
         }
         Set<String> keySet = jedis.keys(pattern);
         long endTime = System.currentTimeMillis();
-        System.err.println("查询keys耗时：" + (endTime - startTime));
+        log.info("getKeysCount查询耗时：" + (endTime - startTime));
         return keySet.size();
     }
 
@@ -133,7 +159,7 @@ public class RedisUtil {
         }
         Set<String> keySet = jedis.keys(pattern);
         long endTime = System.currentTimeMillis();
-        System.err.println("查询keys耗时：" + (endTime - startTime));
+        log.info("getKeyTree查询耗时：" + (endTime - startTime));
         ZTreeBean zTreeBean = null;
         if (null != keySet) {
             for (String key : keySet) {
@@ -208,6 +234,7 @@ public class RedisUtil {
             redisInfo.setStats(returnStatsInfo(redisInfoBean).toString());
             redisInfo.setCpu(returnCpuInfo(redisInfoBean).toString());
         }
+        closeJedis(jedis);
         return redisInfo;
     }
 
@@ -589,6 +616,7 @@ public class RedisUtil {
      */
     public static List<Slowlog> getRedisLog(Jedis jedis) {
         List<Slowlog> logList = jedis.slowlogGet(100);
+        System.out.println(logList);
         return logList;
     }
 
@@ -599,48 +627,11 @@ public class RedisUtil {
         return jedis.info(command);
     }
 
-    public static void main(String[] args) {
-        Connect connect = new Connect();
-        connect.setHost("127.0.0.1");
-        connect.setPort("6379");
-        connect.setPass("123456");
-        Jedis jedis = openJedis(connect);
-        jedis.select(0);
-        for (int i = 1; i <= 100; i++) {
-            jedis.set("testStr" + i, "testStr" + i);
-        }
+
+    public static void testCase(Jedis jedis) {
         /*-------------------String Test------------------------*/
-        jedis.set("testString1", "testString");
-        StringBuffer buf = new StringBuffer();
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        buf.append("111111111111111111111111111111111111111111111111111111111111111111111");
-        jedis.set("testString2", buf.toString());
+        jedis.set("testString1", "testString1");
+        jedis.set("testString2", "testString2");
         /*-------------------List Test--------------------------*/
         jedis.del("testList");
         jedis.lpush("testList", "list01");
@@ -668,6 +659,19 @@ public class RedisUtil {
         jedis.zadd("testZset", 3, "set-value03");
         jedis.zadd("testZset", 4, "set-value04");
         jedis.zadd("testZset", 5, "set-value05");
+    }
+
+    public static void main(String[] args) {
+        Connect connect = new Connect();
+        connect.setHost("127.0.0.1");
+        connect.setPort("6379");
+        connect.setPass("123456");
+        Jedis jedis = openJedis(connect);
+        jedis.select(1);
+        for (int i = 1; i <= 1000005; i++) {
+            jedis.set("testStr" + i, "testStr" + i);
+        }
+        getRedisLog(jedis);
         System.out.println("exec finish");
         jedis.close();
     }

@@ -99,6 +99,7 @@ public class ApiController {
             if (null != jedis) {
                 WebUtil.setSessionAttribute("connect", connect);
                 responseBean.setData("已经连接到： " + connect.getName());
+                RedisUtil.closeJedis(jedis);
             } else {
                 WebUtil.setSessionAttribute("connect", null);
                 responseBean.setCode(0);
@@ -120,6 +121,7 @@ public class ApiController {
     public Integer isopenConnect() {
         Jedis jedis = DataUtil.getCurrentJedisObject();
         if (null != jedis) {
+            RedisUtil.closeJedis(jedis);
             return 1;
         } else {
             return 0;
