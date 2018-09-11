@@ -7,27 +7,13 @@ $(document).ready(function () {
     layui.use('form', function () {
         var form = layui.form;
         form.render();
-        form.on('radio()', function (data) {
-            switch (data.value) {
-                case "1":
-                    $("#text").removeClass("key-vals-hide");
-                    $("#text").addClass("key-vals-show");
-                    $("#json").addClass("key-vals-hide");
-                    $("#raws").addClass("key-vals-hide");
-                    break;
-                case "2":
-                    $("#json").removeClass("key-vals-hide");
-                    $("#text").addClass("key-vals-hide");
-                    $("#json").addClass("key-vals-show");
-                    $("#raws").addClass("key-vals-hide");
-                    break;
-                case "3":
-                    $("#raws").removeClass("key-vals-hide");
-                    $("#text").addClass("key-vals-hide");
-                    $("#json").addClass("key-vals-hide");
-                    $("#raws").addClass("key-vals-show");
-                    break;
-            }
+        form.on('radio(vals)', function (data) {
+            var thisObj = $("#vals" + data.value);
+            var elseObj = $(".vals").not(thisObj);
+            $(".vals").removeClass("key-vals-hide");
+            $(".vals").removeClass("key-vals-show");
+            thisObj.addClass("key-vals-show");
+            elseObj.addClass("key-vals-hide");
         });
     });
     loadKeyTree();
@@ -426,9 +412,159 @@ function getKeyInfo() {
                 $("#type").text(keyInfo.type);
                 $("#size").text(keyInfo.size);
                 $("#ttl").text(keyInfo.ttl);
-                $("#text").html(keyInfo.text);
-                $("#json").html(getFormatJson(keyInfo.json));
-                $("#raws").html(keyInfo.raws);
+                $("#vals1").html(keyInfo.text);
+                $("#vals2").html(getFormatJson(keyInfo.json));
+                $("#vals3").html(keyInfo.raws);
+                $("#vals4").html(getEditView(keyInfo.type, keyInfo.text));
+            } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        }
+    });
+}
+
+
+function getEditView(type, data) {
+    var view = '';
+    switch (type) {
+        case "set":
+            var setDataArray = data.split(",");
+            view += '<table class="layui-table">';
+            view += '<colgroup><col><col width="100"></colgroup>';
+            view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
+            view += '<tbody>';
+            for (var i = 0; i < setDataArray.length; i++) {
+                view += '<tr>';
+                view += '<td>' + setDataArray[i] + '</td>';
+                view += '<td>';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<i class="layui-icon">&#x1006;</i>删除</button>';
+                view += '</td>';
+                view += '</tr>';
+            }
+            view += '</tbody>';
+            view += '</table>';
+            view += '<div class="key-vals-submit ">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
+            view += '</div>';
+            break;
+        case "list":
+            var listDataArray = data.split(",");
+            view += '<table class="layui-table">';
+            view += '<colgroup><col><col width="100"></colgroup>';
+            view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
+            view += '<tbody>';
+            for (var i = 0; i < listDataArray.length; i++) {
+                view += '<tr>';
+                view += '<td>' + listDataArray[i] + '</td>';
+                view += '<td>';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<i class="layui-icon">&#x1006;</i>删除</button>';
+                view += '</td>';
+                view += '</tr>';
+            }
+            view += '</tbody>';
+            view += '</table>';
+            view += '<div class="key-vals-submit ">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
+            view += '</div>';
+            break;
+        case "zset":
+            var zsetDataArray = data.split(",");
+            view += '<table class="layui-table">';
+            view += '<colgroup><col><col width="100"></colgroup>';
+            view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
+            view += '<tbody>';
+            for (var i = 0; i < zsetDataArray.length; i++) {
+                view += '<tr>';
+                view += '<td>' + zsetDataArray[i] + '</td>';
+                view += '<td>';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<i class="layui-icon">&#x1006;</i>删除</button>';
+                view += '</td>';
+                view += '</tr>';
+            }
+            view += '</tbody>';
+            view += '</table>';
+            view += '<div class="key-vals-submit ">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
+            view += '</div>';
+            break;
+        case "hash":
+            var dataArray = data.split(",");
+            view += '<table class="layui-table">';
+            view += '<colgroup><col width="260"><col width="440"><col></colgroup>';
+            view += '<thead><tr><th>key</th><th>value</th><th>tool</th></tr></thead>';
+            view += '<tbody>';
+            for (var i = 0; i < dataArray.length; i++) {
+                var mapArray = dataArray[i].split(":");
+                view += '<tr>';
+                view += '<td>' + mapArray[0] + '</td><td>' + mapArray[1] + '</td>';
+                view += '<td>';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<i class="layui-icon">&#xe642;</i>修改</button>';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<i class="layui-icon">&#x1006;</i>删除</button>';
+                view += '</td>';
+                view += '</tr>';
+            }
+            view += '</tbody>';
+            view += '</table>';
+            view += '<div class="key-vals-submit ">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
+            view += '</div>';
+            break;
+        case "string":
+            view += '<textarea id="currVal" class="layui-textarea key-vals-textarea">' + data + '</textarea>';
+            view += '<div class="key-vals-submit ">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+            view += '<i class="layui-icon">&#x1005;</i>提交</button></div>';
+            break;
+    }
+    return view;
+}
+
+
+function updateString() {
+    if (currKey == "" || currKey == null) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    var xhr = $.ajax({
+        type: "post",
+        url: basePath + '/api/data/updateStr',
+        data: {
+            'key': currKey,
+            'val': $("#currVal").val(),
+            'index': currIndex
+        },
+        timeout: 10000,
+        sync: false,
+        success: function (data) {
+            if (data.code == 200) {
+                getKeyInfo();
+                layer.msg('修改成功');
             } else {
                 layer.alert(data.msgs, {
                     skin: 'layui-layer-lan',

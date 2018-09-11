@@ -106,7 +106,7 @@ public class RedisUtil {
     /**
      * 判断key是否存在
      */
-    public static boolean existsKey(Jedis jedis, String key, int index) {
+    public static boolean existsKey(Jedis jedis, int index, String key) {
         jedis.select(index);
         return jedis.exists(key);
     }
@@ -114,7 +114,7 @@ public class RedisUtil {
     /**
      * 重命名key
      */
-    public static String renameKey(Jedis jedis, String oldKey, String newKey, int index) {
+    public static String renameKey(Jedis jedis, int index, String oldKey, String newKey) {
         jedis.select(index);
         return jedis.rename(oldKey, newKey);
     }
@@ -123,10 +123,19 @@ public class RedisUtil {
     /**
      * 删除key
      */
-    public static long deleteKey(Jedis jedis, String key, int index) {
+    public static long deleteKey(Jedis jedis, int index, String key) {
         jedis.select(index);
         return jedis.del(key);
     }
+
+    /**
+     * 修改String的Value
+     */
+    public static String updateStr(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.set(key, val);
+    }
+
 
     /**
      * 获取库的key值
@@ -508,7 +517,7 @@ public class RedisUtil {
     /**
      * 获取Redis Key信息
      */
-    public static KeyBean getKeyInfo(Jedis jedis, String key, int index) {
+    public static KeyBean getKeyInfo(Jedis jedis, int index, String key) {
         KeyBean keyBean = new KeyBean();
         jedis.select(index);
         keyBean.setKey(key);
@@ -520,7 +529,6 @@ public class RedisUtil {
         //set (集合)
         //zset (有序集)
         //hash (哈希表)
-        System.out.println(keyBean.getType());
         switch (keyBean.getType()) {
             case "set":
                 Set<String> set = jedis.smembers(key);
@@ -667,11 +675,8 @@ public class RedisUtil {
         connect.setPort("6379");
         connect.setPass("123456");
         Jedis jedis = openJedis(connect);
-        jedis.select(1);
-        for (int i = 1; i <= 1000005; i++) {
-            jedis.set("testStr" + i, "testStr" + i);
-        }
-        getRedisLog(jedis);
+        jedis.select(2);
+        testCase(jedis);
         System.out.println("exec finish");
         jedis.close();
     }

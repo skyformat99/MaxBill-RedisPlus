@@ -268,13 +268,13 @@ public class ApiController {
     }
 
     @RequestMapping("/data/keysData")
-    public ResponseBean keysData(String key, int index) {
+    public ResponseBean keysData(int index, String key) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
-                if (RedisUtil.existsKey(jedis, key, index)) {
-                    responseBean.setData(RedisUtil.getKeyInfo(jedis, key, index));
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    responseBean.setData(RedisUtil.getKeyInfo(jedis, index, key));
                 } else {
                     responseBean.setCode(0);
                     responseBean.setMsgs("该key不存在");
@@ -294,14 +294,14 @@ public class ApiController {
 
 
     @RequestMapping("/data/renameKey")
-    public ResponseBean renameKey(String oldKey, String newKey, int index) {
+    public ResponseBean renameKey(int index, String oldKey, String newKey) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
-                if (RedisUtil.existsKey(jedis, oldKey, index)) {
-                    if (!RedisUtil.existsKey(jedis, newKey, index)) {
-                        RedisUtil.renameKey(jedis, oldKey, newKey, index);
+                if (RedisUtil.existsKey(jedis, index, oldKey)) {
+                    if (!RedisUtil.existsKey(jedis, index, newKey)) {
+                        RedisUtil.renameKey(jedis, index, oldKey, newKey);
                     } else {
                         responseBean.setCode(0);
                         responseBean.setMsgs("'" + newKey + "' 该key已存在");
@@ -325,13 +325,38 @@ public class ApiController {
 
 
     @RequestMapping("/data/deleteKey")
-    public ResponseBean deleteKey(String key, int index) {
+    public ResponseBean deleteKey(int index, String key) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
-                if (RedisUtil.existsKey(jedis, key, index)) {
-                    RedisUtil.deleteKey(jedis, key, index);
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.deleteKey(jedis, index, key);
+                } else {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("'" + key + "' 该key不存在");
+                }
+                RedisUtil.closeJedis(jedis);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
+    @RequestMapping("/data/updateStr")
+    public ResponseBean updateStr(int index, String key, String val) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.updateStr(jedis, index, key, val);
                 } else {
                     responseBean.setCode(0);
                     responseBean.setMsgs("'" + key + "' 该key不存在");

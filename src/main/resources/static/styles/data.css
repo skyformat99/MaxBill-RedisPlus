@@ -172,3 +172,13 @@
     vertical-align: top;
     *vertical-align: middle
 }
+
+.key-vals-textarea {
+    height: 355px !important;
+    resize: none !important;
+}
+
+.key-vals-submit {
+    text-align: center;
+    margin-top: 10px;
+}
