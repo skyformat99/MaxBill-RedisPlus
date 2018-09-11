@@ -1,8 +1,3 @@
-#### 招募MAC平台打包志愿者：
-
-作者没有mac，mac打包至今没有进展，招募一名热爱开源的同学帮忙打包mac平台安装包！联系邮箱：maxbill1993@163.com
-
-
 # RedisPlus
 
 #### 项目介绍
@@ -18,7 +13,14 @@ RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linu
 
 #### 版本说明
 
-版本的命名规则以x.y.z形式，重大版本更新发布会更改x位主版本，例如v2.0.0 版本会增加集群、支持ssh通道连接、国际化等功能；一般解决了多个缺陷后，会发布一个小版本，更改y位，例如v1.1.0解决了1.0.0 的问题后发布的小版本；z位的更改不会发布版本，这是缺陷修复或者小需求增加的正常迭代。
+版本的命名规则以x.y.z形式
+
+重大版本更新发布会更改x位主版本，例如v2.0.0 版本会增加集群、支持ssh通道连接、国际化等功能
+
+一般解决了多个缺陷后，会发布一个小版本，更改y位，例如v1.1.0解决了1.0.0 的问题后发布的小版本
+
+z位的更改不会发布版本，这是缺陷修复或者小需求增加的正常迭代
+
 
 #### 版本规划
 
@@ -32,21 +34,19 @@ v1.1.0
 
 4.新增异常处理页面  （已完成）
 
-5.数据模块key分层显示
+5.数据显示不同视图，修复非String类型异常问题   （v1.0.7已完成）
 
-6.数据显示vlaue值反序列化，不乱码处理
+6.状态栏连接状态美化(加图标)    （已完成）
 
-7.状态栏连接状态美化(加图标)    （已完成）
+7.增加使用教程
 
-8.增加使用教程
+8.增加全局按key模糊查询  （已完成）
 
-9.增加全局按key模糊查询  （已完成）
+9.key过多加载卡死问题修复   （已修复，可处理百万级别）
 
-10.key过多加载卡死问题修复   （已修复，可处理百万级别）
+10.打包windows平台安装包  （已完成）
 
-11.打包windows平台安装包  （已完成）
-
-12.打包mac平台安装包
+11.打包mac平台安装包
 
 12.修复1.0.0问题，性能优化（持续进行）
 
@@ -79,16 +79,16 @@ v2.0.0
 
 #### 应用截图
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174302_dfd839b5_1252126.png "深度截图_com.maxbill.MainApplication_20180904174001.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170248_649a1236_1252126.png "深度截图_com.maxbill.MainApplication_20180910165852.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174311_9991de81_1252126.png "深度截图_com.maxbill.MainApplication_20180904174021.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170300_cb981a5e_1252126.png "深度截图_com.maxbill.MainApplication_20180910165912.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174321_53591727_1252126.png "深度截图_com.maxbill.MainApplication_20180904174037.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170311_eb17fbe6_1252126.png "深度截图_com.maxbill.MainApplication_20180910165927.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174331_3baf9be8_1252126.png "深度截图_com.maxbill.MainApplication_20180904174051.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170329_84730ddd_1252126.png "深度截图_com.maxbill.MainApplication_20180910170015.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174341_dcfb9cb9_1252126.png "深度截图_com.maxbill.MainApplication_20180904174106.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170344_a3eaf178_1252126.png "深度截图_com.maxbill.MainApplication_20180910170046.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0904/174352_3738f4fe_1252126.png "深度截图_com.maxbill.MainApplication_20180904174116.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170358_e8bf24bb_1252126.png "深度截图_com.maxbill.MainApplication_20180910170105.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0907/123200_ed3b67c9_1252126.png "深度截图_com.maxbill.MainApplication_20180907123037.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0910/170408_3460dafd_1252126.png "深度截图_com.maxbill.MainApplication_20180910170121.png")
