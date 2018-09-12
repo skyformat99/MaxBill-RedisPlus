@@ -13,6 +13,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.util.Slowlog;
+import sun.plugin.util.UIUtil;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
@@ -134,6 +135,26 @@ public class RedisUtil {
     public static String updateStr(Jedis jedis, int index, String key, String val) {
         jedis.select(index);
         return jedis.set(key, val);
+    }
+
+
+    /**
+     * 添加List的item
+     */
+    public static long insertList(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.rpush(key, val);
+    }
+
+
+    /**
+     * 删除List的item
+     */
+    public static long deleteList(Jedis jedis, int index, String key, long keyIndex) {
+        jedis.select(index);
+        String tempItem = KeyUtil.getUUIDKey();
+        jedis.lset(key, keyIndex, tempItem);
+        return jedis.lrem(key, 0, tempItem);
     }
 
 
@@ -546,7 +567,6 @@ public class RedisUtil {
                 break;
             case "list":
                 List<String> list = jedis.lrange(key, 0, -1);
-                Collections.reverse(list);
                 StringBuffer listBuf = new StringBuffer();
                 for (String info : list) {
                     listBuf.append(info).append(",");

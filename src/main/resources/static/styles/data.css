@@ -48,7 +48,7 @@
     margin: 0 auto;
 }
 
-.key-vals-tool {
+.key-vals-view {
     height: 40px;
     line-height: 30px;
     text-align: left;
@@ -63,10 +63,9 @@
 }
 
 .key-vals-show {
-    height: 398px;
+    height: 420px;
     line-height: 25px;
-    border: #eaeaea 1px solid;
-    padding: 10px;
+    padding: 15px;
     display: block;
     word-wrap: break-word;
     overflow-x: hidden;
@@ -178,7 +177,12 @@
     resize: none !important;
 }
 
-.key-vals-submit {
-    text-align: center;
-    margin-top: 10px;
+.key-vals-tool {
+    margin-bottom: 2px;
+    margin-left: 1px;
+}
+
+.data-table-box {
+    height: 383px;
+    overflow-y: auto;
 }

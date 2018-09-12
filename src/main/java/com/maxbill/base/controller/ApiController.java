@@ -374,6 +374,56 @@ public class ApiController {
     }
 
 
+    @RequestMapping("/data/insertList")
+    public ResponseBean insertList(int index, String key, String val) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.insertList(jedis, index, key, val);
+                } else {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("'" + key + "' 该key不存在");
+                }
+                RedisUtil.closeJedis(jedis);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
+    @RequestMapping("/data/deleteList")
+    public ResponseBean deleteList(int index, String key, long keyIndex) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.deleteList(jedis, index, key, keyIndex);
+                } else {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("'" + key + "' 该key不存在");
+                }
+                RedisUtil.closeJedis(jedis);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
     @RequestMapping("/info/realInfo")
     public ResponseBean realInfo() {
         ResponseBean responseBean = new ResponseBean();
