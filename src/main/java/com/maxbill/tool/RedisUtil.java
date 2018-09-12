@@ -137,6 +137,22 @@ public class RedisUtil {
         return jedis.set(key, val);
     }
 
+    /**
+     * 添加Set的item
+     */
+    public static long insertSet(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.sadd(key, val);
+    }
+
+    /**
+     * 添加Zset的item
+     */
+    public static long insertZset(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.zadd(key, 1, val);
+    }
+
 
     /**
      * 添加List的item
@@ -155,6 +171,22 @@ public class RedisUtil {
         String tempItem = KeyUtil.getUUIDKey();
         jedis.lset(key, keyIndex, tempItem);
         return jedis.lrem(key, 0, tempItem);
+    }
+
+    /**
+     * 删除List的item
+     */
+    public static long deleteSet(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.srem(key, val);
+    }
+
+    /**
+     * 删除List的item
+     */
+    public static long deleteZset(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.zrem(key, val);
     }
 
 

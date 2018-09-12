@@ -447,6 +447,11 @@ function getEditView(type, data) {
     switch (type) {
         case "set":
             var setDataArray = data.split(",");
+            view += '<div class="key-vals-tool">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertSet()">';
+            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
+            view += '</div>';
+            view += '<div class="data-table-box">';
             view += '<table class="layui-table">';
             view += '<colgroup><col><col width="100"></colgroup>';
             view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
@@ -455,16 +460,13 @@ function getEditView(type, data) {
                 view += '<tr>';
                 view += '<td>' + setDataArray[i] + '</td>';
                 view += '<td>';
-                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteSet(\'' + setDataArray[i] + '\')">';
                 view += '<i class="layui-icon">&#x1006;</i>删除</button>';
                 view += '</td>';
                 view += '</tr>';
             }
             view += '</tbody>';
             view += '</table>';
-            view += '<div class="key-vals-submit ">';
-            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
-            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
             view += '</div>';
             break;
         case "list":
@@ -494,6 +496,13 @@ function getEditView(type, data) {
             break;
         case "zset":
             var zsetDataArray = data.split(",");
+
+            var setDataArray = data.split(",");
+            view += '<div class="key-vals-tool">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertZset()">';
+            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
+            view += '</div>';
+            view += '<div class="data-table-box">';
             view += '<table class="layui-table">';
             view += '<colgroup><col><col width="100"></colgroup>';
             view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
@@ -502,16 +511,13 @@ function getEditView(type, data) {
                 view += '<tr>';
                 view += '<td>' + zsetDataArray[i] + '</td>';
                 view += '<td>';
-                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteZset(\'' + zsetDataArray[i] + '\')">';
                 view += '<i class="layui-icon">&#x1006;</i>删除</button>';
                 view += '</td>';
                 view += '</tr>';
             }
             view += '</tbody>';
             view += '</table>';
-            view += '<div class="key-vals-submit ">';
-            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
-            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
             view += '</div>';
             break;
         case "hash":
@@ -594,7 +600,7 @@ function updateStr() {
 }
 
 
-//重命名key
+//新增list的item
 function insertList() {
     if (currKey == "" || currKey == null) {
         layer.alert("请选择要操作的key！", {
@@ -650,7 +656,7 @@ function insertList() {
     );
 }
 
-
+//删除list的item
 function deleteList(keyIndex) {
     if (currKey == "" || currKey == null) {
         layer.alert("请选择要操作的key！", {
@@ -694,4 +700,207 @@ function deleteList(keyIndex) {
     });
 }
 
+
+//新增set的item
+function insertSet() {
+    if (currKey == "" || currKey == null) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    layer.prompt(
+        {
+            title: '输入添加的值',
+            formType: 3,
+            value: "",
+            skin: 'layui-layer-lan',
+            closeBtn: 0,
+        },
+        function (text, index) {
+            var xhr = $.ajax({
+                type: "post",
+                url: basePath + "/api/data/insertSet",
+                data: {
+                    'key': currKey,
+                    'val': text,
+                    'index': currIndex
+                },
+                timeout: 10000,
+                sync: false,
+                success: function (data) {
+                    layer.close(index);
+                    if (data.code == 200) {
+                        getKeyInfo();
+                        layer.msg('添加成功');
+                    } else {
+                        layer.alert(data.msgs, {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                },
+                complete: function (XMLHttpRequest, status) {
+                    //请求完成后最终执行参数
+                    if (status == 'timeout') {
+                        xhr.abort();
+                        //超时,status还有success,error等值的情况
+                        layer.alert("请求超时，请检查网络连接", {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                }
+            });
+        }
+    );
+}
+
+
+//删除list的item
+function deleteSet(val) {
+    if (currKey == "" || currKey == null) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    var xhr = $.ajax({
+        type: "post",
+        url: basePath + '/api/data/deleteSet',
+        data: {
+            'key': currKey,
+            'val': val,
+            'index': currIndex
+        },
+        timeout: 10000,
+        sync: false,
+        success: function (data) {
+            if (data.code == 200) {
+                getKeyInfo();
+                layer.msg('删除成功');
+            } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        }
+    });
+}
+
+
+//新增set的item
+function insertZset() {
+    if (currKey == "" || currKey == null) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    layer.prompt(
+        {
+            title: '输入添加的值',
+            formType: 3,
+            value: "",
+            skin: 'layui-layer-lan',
+            closeBtn: 0,
+        },
+        function (text, index) {
+            var xhr = $.ajax({
+                type: "post",
+                url: basePath + "/api/data/insertZset",
+                data: {
+                    'key': currKey,
+                    'val': text,
+                    'index': currIndex
+                },
+                timeout: 10000,
+                sync: false,
+                success: function (data) {
+                    layer.close(index);
+                    if (data.code == 200) {
+                        getKeyInfo();
+                        layer.msg('添加成功');
+                    } else {
+                        layer.alert(data.msgs, {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                },
+                complete: function (XMLHttpRequest, status) {
+                    //请求完成后最终执行参数
+                    if (status == 'timeout') {
+                        xhr.abort();
+                        //超时,status还有success,error等值的情况
+                        layer.alert("请求超时，请检查网络连接", {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                }
+            });
+        }
+    );
+}
+
+
+//删除list的item
+function deleteZset(val) {
+    if (currKey == "" || currKey == null) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    var xhr = $.ajax({
+        type: "post",
+        url: basePath + '/api/data/deleteZset',
+        data: {
+            'key': currKey,
+            'val': val,
+            'index': currIndex
+        },
+        timeout: 10000,
+        sync: false,
+        success: function (data) {
+            if (data.code == 200) {
+                getKeyInfo();
+                layer.msg('删除成功');
+            } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        }
+    });
+}
 
