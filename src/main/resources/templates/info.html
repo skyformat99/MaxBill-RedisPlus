@@ -54,10 +54,42 @@
             </div>
         </div>
         <div class="handle-right">
+            <div>
+                <table class="layui-table" lay-size="sm">
+                    <colgroup>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>主机</th>
+                        <th>连接时长</th>
+                        <th>连接数据库</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <#if info.users??>
+                        <#list info.users as user>
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.addr}</td>
+                            <td>${user.age}</td>
+                            <td>${user.db}</td>
+                        </tr>
+                        </#list>
+                    </#if>
+
+                    </tbody>
+                </table>
+            </div>
             <div class="layui-collapse" lay-accordion="">
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title"><span calss="">服务端信息</span></h2>
-                    <div class="layui-colla-content layui-show">${info.server}</div>
+                <#--<div class="layui-colla-content layui-show">${info.server}</div>-->
+                    <div class="layui-colla-content">${info.server}</div>
                 </div>
                 <div class="layui-colla-item">
                     <h2 class="layui-colla-title"><span calss="">客户端信息</span></h2>

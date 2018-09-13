@@ -17,6 +17,11 @@
     padding: 0;
 }
 
+.handle-right {
+    height: 100%;
+    margin-left: 800px;
+}
+
 .layui-colla-title {
     font-size: 14px;
     font-weight: bold;
@@ -29,7 +34,7 @@
     border: 0px;
 }
 
-.handle-right {
-    height: 100%;
-    margin-left: 800px;
+.layui-table {
+    width: 99.8%;
+    margin: 0 auto;
 }

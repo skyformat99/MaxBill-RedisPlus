@@ -7,12 +7,16 @@ import java.util.regex.Pattern;
 
 public class StringUtil {
 
+    public static final String FLAG_COLON=":";
+
+    public static final String FLAG_EQUAL="=";
+
     /**
-     * 拆分key:value形式字符返回key
+     * 拆分key flag value形式字符返回key
      */
-    public static String getKeyString(String tempStr) {
-        if (!StringUtils.isEmpty(tempStr) && appearStringNumber(tempStr, ":") == 1) {
-            String[] tempStrArray = tempStr.split(":");
+    public static String getKeyString(String falg, String tempStr) {
+        if (!StringUtils.isEmpty(tempStr) && appearStringNumber(tempStr, falg) == 1) {
+            String[] tempStrArray = tempStr.split(falg);
             return tempStrArray[0];
         } else {
             return "";
@@ -20,11 +24,11 @@ public class StringUtil {
     }
 
     /**
-     * 拆分key:value形式字符返回value
+     * 拆分key flag value形式字符返回value
      */
-    public static String getValueString(String tempStr) {
-        if (!StringUtils.isEmpty(tempStr) && appearStringNumber(tempStr, ":") == 1) {
-            String[] tempStrArray = tempStr.split(":");
+    public static String getValueString(String falg, String tempStr) {
+        if (!StringUtils.isEmpty(tempStr) && appearStringNumber(tempStr, falg) == 1) {
+            String[] tempStrArray = tempStr.split(falg);
             return tempStrArray[1];
         } else {
             return "";

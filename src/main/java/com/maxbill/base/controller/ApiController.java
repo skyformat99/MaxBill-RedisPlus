@@ -533,9 +533,9 @@ public class ApiController {
                 resultMap.put("key", DateUtil.formatDate(new Date(), DateUtil.TIME_STR));
                 RedisInfo redisInfo = getRedisInfo(jedis);
                 String[] memory = redisInfo.getMemory().split("\n");
-                String val01 = StringUtil.getValueString(memory[1]).replace("\r", "");
+                String val01 = StringUtil.getValueString(":",memory[1]).replace("\r", "");
                 String[] cpu = redisInfo.getCpu().split("\n");
-                String val02 = StringUtil.getValueString(cpu[1]).replace("\r", "");
+                String val02 = StringUtil.getValueString(":",cpu[1]).replace("\r", "");
                 resultMap.put("val01", (float) (Math.round((Float.valueOf(val01) / 1048576) * 100)) / 100);
                 resultMap.put("val02", Float.valueOf(val02));
                 responseBean.setData(resultMap);

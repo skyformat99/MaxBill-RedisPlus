@@ -2,6 +2,9 @@ package com.maxbill.base.bean;
 
 import lombok.Data;
 
+import java.util.Collections;
+import java.util.List;
+
 @Data
 public class RedisInfo {
 
@@ -23,5 +26,7 @@ public class RedisInfo {
     private String cluster = "";
     //值空间
     private String keyspace = "";
+    //用户
+    private List<ClientInfo> users = Collections.emptyList();
 
 }
