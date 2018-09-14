@@ -496,8 +496,6 @@ function getEditView(type, data) {
             break;
         case "zset":
             var zsetDataArray = data.split(",");
-
-            var setDataArray = data.split(",");
             view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertZset()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
@@ -521,28 +519,29 @@ function getEditView(type, data) {
             view += '</div>';
             break;
         case "hash":
-            var dataArray = data.split(",");
+            var hashDataArray = data.split(",");
+            view += '<div class="key-vals-tool">';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertHash()">';
+            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
+            view += '</div>';
+            view += '<div class="data-table-box">';
             view += '<table class="layui-table">';
-            view += '<colgroup><col width="260"><col width="440"><col></colgroup>';
+            view += '<colgroup><col><col><col width="100"></colgroup>';
             view += '<thead><tr><th>key</th><th>value</th><th>tool</th></tr></thead>';
             view += '<tbody>';
-            for (var i = 0; i < dataArray.length; i++) {
-                var mapArray = dataArray[i].split(":");
+            for (var i = 0; i < hashDataArray.length; i++) {
+                var mapArray = hashDataArray[i].split(":");
                 view += '<tr>';
-                view += '<td>' + mapArray[0] + '</td><td>' + mapArray[1] + '</td>';
+                view += '<td>' + mapArray[0] + '</td>';
+                view += '<td>' + mapArray[1] + '</td>';
                 view += '<td>';
-                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
-                view += '<i class="layui-icon">&#xe642;</i>修改</button>';
-                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteHash(\'' + mapArray[0] + '\')">';
                 view += '<i class="layui-icon">&#x1006;</i>删除</button>';
                 view += '</td>';
                 view += '</tr>';
             }
             view += '</tbody>';
             view += '</table>';
-            view += '<div class="key-vals-submit ">';
-            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateString()">';
-            view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
             view += '</div>';
             break;
         case "string":
@@ -875,6 +874,108 @@ function deleteZset(val) {
         data: {
             'key': currKey,
             'val': val,
+            'index': currIndex
+        },
+        timeout: 10000,
+        sync: false,
+        success: function (data) {
+            if (data.code == 200) {
+                getKeyInfo();
+                layer.msg('删除成功');
+            } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        },
+        complete: function (XMLHttpRequest, status) {
+            //请求完成后最终执行参数
+            if (status == 'timeout') {
+                //超时,status还有success,error等值的情况
+                xhr.abort();
+                layer.alert("请求超时，请检查网络连接", {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
+        }
+    });
+}
+
+//增加hash的item
+function insertHash() {
+    layer.prompt({
+        closeBtn: 0,
+        formType: 3,
+        title: '输入添加的值',
+        skin: 'layui-layer-lan',
+        yes: function (index) {
+            var mapKey = $("#mapKey").val();
+            var mapVal = $("#mapVal").val();
+            if (mapKey === '') {
+                return;
+            }
+            if (mapVal === '') {
+                return;
+            }
+            var xhr = $.ajax({
+                type: "post",
+                url: basePath + '/api/data/insertHash',
+                data: {
+                    'key': currKey,
+                    'mapKey': mapKey,
+                    'mapVal': mapVal,
+                    'index': currIndex
+                },
+                timeout: 10000,
+                sync: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        getKeyInfo();
+                        layer.msg('添加成功');
+                        layer.close(index);
+                    } else {
+                        layer.alert(data.msgs, {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                },
+                complete: function (XMLHttpRequest, status) {
+                    //请求完成后最终执行参数
+                    if (status == 'timeout') {
+                        //超时,status还有success,error等值的情况
+                        xhr.abort();
+                        layer.alert("请求超时，请检查网络连接", {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                }
+            });
+        }
+    });
+    $(".layui-layer-content").html("");
+    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapKey\" class=\"layui-layer-input\" placeholder=\"请输入Key\"/>");
+    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapVal\" class=\"layui-layer-input\" placeholder=\"请输入Val\"/>");
+}
+
+//删除hash的item
+function deleteHash(mapKey) {
+    if (currKey == "" || currKey == null) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    var xhr = $.ajax({
+        type: "post",
+        url: basePath + '/api/data/deleteHash',
+        data: {
+            'key': currKey,
+            'mapKey': mapKey,
             'index': currIndex
         },
         timeout: 10000,

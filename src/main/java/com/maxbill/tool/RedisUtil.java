@@ -162,6 +162,30 @@ public class RedisUtil {
         return jedis.rpush(key, val);
     }
 
+    /**
+     * 添加Hase的key和val
+     */
+    public static long insertHash(Jedis jedis, int index, String key, String mapKey, String mapVal) {
+        jedis.select(index);
+        return jedis.hset(key, mapKey, mapVal);
+    }
+
+
+    /**
+     * 删除Set的item
+     */
+    public static long deleteSet(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.srem(key, val);
+    }
+
+    /**
+     * 删除Zset的item
+     */
+    public static long deleteZset(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.zrem(key, val);
+    }
 
     /**
      * 删除List的item
@@ -173,20 +197,13 @@ public class RedisUtil {
         return jedis.lrem(key, 0, tempItem);
     }
 
-    /**
-     * 删除List的item
-     */
-    public static long deleteSet(Jedis jedis, int index, String key, String val) {
-        jedis.select(index);
-        return jedis.srem(key, val);
-    }
 
     /**
      * 删除List的item
      */
-    public static long deleteZset(Jedis jedis, int index, String key, String val) {
+    public static long deleteHash(Jedis jedis, int index, String key, String mapKey) {
         jedis.select(index);
-        return jedis.zrem(key, val);
+        return jedis.hdel(key, mapKey);
     }
 
 

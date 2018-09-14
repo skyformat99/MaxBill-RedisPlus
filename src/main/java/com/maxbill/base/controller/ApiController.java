@@ -448,14 +448,14 @@ public class ApiController {
     }
 
 
-    @RequestMapping("/data/deleteList")
-    public ResponseBean deleteList(int index, String key, long keyIndex) {
+    @RequestMapping("/data/insertHash")
+    public ResponseBean insertHash(int index, String key, String mapKey, String mapVal) {
         ResponseBean responseBean = new ResponseBean();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 if (RedisUtil.existsKey(jedis, index, key)) {
-                    RedisUtil.deleteList(jedis, index, key, keyIndex);
+                    RedisUtil.insertHash(jedis, index, key, mapKey, mapVal);
                 } else {
                     responseBean.setCode(0);
                     responseBean.setMsgs("'" + key + "' 该key不存在");
@@ -522,6 +522,55 @@ public class ApiController {
         return responseBean;
     }
 
+    @RequestMapping("/data/deleteList")
+    public ResponseBean deleteList(int index, String key, long keyIndex) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.deleteList(jedis, index, key, keyIndex);
+                } else {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("'" + key + "' 该key不存在");
+                }
+                RedisUtil.closeJedis(jedis);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
+    @RequestMapping("/data/deleteHash")
+    public ResponseBean deleteHash(int index, String key, String mapKey) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.deleteHash(jedis, index, key, mapKey);
+                } else {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("'" + key + "' 该key不存在");
+                }
+                RedisUtil.closeJedis(jedis);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
 
     @RequestMapping("/info/realInfo")
     public ResponseBean realInfo() {
@@ -533,9 +582,9 @@ public class ApiController {
                 resultMap.put("key", DateUtil.formatDate(new Date(), DateUtil.TIME_STR));
                 RedisInfo redisInfo = getRedisInfo(jedis);
                 String[] memory = redisInfo.getMemory().split("\n");
-                String val01 = StringUtil.getValueString(":",memory[1]).replace("\r", "");
+                String val01 = StringUtil.getValueString(":", memory[1]).replace("\r", "");
                 String[] cpu = redisInfo.getCpu().split("\n");
-                String val02 = StringUtil.getValueString(":",cpu[1]).replace("\r", "");
+                String val02 = StringUtil.getValueString(":", cpu[1]).replace("\r", "");
                 resultMap.put("val01", (float) (Math.round((Float.valueOf(val01) / 1048576) * 100)) / 100);
                 resultMap.put("val02", Float.valueOf(val02));
                 responseBean.setData(resultMap);
