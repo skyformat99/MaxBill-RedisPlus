@@ -72,7 +72,7 @@ v2.0.0
 2.使用javafx的桌面元素
 
 3.使用derby内嵌数据库
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003505_853860e7_1252126.png "深度截图_com.maxbill.MainApplication_20180916003247.png")
+
 4.内置服务使用springboot开发
 
 
