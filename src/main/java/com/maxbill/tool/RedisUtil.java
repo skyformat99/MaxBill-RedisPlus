@@ -120,6 +120,14 @@ public class RedisUtil {
         return jedis.rename(oldKey, newKey);
     }
 
+    /**
+     * 设置key时间
+     */
+    public static long retimeKey(Jedis jedis, int index, String key, int time) {
+        jedis.select(index);
+        return jedis.expire(key, time);
+    }
+
 
     /**
      * 删除key
@@ -248,6 +256,7 @@ public class RedisUtil {
                 zTreeBean.setName(key);
                 zTreeBean.setParent(false);
                 zTreeBean.setIndex(index);
+                zTreeBean.setIcon("../image/data-key.png");
                 treeList.add(zTreeBean);
             }
         }
@@ -780,8 +789,8 @@ public class RedisUtil {
         connect.setPort("6379");
         connect.setPass("123456");
         Jedis jedis = openJedis(connect);
-        jedis.select(2);
-        testCase(jedis);
+        jedis.select(3);
+        //testCase(jedis);
         System.out.println("exec finish");
         jedis.close();
     }

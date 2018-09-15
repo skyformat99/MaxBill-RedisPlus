@@ -65,6 +65,13 @@ public class RouteController {
         return mv;
     }
 
+    @GetMapping("/book")
+    public ModelAndView toBook(ModelAndView mv) {
+        mv.addAllObjects(setPageInfo());
+        mv.setViewName("book");
+        return mv;
+    }
+
     @GetMapping("/self")
     public ModelAndView toSelf(ModelAndView mv) {
         mv.addAllObjects(setPageInfo());

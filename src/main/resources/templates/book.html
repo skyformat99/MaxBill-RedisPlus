@@ -9,16 +9,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" type="text/css" href="${ctx}/plugin/layui/css/layui.css"/>
-    <link rel="stylesheet" type="text/css" href="${ctx}/styles/style.css"/>
-    <link rel="stylesheet" type="text/css" href="${ctx}/styles/root.css"/>
+    <link rel="stylesheet" href="${ctx}/plugin/layui/css/layui.css"/>
+    <link rel="stylesheet" href="${ctx}/styles/style.css"/>
+    <link rel="stylesheet" href="${ctx}/styles/self.css"/>
 </head>
 <body>
 <input id="basePath" type="hidden" value="${ctx}"/>
 <div class="root">
     <div class="topbar">
         <div class="topbar-menu">
-            <a href="javascript:toPage('root')" class="topbar-menu-item curr">
+            <a href="javascript:toPage('root')" class="topbar-menu-item">
                 <img src="${ctx}/image/menu01.png"/><span>连接</span>
             </a>
             <a href="javascript:toPage('data')" class="topbar-menu-item">
@@ -30,7 +30,7 @@
             <a href="javascript:toPage('conf')" class="topbar-menu-item">
                 <img src="${ctx}/image/menu04.png"/><span>配置</span>
             </a>
-            <a href="javascript:toPage('book')" class="topbar-menu-item">
+            <a href="javascript:toPage('book')" class="topbar-menu-item curr">
                 <img src="${ctx}/image/menu05.png"/><span>指南</span>
             </a>
             <a href="javascript:toPage('self')" class="topbar-menu-item">
@@ -41,15 +41,10 @@
     </div>
     <div class="handle">
         <div class="handle-left">
-            <span class="handle-left-item"><i class="layui-icon">&#xe654;</i><cite id="add" onclick="addConnectData()">添加连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe666;</i><cite id="get" onclick="getConnectData()">刷新连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe642;</i><cite id="upd" onclick="updConnectData()">编辑连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe640;</i><cite id="del" onclick="delConnectData()">移除连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe681;</i><cite id="imp" onclick="impConnectData()">导入连接</cite></span>
-            <span class="handle-left-item"><i class="layui-icon">&#xe601;</i><cite id="exp" onclick="expConnectData()">导出连接</cite></span>
+
         </div>
-        <div class="handle-right" id="tableDiv">
-            <table id="dataList" lay-filter="dataList"></table>
+        <div class="handle-right">
+
         </div>
     </div>
     <div class="status">
@@ -62,6 +57,6 @@
 </div>
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script type="text/javascript" src="${ctx}/script/script.js"></script>
-<script type="text/javascript" src="${ctx}/script/root.js"></script>
+<script type="text/javascript" src="${ctx}/script/self.js"></script>
 </body>
 </html>

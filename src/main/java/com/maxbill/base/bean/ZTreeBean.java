@@ -21,6 +21,8 @@ public class ZTreeBean {
 
     private Long count;
 
+    private String icon;
+
     private boolean checked = false;
 
     @JSONField(name = "isParent")

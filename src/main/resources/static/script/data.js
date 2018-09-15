@@ -1,7 +1,9 @@
+//当前选中的键
 var currKey;
-// var currIndex = -1;
+//默认数据库0
 var currIndex = 0;
-var pageSize = 100;
+//每次加载的数据量
+var pageSize = 50;
 var basePath = $("#basePath").val();
 
 $(document).ready(function () {
@@ -32,7 +34,8 @@ var zTreeSetting = {
         }
     },
     view: {
-        showLine: false,
+        showLine: true,
+        showIcon: true,
         addDiyDom: showPageView
     },
     async: {
@@ -156,6 +159,7 @@ function loadKeyTree() {
                 $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
                 $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
             }
+            $("#keyTree" + currIndex + "_1_switch").click()
         },
         complete: function (XMLHttpRequest, status) {
             //请求完成后最终执行参数
@@ -192,7 +196,7 @@ function loadPatternTree() {
         success: function (data) {
             var ztreeObj = $.fn.zTree.init($("#keyTree" + currIndex), zTreeSetting, data.data);
             ztreeObj.expandAll(false);
-            $("#keyTree" + currIndex + "_1_a").addClass("curSelectedNode");
+            //$("#keyTree" + currIndex + "_1_a").addClass("curSelectedNode");
             $("#keyTree" + currIndex + "_1_switch").click()
         },
         complete: function (XMLHttpRequest, status) {
@@ -334,6 +338,72 @@ function reloadKey() {
     getKeyInfo();
 }
 
+//设置key的失效时间
+function retimeKey() {
+    if (currKey == "" || currKey == null) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    layer.prompt(
+        {
+            title: '输入TTL的值',
+            formType: 3,
+            value: -1,
+            skin: 'layui-layer-lan',
+            closeBtn: 0,
+        },
+        function (text, index) {
+            if (text == -1) {
+                layer.close(index);
+                return;
+            }
+            var checkFlag = /^(0|[1-9][0-9]*)$/.test(text);
+            if (!checkFlag) {
+                layer.msg('只能输入整数值');
+                return;
+            }
+            var xhr = $.ajax({
+                type: "post",
+                url: basePath + "/api/data/retimeKey",
+                data: {
+                    'key': currKey,
+                    'time': text,
+                    'index': currIndex
+                },
+                timeout: 10000,
+                sync: false,
+                success: function (data) {
+                    layer.close(index);
+                    if (data.code == 200) {
+                        getKeyInfo();
+                        layer.msg('设置成功');
+                    } else {
+                        layer.alert(data.msgs, {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                },
+                complete: function (XMLHttpRequest, status) {
+                    //请求完成后最终执行参数
+                    if (status == 'timeout') {
+                        xhr.abort();
+                        //超时,status还有success,error等值的情况
+                        layer.alert("请求超时，请检查网络连接", {
+                            skin: 'layui-layer-lan',
+                            closeBtn: 0
+                        });
+                    }
+                }
+            });
+        }
+    );
+}
+
+//检索key
 function selectKey() {
     var key = $("#key-input").val();
     if (key == "") {

@@ -21,7 +21,7 @@ layui.use(['jquery', 'layer'], function () {
 
 
 function toPage(page) {
-    if (page == 'root' || page == 'self') {
+    if (page == 'root' || page == 'book'|| page == 'self') {
         window.location.href = basePath + '/' + page;
     } else {
         $.ajax({

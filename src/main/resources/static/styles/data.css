@@ -113,7 +113,8 @@
     margin-top: 11px;
     border-radius: 3px;
     padding-left: 10px;
-    width: 300px !important;
+    /*width: 300px !important;*/
+    width: 210px !important;
     height: 28px !important;
     border: 1px solid silver;
 }
@@ -170,6 +171,14 @@
     background-position: -144px -32px;
     vertical-align: top;
     *vertical-align: middle
+}
+
+.ztree .level1 {
+    margin-top: 5px !important;
+}
+
+.ztree li a:hover {
+    color: #009E94;
 }
 
 .key-vals-textarea {

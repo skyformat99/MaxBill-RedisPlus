@@ -248,8 +248,8 @@ public class ApiController {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
                 List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id, pattern);
-                int startIndex = (page - 1) * 100;
-                int endIndex = page * 100;
+                int startIndex = (page - 1) * 50;
+                int endIndex = page * 50;
                 if (endIndex > count) {
                     endIndex = count;
                 }
@@ -309,6 +309,31 @@ public class ApiController {
                 } else {
                     responseBean.setCode(0);
                     responseBean.setMsgs("'" + oldKey + "' 该key不存在");
+                }
+                RedisUtil.closeJedis(jedis);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseBean.setCode(500);
+            responseBean.setMsgs("重命名操作异常");
+        }
+        return responseBean;
+    }
+
+    @RequestMapping("/data/retimeKey")
+    public ResponseBean retimeKey(int index, String key, int time) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Jedis jedis = DataUtil.getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.retimeKey(jedis, index, key, time);
+                } else {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("'" + key + "' 该key不存在");
                 }
                 RedisUtil.closeJedis(jedis);
             } else {
