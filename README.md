@@ -6,9 +6,9 @@ RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linu
 
 #### 下载地址
 
-1.微云地址：https://share.weiyun.com/5UIOsxY
+1.微云下载：https://share.weiyun.com/5UIOsxY
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0909/200121_021d84e3_1252126.png "屏幕截图.png")
+2.百度下载：https://pan.baidu.com/s/1ETwWnEj4rbsE1S3GlYHlWg
 
 
 #### 版本说明
@@ -28,9 +28,9 @@ v1.1.0
 
 1.美化实时监控页面(图表配色，单位……)   （已完成）
 
-2.增加更新日志功能
+2.增加更新日志功能  （已完成）
 
-3.增加版本规划功能
+3.增加版本规划功能  （已完成）
 
 4.新增异常处理页面  （已完成）
 
@@ -38,7 +38,7 @@ v1.1.0
 
 6.状态栏连接状态美化(加图标)    （已完成）
 
-7.增加使用教程
+7.增加使用教程    （已完成）
 
 8.增加全局按key模糊查询  （已完成）
 
@@ -46,9 +46,7 @@ v1.1.0
 
 10.打包windows平台安装包  （已完成）
 
-11.打包mac平台安装包
-
-12.修复1.0.0问题，性能优化（持续进行）
+11.修复1.0.0问题，性能优化（持续进行）
 
 
 v2.0.0
@@ -76,6 +74,13 @@ v2.0.0
 3.使用derby内嵌数据库
 
 4.内置服务使用springboot开发
+
+
+### 打包说明
+
+1.linux平台：需要安装fakeroot库
+
+2.windows：需要安装WiX Toolset、Inno Setup、microsoft .net framework库
 
 #### 应用截图
 
