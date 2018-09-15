@@ -38,3 +38,7 @@
     width: 99.8%;
     margin: 0 auto;
 }
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: #FFFFFF;
+}

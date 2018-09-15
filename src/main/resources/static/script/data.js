@@ -616,7 +616,7 @@ function getEditView(type, data) {
             break;
         case "string":
             view += '<textarea id="currVal" class="layui-textarea key-vals-textarea">' + data + '</textarea>';
-            view += '<div class="key-vals-submit ">';
+            view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateStr()">';
             view += '<i class="layui-icon">&#x1005;</i>提交</button></div>';
             break;

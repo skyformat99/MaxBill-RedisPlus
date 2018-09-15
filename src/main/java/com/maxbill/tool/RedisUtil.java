@@ -78,6 +78,7 @@ public class RedisUtil {
      * 从JedisPool中获取Jedis
      */
     public static Jedis openJedis(Connect connect) {
+        log.info("正在建立新连接...");
         //销毁旧的连接池
         freeJedisPool();
         //防止吃初始化时多线程竞争问题
