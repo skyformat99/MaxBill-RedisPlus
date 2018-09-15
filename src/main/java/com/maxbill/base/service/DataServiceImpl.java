@@ -3,7 +3,6 @@ package com.maxbill.base.service;
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.dao.DataMapper;
 import com.maxbill.tool.DateUtil;
-import com.maxbill.tool.KeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

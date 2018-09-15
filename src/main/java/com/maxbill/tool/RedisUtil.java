@@ -2,21 +2,20 @@ package com.maxbill.tool;
 
 import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.*;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.SocketUtils;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.util.Slowlog;
-import sun.plugin.util.UIUtil;
 
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static com.maxbill.tool.StringUtil.FLAG_COLON;
+import static com.maxbill.tool.StringUtil.FLAG_EQUAL;
 
 public class RedisUtil {
 
@@ -338,8 +337,8 @@ public class RedisUtil {
         if (!StringUtils.isEmpty(serverInfo)) {
             String[] server = serverInfo.split("\n");
             for (String info : server) {
-                String key = StringUtil.getKeyString(":", info);
-                String value = StringUtil.getValueString(":", info);
+                String key = StringUtil.getKeyString(FLAG_COLON, info);
+                String value = StringUtil.getValueString(FLAG_COLON, info);
                 switch (key) {
                     case "redis_version":
                         serverBuf.append("服务版本: ").append(value);
@@ -393,8 +392,8 @@ public class RedisUtil {
         if (!StringUtils.isEmpty(clientInfo)) {
             String[] client = clientInfo.split("\n");
             for (String info : client) {
-                String key = StringUtil.getKeyString(":", info);
-                String value = StringUtil.getValueString(":", info);
+                String key = StringUtil.getKeyString(FLAG_COLON, info);
+                String value = StringUtil.getValueString(FLAG_COLON, info);
                 switch (key) {
                     case "connected_clients":
                         clientBuf.append("当前已连接客户端数量: ").append(value);
@@ -428,8 +427,8 @@ public class RedisUtil {
         if (!StringUtils.isEmpty(memoryInfo)) {
             String[] memory = memoryInfo.split("\n");
             for (String info : memory) {
-                String key = StringUtil.getKeyString(":", info);
-                String value = StringUtil.getValueString(":", info);
+                String key = StringUtil.getKeyString(FLAG_COLON, info);
+                String value = StringUtil.getValueString(FLAG_COLON, info);
                 switch (key) {
                     case "used_memory":
                         memoryBuf.append("已占用内存量: ").append(value);
@@ -467,8 +466,8 @@ public class RedisUtil {
         if (!StringUtils.isEmpty(persistenceInfo)) {
             String[] persistence = persistenceInfo.split("\n");
             for (String info : persistence) {
-                String key = StringUtil.getKeyString(":", info);
-                String value = StringUtil.getValueString(":", info);
+                String key = StringUtil.getKeyString(FLAG_COLON, info);
+                String value = StringUtil.getValueString(FLAG_COLON, info);
                 switch (key) {
                     case "rdb_bgsave_in_progress":
                         persistenceBuf.append("是否正在创建RDB的文件: ").append(value);
@@ -525,8 +524,8 @@ public class RedisUtil {
         if (!StringUtils.isEmpty(statsInfo)) {
             String[] stats = statsInfo.split("\n");
             for (String info : stats) {
-                String key = StringUtil.getKeyString(":", info);
-                String value = StringUtil.getValueString(":", info);
+                String key = StringUtil.getKeyString(FLAG_COLON, info);
+                String value = StringUtil.getValueString(FLAG_COLON, info);
                 switch (key) {
                     case "total_connections_received":
                         statsBuf.append("已连接客户端总数: ").append(value);
@@ -569,8 +568,8 @@ public class RedisUtil {
         if (!StringUtils.isEmpty(cpuInfo)) {
             String[] cpu = cpuInfo.split("\n");
             for (String info : cpu) {
-                String key = StringUtil.getKeyString(":", info);
-                String value = StringUtil.getValueString(":", info);
+                String key = StringUtil.getKeyString(FLAG_COLON, info);
+                String value = StringUtil.getValueString(FLAG_COLON, info);
                 switch (key) {
                     case "used_cpu_sys":
                         cpuBuf.append("服务主进程在核心态累计CPU耗时: ").append(value);
@@ -610,16 +609,16 @@ public class RedisUtil {
                     String[] items = user.split(" ");
                     for (String item : items) {
                         if (item.startsWith("id=")) {
-                            clientInfo.setId(StringUtil.getValueString(StringUtil.FLAG_EQUAL, item));
+                            clientInfo.setId(StringUtil.getValueString(FLAG_EQUAL, item));
                         }
                         if (item.startsWith("addr=")) {
-                            clientInfo.setAddr(StringUtil.getValueString(StringUtil.FLAG_EQUAL, item));
+                            clientInfo.setAddr(StringUtil.getValueString(FLAG_EQUAL, item));
                         }
                         if (item.startsWith("age=")) {
-                            clientInfo.setAge(StringUtil.getValueString(StringUtil.FLAG_EQUAL, item));
+                            clientInfo.setAge(StringUtil.getValueString(FLAG_EQUAL, item));
                         }
                         if (item.startsWith("db=")) {
-                            clientInfo.setDb(StringUtil.getValueString(StringUtil.FLAG_EQUAL, item));
+                            clientInfo.setDb(StringUtil.getValueString(FLAG_EQUAL, item));
                         }
                     }
                     usersList.add(clientInfo);

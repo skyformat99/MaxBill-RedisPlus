@@ -3,9 +3,6 @@ package com.maxbill.tool;
 import com.maxbill.base.bean.Connect;
 import redis.clients.jedis.Jedis;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class DataUtil {
 
 

@@ -3,10 +3,8 @@ package com.maxbill.core.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
-import java.io.InputStream;
 
 @Configuration
 public class DruidConfig {
