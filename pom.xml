@@ -9,6 +9,24 @@
     <name>RedisPlus</name>
     <description>RedisPlus project for Spring Boot</description>
 
+    <!--开发者信息-->
+    <developers>
+        <developer>
+            <name>MaxBill</name>
+            <email>maxbill1993@163.com</email>
+            <url>https://my.oschina.net/zss1993</url>
+        </developer>
+    </developers>
+
+    <!--开源协议-->
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+        </license>
+    </licenses>
+
+    <!--父级项目依赖-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -17,11 +35,13 @@
         <relativePath/>
     </parent>
 
+    <!--属性信息配置-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
+
 
     <dependencies>
         <!--web启动器依赖-->

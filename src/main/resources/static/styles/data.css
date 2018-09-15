@@ -25,9 +25,16 @@
     width: 99.8%;
     height: 50px;
     line-height: 50px;
-    padding-left: 11px;
+    padding-left: 8px;
     margin-right: 17px;
     border: #eaeaea 1px solid;
+}
+
+.key-tree {
+    width: 99.8%;
+    height: 648px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .key-deal {
@@ -113,8 +120,7 @@
     margin-top: 11px;
     border-radius: 3px;
     padding-left: 10px;
-    /*width: 300px !important;*/
-    width: 210px !important;
+    width: 303px !important;
     height: 28px !important;
     border: 1px solid silver;
 }
@@ -129,7 +135,7 @@
 }
 
 .query-like-button {
-    width: 68px !important;
+    width: 67px !important;
     margin-left: 1px !important;
 }
 

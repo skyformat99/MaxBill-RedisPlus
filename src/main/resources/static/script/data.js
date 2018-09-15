@@ -19,6 +19,8 @@ $(document).ready(function () {
             elseObj.addClass("key-vals-hide");
         });
     });
+
+    //加载数据库树
     loadKeyTree();
 });
 
@@ -149,14 +151,17 @@ function ztreeOnExpand(event, treeId, treeNode) {
     }
 }
 
+//异步加载前
 function beforeAsync() {
     layer.load(2);
 }
 
+//异步加载错误
 function onAsyncError() {
     layer.closeAll('loading');
 }
 
+//异步加载成功
 function onAsyncSuccess() {
     layer.closeAll('loading');
 }
@@ -173,7 +178,8 @@ function loadKeyTree() {
                 $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
                 $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
             }
-            $("#keyTree" + currIndex + "_1_switch").click();
+            //展开默认库
+            //$("#keyTree" + currIndex + "_1_switch").click();
         },
         complete: function (XMLHttpRequest, status) {
             //请求完成后最终执行参数
@@ -187,6 +193,14 @@ function loadKeyTree() {
             }
         }
     });
+}
+
+
+//回车查询事件
+function keydownLoadTree() {
+    if (event.keyCode == 13) {
+        loadPatternTree();
+    }
 }
 
 //模糊匹配
@@ -210,7 +224,9 @@ function loadPatternTree() {
         success: function (data) {
             var ztreeObj = $.fn.zTree.init($("#keyTree" + currIndex), zTreeSetting, data.data);
             ztreeObj.expandAll(false);
+            //增加默认选中样式
             //$("#keyTree" + currIndex + "_1_a").addClass("curSelectedNode");
+            //展开默认库
             $("#keyTree" + currIndex + "_1_switch").click();
         },
         complete: function (XMLHttpRequest, status) {
@@ -525,7 +541,7 @@ function getKeyInfo() {
     });
 }
 
-
+//数据编辑视图
 function getEditView(type, data) {
     var view = '';
     switch (type) {
@@ -638,7 +654,7 @@ function getEditView(type, data) {
     return view;
 }
 
-
+//修改string类型
 function updateStr() {
     if (currKey == "" || currKey == null) {
         layer.alert("请选择要操作的key！", {
@@ -841,7 +857,7 @@ function insertSet() {
 }
 
 
-//删除list的item
+//删除set的item
 function deleteSet(val) {
     if (currKey == "" || currKey == null) {
         layer.alert("请选择要操作的key！", {
@@ -943,7 +959,7 @@ function insertZset() {
 }
 
 
-//删除list的item
+//删除zset的item
 function deleteZset(val) {
     if (currKey == "" || currKey == null) {
         layer.alert("请选择要操作的key！", {

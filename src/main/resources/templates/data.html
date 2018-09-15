@@ -41,27 +41,30 @@
     <div class="handle">
         <div class="handle-left">
             <div class="key-like">
-                <input id="key-like-input" class="query-like-input" type="text" placeholder="请输要检索的key表达式">
+                <input id="key-like-input" class="query-like-input" onkeypress="keydownLoadTree()"
+                       type="text" placeholder="请输要检索的key表达式">
                 <button class="layui-btn layui-btn-sm query-like-button set-color" onclick="loadPatternTree()">
                     <i class="layui-icon">&#xe615;</i>搜索
                 </button>
             </div>
-            <ul id="keyTree0" name="keyTree0" class="ztree"></ul>
-            <ul id="keyTree1" name="keyTree1" class="ztree"></ul>
-            <ul id="keyTree2" name="keyTree2" class="ztree"></ul>
-            <ul id="keyTree3" name="keyTree3" class="ztree"></ul>
-            <ul id="keyTree4" name="keyTree4" class="ztree"></ul>
-            <ul id="keyTree5" name="keyTree5" class="ztree"></ul>
-            <ul id="keyTree6" name="keyTree6" class="ztree"></ul>
-            <ul id="keyTree7" name="keyTree7" class="ztree"></ul>
-            <ul id="keyTree8" name="keyTree8" class="ztree"></ul>
-            <ul id="keyTree9" name="keyTree9" class="ztree"></ul>
-            <ul id="keyTree10" name="keyTree10" class="ztree"></ul>
-            <ul id="keyTree11" name="keyTree11" class="ztree"></ul>
-            <ul id="keyTree12" name="keyTree12" class="ztree"></ul>
-            <ul id="keyTree13" name="keyTree13" class="ztree"></ul>
-            <ul id="keyTree14" name="keyTree14" class="ztree"></ul>
-            <ul id="keyTree15" name="keyTree15" class="ztree"></ul>
+            <div class="key-tree">
+                <ul id="keyTree0" name="keyTree0" class="ztree"></ul>
+                <ul id="keyTree1" name="keyTree1" class="ztree"></ul>
+                <ul id="keyTree2" name="keyTree2" class="ztree"></ul>
+                <ul id="keyTree3" name="keyTree3" class="ztree"></ul>
+                <ul id="keyTree4" name="keyTree4" class="ztree"></ul>
+                <ul id="keyTree5" name="keyTree5" class="ztree"></ul>
+                <ul id="keyTree6" name="keyTree6" class="ztree"></ul>
+                <ul id="keyTree7" name="keyTree7" class="ztree"></ul>
+                <ul id="keyTree8" name="keyTree8" class="ztree"></ul>
+                <ul id="keyTree9" name="keyTree9" class="ztree"></ul>
+                <ul id="keyTree10" name="keyTree10" class="ztree"></ul>
+                <ul id="keyTree11" name="keyTree11" class="ztree"></ul>
+                <ul id="keyTree12" name="keyTree12" class="ztree"></ul>
+                <ul id="keyTree13" name="keyTree13" class="ztree"></ul>
+                <ul id="keyTree14" name="keyTree14" class="ztree"></ul>
+                <ul id="keyTree15" name="keyTree15" class="ztree"></ul>
+            </div>
         </div>
         <div class="handle-right">
             <div class="key-deal">

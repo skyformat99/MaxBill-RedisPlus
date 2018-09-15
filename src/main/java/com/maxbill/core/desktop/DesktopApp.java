@@ -1,6 +1,7 @@
 package com.maxbill.core.desktop;
 
 import com.maxbill.MainApplication;
+import com.maxbill.core.config.TaskConfig;
 import com.maxbill.tool.DataUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,6 +21,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import redis.clients.jedis.Jedis;
 
@@ -70,7 +72,10 @@ public class DesktopApp extends Application {
         stage.getIcons().add(new Image(appIcon));
         stage.setResizable(false);
         stage.setTitle(appName);
-        //stage.setFullScreen(true);
+        stage.setOnShowing((WindowEvent e) -> {
+        });
+        stage.setOnShown((WindowEvent e) -> {
+        });
         stage.show();
     }
 
