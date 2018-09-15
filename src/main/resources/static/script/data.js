@@ -7,7 +7,7 @@ var pageSize = 50;
 var basePath = $("#basePath").val();
 
 $(document).ready(function () {
-    layui.use('form', function () {
+    layui.use(['form', 'jquery'], function () {
         var form = layui.form;
         form.render();
         form.on('radio(vals)', function (data) {
@@ -47,7 +47,10 @@ var zTreeSetting = {
     },
     callback: {
         onClick: ztreeOnClick,
-        onExpand: ztreeOnExpand
+        onExpand: ztreeOnExpand,
+        beforeAsync: beforeAsync,
+        onAsyncError: onAsyncError,
+        onAsyncSuccess: onAsyncSuccess
     }
 };
 
@@ -146,6 +149,17 @@ function ztreeOnExpand(event, treeId, treeNode) {
     }
 }
 
+function beforeAsync() {
+    layer.load(2);
+}
+
+function onAsyncError() {
+    layer.closeAll('loading');
+}
+
+function onAsyncSuccess() {
+    layer.closeAll('loading');
+}
 
 //初始化16个根库
 function loadKeyTree() {
@@ -159,7 +173,7 @@ function loadKeyTree() {
                 $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
                 $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
             }
-            $("#keyTree" + currIndex + "_1_switch").click()
+            $("#keyTree" + currIndex + "_1_switch").click();
         },
         complete: function (XMLHttpRequest, status) {
             //请求完成后最终执行参数
@@ -197,7 +211,7 @@ function loadPatternTree() {
             var ztreeObj = $.fn.zTree.init($("#keyTree" + currIndex), zTreeSetting, data.data);
             ztreeObj.expandAll(false);
             //$("#keyTree" + currIndex + "_1_a").addClass("curSelectedNode");
-            $("#keyTree" + currIndex + "_1_switch").click()
+            $("#keyTree" + currIndex + "_1_switch").click();
         },
         complete: function (XMLHttpRequest, status) {
             //请求完成后最终执行参数
