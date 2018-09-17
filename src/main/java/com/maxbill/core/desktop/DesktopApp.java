@@ -66,6 +66,7 @@ public class DesktopApp extends Application {
         stage.getIcons().add(new Image(appIcon));
         stage.setResizable(false);
         stage.setTitle(appName);
+        stage.setFullScreen(false);
         stage.setOnShowing((WindowEvent e) -> {
         });
         stage.setOnShown((WindowEvent e) -> {
