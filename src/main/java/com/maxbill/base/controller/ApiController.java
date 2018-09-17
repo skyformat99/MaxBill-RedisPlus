@@ -12,6 +12,7 @@ import redis.clients.jedis.Jedis;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static com.maxbill.tool.DateUtil.DATE_STR;
 import static com.maxbill.tool.RedisUtil.getRedisInfo;
 
 @RestController
@@ -164,7 +165,7 @@ public class ApiController {
             excelBean.setTitles(titles);
             excelBean.setRows(this.dataService.selectConnect());
             String filePath = System.getProperty("user.home") + "/";
-            String fileName = DateUtil.formatDateTime(new Date()) + "-redis-connect" + ".xlsx";
+            String fileName = DateUtil.formatDate(new Date(),DATE_STR) + "-redis-connect" + ".xlsx";
             boolean exportFlag = ExcelUtil.exportExcel(excelBean, filePath + fileName);
             if (exportFlag) {
                 responseBean.setMsgs("成功导出连接至用户目录");
