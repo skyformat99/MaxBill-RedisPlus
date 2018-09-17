@@ -84,18 +84,16 @@ v2.0.0
 
 #### 应用截图
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003420_353f3323_1252126.png "深度截图_com.maxbill.MainApplication_20180916003100.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143612_a7381776_1252126.png "深度截图_com.maxbill.MainApplication_20180917142650.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003434_e20379dc_1252126.png "深度截图_com.maxbill.MainApplication_20180916003113.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143636_9ddd2654_1252126.png "深度截图_com.maxbill.MainApplication_20180917142708.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003445_800a9a76_1252126.png "深度截图_com.maxbill.MainApplication_20180916003147.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143649_8af0a861_1252126.png "深度截图_com.maxbill.MainApplication_20180917142726.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003454_caae523f_1252126.png "深度截图_com.maxbill.MainApplication_20180916003220.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143659_a2e1bd9b_1252126.png "深度截图_com.maxbill.MainApplication_20180917142741.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003545_4b85ca15_1252126.png "深度截图_com.maxbill.MainApplication_20180916003247.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143714_81d8a576_1252126.png "深度截图_com.maxbill.MainApplication_20180917142749.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003556_133dde20_1252126.png "深度截图_com.maxbill.MainApplication_20180916003256.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143724_227d3df1_1252126.png "深度截图_com.maxbill.MainApplication_20180917142829.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003605_f8affb21_1252126.png "深度截图_com.maxbill.MainApplication_20180916003309.png")
-
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0916/003615_74c95ca6_1252126.png "深度截图_com.maxbill.MainApplication_20180916003317.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143733_073bd1ef_1252126.png "深度截图_com.maxbill.MainApplication_20180917142840.png")
