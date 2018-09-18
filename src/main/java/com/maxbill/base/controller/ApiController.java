@@ -96,15 +96,26 @@ public class ApiController {
         ResponseBean responseBean = new ResponseBean();
         try {
             Connect connect = this.dataService.selectConnectById(id);
-            Jedis jedis = RedisUtil.openJedis(connect);
-            if (null != jedis) {
-                WebUtil.setSessionAttribute("connect", connect);
-                responseBean.setData("已经连接到： " + connect.getName());
-                RedisUtil.closeJedis(jedis);
+            boolean openFlag = JschUtil.openSSH(connect);
+            if (openFlag) {
+                Connect connect1 = new Connect();
+                connect1.setHost("127.0.0.1");
+                connect1.setPort("55555");
+                connect1.setPass("123456");
+                Jedis jedis = RedisUtil.openJedis(connect1);
+                if (null != jedis) {
+                    WebUtil.setSessionAttribute("connect", connect);
+                    responseBean.setData("已经连接到： " + connect.getName());
+                    RedisUtil.closeJedis(jedis);
+                } else {
+                    WebUtil.setSessionAttribute("connect", null);
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("打开连接失败");
+                    responseBean.setData("未连接服务");
+                }
             } else {
-                WebUtil.setSessionAttribute("connect", null);
                 responseBean.setCode(0);
-                responseBean.setMsgs("打开连接失败");
+                responseBean.setMsgs("SSH打开失败");
                 responseBean.setData("未连接服务");
             }
         } catch (Exception e) {
@@ -165,7 +176,7 @@ public class ApiController {
             excelBean.setTitles(titles);
             excelBean.setRows(this.dataService.selectConnect());
             String filePath = System.getProperty("user.home") + "/";
-            String fileName = DateUtil.formatDate(new Date(),DATE_STR) + "-redis-connect" + ".xlsx";
+            String fileName = DateUtil.formatDate(new Date(), DATE_STR) + "-redis-connect" + ".xlsx";
             boolean exportFlag = ExcelUtil.exportExcel(excelBean, filePath + fileName);
             if (exportFlag) {
                 responseBean.setMsgs("成功导出连接至用户目录");

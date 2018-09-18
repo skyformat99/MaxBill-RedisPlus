@@ -266,7 +266,7 @@ function openConnect(id) {
     var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/connect/create',
-        timeout: 10000,
+        timeout: 15000,
         data: {"id": id},
         sync: false,
         success: function (data) {
