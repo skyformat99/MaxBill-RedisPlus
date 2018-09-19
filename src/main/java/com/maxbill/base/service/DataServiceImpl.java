@@ -3,6 +3,7 @@ package com.maxbill.base.service;
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.dao.DataMapper;
 import com.maxbill.tool.DateUtil;
+import com.maxbill.tool.KeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,11 @@ public class DataServiceImpl implements DataService {
     }
 
     public int insertConnect(Connect obj) throws Exception {
+        obj.setId(KeyUtil.getUUIDKey());
+        obj.setTime(DateUtil.formatDateTime(new Date()));
+        if ("0".equals(obj.getType())) {
+            obj.setName("--");
+        }
         return this.dataMapper.insertConnect(obj);
     }
 

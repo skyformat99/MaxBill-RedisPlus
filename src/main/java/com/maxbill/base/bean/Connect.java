@@ -5,22 +5,14 @@ import lombok.Data;
 @Data
 public class Connect {
 
+    //主键
     private String id;
 
-    //SSH
-    private String ssh;
+    //说明
+    private String text;
 
-    //用户名
+    //连接名
     private String name;
-
-    //主机
-    private String host;
-
-    //端口
-    private String port;
-
-    //密码
-    private String pass;
 
     //时间
     private String time;
@@ -28,5 +20,22 @@ public class Connect {
     //类型：0默认，1：ssh
     private String type;
 
+    //主机
+    private String rhost;
+
+    //主机
+    private String shost;
+
+    //redis端口
+    private String rport;
+
+    //ssh端口
+    private String sport;
+
+    //redis密码
+    private String rpass;
+
+    //ssh密码
+    private String spass;
 
 }

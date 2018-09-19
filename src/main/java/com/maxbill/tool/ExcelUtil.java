@@ -43,9 +43,9 @@ public class ExcelUtil {
         for (int i = 0; i < values.size(); i++) {
             row = sheet.createRow(i + 1);
             row.createCell(0).setCellValue(values.get(i).getName());
-            row.createCell(1).setCellValue(values.get(i).getHost());
-            row.createCell(2).setCellValue(values.get(i).getPort());
-            row.createCell(3).setCellValue(values.get(i).getPass());
+           // row.createCell(1).setCellValue(values.get(i).getHost());
+            //row.createCell(2).setCellValue(values.get(i).getPort());
+            //row.createCell(3).setCellValue(values.get(i).getPass());
             row.createCell(4).setCellValue(values.get(i).getTime());
         }
         Boolean exportFlag = true;
@@ -98,15 +98,15 @@ public class ExcelUtil {
                     Connect connect = new Connect();
                     connect.setId(KeyUtil.getUUIDKey());
                     connect.setName(name);
-                    connect.setHost(host);
-                    connect.setPort(port);
-                    connect.setPass(pass);
+                   // connect.setHost(host);
+                    //connect.setPort(port);
+                    //connect.setPass(pass);
                     connect.setTime(time);
                     if (StringUtils.isEmpty(pass)) {
-                        connect.setPass("");
+                      //  connect.setPass("");
                     }
                     if (StringUtils.isEmpty(time)) {
-                        connect.setPass(DateUtil.formatDateTime(new Date()));
+                      //  connect.setPass(DateUtil.formatDateTime(new Date()));
                     }
                     connectList.add(connect);
                 }

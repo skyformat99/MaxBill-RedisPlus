@@ -20,16 +20,37 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
         type: 'post',
         url: basePath + '/api/connect/select',
         cols: [[
-            {field: 'name', title: '名称', event: 'setSign'},
-            {field: 'host', title: '主机', event: 'setSign'},
-            {field: 'port', title: '端口', event: 'setSign'},
+            {field: 'text', title: '名称', event: 'setSign'},
+            {field: 'name', title: '用户', event: 'setSign'},
             {
-                title: '密码', event: 'setSign',
+                title: '主机', event: 'setSign',
                 templet: function (data) {
-                    if (data.pass == '') {
-                        return "";
+                    if (data.type == '0') {
+                        return data.rhost;
                     } else {
-                        return "******";
+                        return data.shost;
+                    }
+                }
+            },
+            //{field: 'host', title: '主机', event: 'setSign'},
+            {
+                title: '端口', event: 'setSign',
+                templet: function (data) {
+                    if (data.type == '0') {
+                        return data.rport;
+                    } else {
+                        return data.sport;
+                    }
+                }
+            },
+            //{field: 'port', title: '端口', event: 'setSign'},
+            {
+                title: '协议', event: 'setSign',
+                templet: function (data) {
+                    if (data.type == '0') {
+                        return "---";
+                    } else {
+                        return "SSH";
                     }
                 }
             },
@@ -102,7 +123,7 @@ function addConnectData() {
     layer.open({
         title: '新增连接',
         type: 2,
-        area: ['345px', '345px'],
+        area: ['345px', '390px'],
         fixed: true,
         maxmin: false,
         skin: 'layui-layer-lan',
@@ -159,7 +180,7 @@ function updConnectData() {
     layer.open({
         title: '编辑连接',
         type: 2,
-        area: ['345px', '345px'],
+        area: ['345px', '330px'],
         fixed: true,
         maxmin: false,
         skin: 'layui-layer-lan',

@@ -42,14 +42,13 @@ public class ApiController {
     public ResponseBean insertConnect(Connect connect) {
         ResponseBean responseBean = new ResponseBean();
         try {
-            connect.setId(KeyUtil.getUUIDKey());
-            connect.setTime(DateUtil.formatDateTime(new Date()));
             int insFlag = this.dataService.insertConnect(connect);
             if (insFlag != 1) {
                 responseBean.setCode(201);
                 responseBean.setMsgs("新增连接失败");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             responseBean.setCode(500);
             responseBean.setMsgs("新增连接异常");
         }
@@ -96,16 +95,19 @@ public class ApiController {
         ResponseBean responseBean = new ResponseBean();
         try {
             Connect connect = this.dataService.selectConnectById(id);
-            boolean openFlag = JschUtil.openSSH(connect);
-            if (openFlag) {
-                Connect connect1 = new Connect();
-                connect1.setHost("127.0.0.1");
-                connect1.setPort("55555");
-                connect1.setPass("123456");
-                Jedis jedis = RedisUtil.openJedis(connect1);
+            Boolean openFlag = null;
+            if ("1".equals(connect.getType())) {
+                openFlag = JschUtil.openSSH(connect);
+            }
+            if (null != openFlag && !openFlag) {
+                responseBean.setCode(0);
+                responseBean.setMsgs("SSH打开失败");
+                responseBean.setData("未连接服务");
+            } else {
+                Jedis jedis = RedisUtil.openJedis(connect);
                 if (null != jedis) {
                     WebUtil.setSessionAttribute("connect", connect);
-                    responseBean.setData("已经连接到： " + connect.getName());
+                    responseBean.setData("已经连接到： " + connect.getText());
                     RedisUtil.closeJedis(jedis);
                 } else {
                     WebUtil.setSessionAttribute("connect", null);
@@ -113,10 +115,6 @@ public class ApiController {
                     responseBean.setMsgs("打开连接失败");
                     responseBean.setData("未连接服务");
                 }
-            } else {
-                responseBean.setCode(0);
-                responseBean.setMsgs("SSH打开失败");
-                responseBean.setData("未连接服务");
             }
         } catch (Exception e) {
             e.printStackTrace();

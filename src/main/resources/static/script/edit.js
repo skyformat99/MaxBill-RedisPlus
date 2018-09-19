@@ -12,6 +12,18 @@ $(document).ready(function () {
         var form = layui.form;
         //渲染表单
         form.render();
+        showConView();
+        if ($("#type").val() == '0') {
+            showConView();
+        } else {
+            showSshView();
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.style(index, {
+                'height': '490px',
+                'position': 'absolute',
+                'top': '20%'
+            });
+        }
         //监听提交
         form.on('submit(saveBtn)', function (data) {
             saveConnect();
@@ -26,16 +38,48 @@ $(document).ready(function () {
     });
 });
 
+
+function showConView() {
+    $("#rhost-box").show();
+    $("#spass-box").hide();
+    $("#sname-box").hide();
+    $("#shost-box").hide();
+    $("#sport-box").hide();
+    $("#sname-box input").attr('lay-verify', '');
+    $("#shost-box input").attr('lay-verify', '');
+    $("#sport-box input").attr('lay-verify', '');
+    $("#spass-box input").attr('lay-verify', '');
+    $("#rhost-box input").attr('lay-verify', 'required');
+}
+
+function showSshView() {
+    $("#rhost-box").hide();
+    $("#sname-box").show();
+    $("#shost-box").show();
+    $("#sport-box").show();
+    $("#spass-box").show();
+    $("#rhost-box input").attr('lay-verify', '');
+    $("#sname-box input").attr('lay-verify', 'required');
+    $("#shost-box input").attr('lay-verify', 'required');
+    $("#sport-box input").attr('lay-verify', 'required');
+    $("#spass-box input").attr('lay-verify', 'required');
+}
+
 function saveConnect() {
     $.ajax({
         type: "post",
         url: basePath + '/api/connect/update',
         data: {
             "id": $("#id").val(),
-            "name": $("#name").val(),
-            "host": $("#host").val(),
-            "port": $("#port").val(),
-            "pass": $("#pass").val()
+            "text": $("#text").val(),
+            "type": $("#type").val(),
+            "name": $("#sname").val(),
+            "rhost": $("#rhost").val(),
+            "rport": $("#rport").val(),
+            "rpass": $("#rpass").val(),
+            "shost": $("#shost").val(),
+            "sport": $("#sport").val(),
+            "spass": $("#spass").val()
         },
         success: function (data) {
             if (data.code == 200) {

@@ -95,7 +95,7 @@ public class RouteController {
         Connect connect = DataUtil.getCurrentOpenConnect();
         if (null != connect) {
             mvMap.put("marktip", "conn-ok");
-            mvMap.put("message", "已经连接到： " + connect.getName());
+            mvMap.put("message", "已经连接到： " + connect.getText());
         } else {
             mvMap.put("marktip", "conn-no");
             mvMap.put("message", "未连接服务");

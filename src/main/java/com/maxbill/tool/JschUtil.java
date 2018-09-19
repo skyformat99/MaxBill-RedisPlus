@@ -10,21 +10,17 @@ public class JschUtil {
 
     static Logger log = LoggerFactory.getLogger("JschUtil");
     private static Session session;
-    private static final int SSH_PORT = 22679;
-    private static final int localPort = 55555;
-    private static final String remoteHost = "zuoshuai.iok.la";
-    private static final int remotePort = 6379;
 
     public static boolean openSSH(Connect connect) {
         boolean openFlag = true;
         try {
             closeSSH();
-            session = new JSch().getSession(connect.getName(), connect.getHost(), 22);
-            session.setPassword(connect.getPass());
+            session = new JSch().getSession(connect.getName(), connect.getShost(), Integer.valueOf(connect.getSport()));
+            session.setPassword(connect.getSpass());
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
             log.info("已使用SSH通道，SSH服务器版本：" + session.getServerVersion());
-            session.setPortForwardingL(localPort, connect.getHost(), remotePort);
+            session.setPortForwardingL(55555, connect.getShost(), Integer.valueOf(connect.getRport()));
         } catch (Exception e) {
             openFlag = false;
             e.printStackTrace();
@@ -44,11 +40,6 @@ public class JschUtil {
     }
 
     public static void main(String[] args) {
-        Connect connect = new Connect();
-        connect.setHost("192.168.76.137");
-        connect.setName("root");
-        connect.setPass("123456");
-        openSSH(connect);
     }
 
 }
