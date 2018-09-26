@@ -42,11 +42,16 @@ public class ExcelUtil {
         List<Connect> values = excelBean.getRows();
         for (int i = 0; i < values.size(); i++) {
             row = sheet.createRow(i + 1);
-            row.createCell(0).setCellValue(values.get(i).getName());
-           // row.createCell(1).setCellValue(values.get(i).getHost());
-            //row.createCell(2).setCellValue(values.get(i).getPort());
-            //row.createCell(3).setCellValue(values.get(i).getPass());
-            row.createCell(4).setCellValue(values.get(i).getTime());
+            row.createCell(0).setCellValue(values.get(i).getText());
+            row.createCell(1).setCellValue(values.get(i).getRhost());
+            row.createCell(2).setCellValue(values.get(i).getRport());
+            row.createCell(3).setCellValue(values.get(i).getRpass());
+            row.createCell(4).setCellValue(values.get(i).getSname());
+            row.createCell(5).setCellValue(values.get(i).getShost());
+            row.createCell(6).setCellValue(values.get(i).getSport());
+            row.createCell(7).setCellValue(values.get(i).getSpass());
+            row.createCell(8).setCellValue(values.get(i).getType());
+            row.createCell(9).setCellValue(values.get(i).getTime());
         }
         Boolean exportFlag = true;
         try {
@@ -89,25 +94,40 @@ public class ExcelUtil {
                 if (row == null) {
                     continue;
                 }
-                String name = row.getCell(0).toString();
-                String host = row.getCell(1).toString();
-                String port = row.getCell(2).toString();
-                String pass = row.getCell(3).toString();
-                String time = row.getCell(4).toString();
-                if (!StringUtils.isEmpty(name) && !StringUtils.isEmpty(host) && !StringUtils.isEmpty(port)) {
+                String text = row.getCell(0).toString();
+                String rhost = row.getCell(1).toString();
+                String rport = row.getCell(2).toString();
+                String rpass = row.getCell(3).toString();
+                String name = row.getCell(4).toString();
+                String shost = row.getCell(5).toString();
+                String sport = row.getCell(6).toString();
+                String spass = row.getCell(7).toString();
+                String type = row.getCell(8).toString();
+                String time = row.getCell(9).toString();
+                if (StringUtils.isEmpty(type)) {
+                    continue;
+                }
+                if (!"0".equals(type) || !"1".equals(type)) {
+                    continue;
+                }
+                if ("0".equals(type) && (StringUtils.isEmpty(rhost) || StringUtils.isEmpty(rport))) {
+                    continue;
+                }
+                if (!StringUtils.isEmpty(name) && !StringUtils.isEmpty(rhost) && !StringUtils.isEmpty(rport) &&
+                        !StringUtils.isEmpty(rhost) && !StringUtils.isEmpty(rport)) {
                     Connect connect = new Connect();
                     connect.setId(KeyUtil.getUUIDKey());
-                    connect.setName(name);
-                   // connect.setHost(host);
+                    connect.setSname(name);
+                    //connect.setHost(host);
                     //connect.setPort(port);
                     //connect.setPass(pass);
-                    connect.setTime(time);
-                    if (StringUtils.isEmpty(pass)) {
-                      //  connect.setPass("");
-                    }
-                    if (StringUtils.isEmpty(time)) {
-                      //  connect.setPass(DateUtil.formatDateTime(new Date()));
-                    }
+                    //connect.setTime(time);
+                    //if (StringUtils.isEmpty(pass)) {
+                    //connect.setPass("");
+                    //}
+                    //if (StringUtils.isEmpty(time)) {
+                    //connect.setPass(DateUtil.formatDateTime(new Date()));
+                    //}
                     connectList.add(connect);
                 }
             }

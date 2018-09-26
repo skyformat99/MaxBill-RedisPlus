@@ -11,14 +11,17 @@ public class Connect {
     //说明
     private String text;
 
-    //连接名
-    private String name;
-
     //时间
     private String time;
 
+    //是否集群：0单机，1集群
+    private String isha;
+
     //类型：0默认，1：ssh
     private String type;
+
+    //连接名
+    private String sname;
 
     //主机
     private String rhost;

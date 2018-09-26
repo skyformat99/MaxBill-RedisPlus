@@ -36,13 +36,20 @@ public class DataServiceImpl implements DataService {
         obj.setId(KeyUtil.getUUIDKey());
         obj.setTime(DateUtil.formatDateTime(new Date()));
         if ("0".equals(obj.getType())) {
-            obj.setName("--");
+            obj.setSname("--");
+        } else {
+            obj.setRhost("127.0.0.1");
         }
         return this.dataMapper.insertConnect(obj);
     }
 
     public int updateConnect(Connect obj) throws Exception {
         obj.setTime(DateUtil.formatDateTime(new Date()));
+        if ("0".equals(obj.getType())) {
+            obj.setSname("--");
+        } else {
+            obj.setRhost("127.0.0.1");
+        }
         return this.dataMapper.updateConnect(obj);
     }
 

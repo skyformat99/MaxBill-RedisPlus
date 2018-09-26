@@ -170,6 +170,11 @@ public class ApiController {
             titles.add("连接主机");
             titles.add("连接端口");
             titles.add("连接密码");
+            titles.add("SSH用户");
+            titles.add("SSH主机");
+            titles.add("SSH端口");
+            titles.add("SSH密码");
+            titles.add("连接类型");
             titles.add("创建时间");
             excelBean.setTitles(titles);
             excelBean.setRows(this.dataService.selectConnect());

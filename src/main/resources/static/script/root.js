@@ -21,7 +21,7 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
         url: basePath + '/api/connect/select',
         cols: [[
             {field: 'text', title: '名称', event: 'setSign'},
-            {field: 'name', title: '用户', event: 'setSign'},
+            {field: 'sname', title: '用户', event: 'setSign'},
             {
                 title: '主机', event: 'setSign',
                 templet: function (data) {
@@ -44,6 +44,16 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
                 }
             },
             //{field: 'port', title: '端口', event: 'setSign'},
+            {
+                title: '类型', event: 'setSign',
+                templet: function (data) {
+                    if (data.isha == '0') {
+                        return "单机";
+                    } else {
+                        return "集群";
+                    }
+                }
+            },
             {
                 title: '协议', event: 'setSign',
                 templet: function (data) {
@@ -123,7 +133,7 @@ function addConnectData() {
     layer.open({
         title: '新增连接',
         type: 2,
-        area: ['345px', '390px'],
+        area: ['650px', '450px'],
         fixed: true,
         maxmin: false,
         skin: 'layui-layer-lan',

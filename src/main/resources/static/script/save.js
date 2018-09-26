@@ -17,18 +17,8 @@ $(document).ready(function () {
         form.on('select(type)', function (data) {
             if (data.value == '0') {
                 showConView();
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.style(index, {
-                    'height': '390px'
-                });
             } else {
                 showSshView();
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.style(index, {
-                    'height': '550px',
-                    'position': 'absolute',
-                    'top': '20%'
-                });
             }
         });
         //监听提交
@@ -47,29 +37,18 @@ $(document).ready(function () {
 });
 
 function showConView() {
-    $("#rhost-box").show();
-    $("#spass-box").hide();
-    $("#sname-box").hide();
-    $("#shost-box").hide();
-    $("#sport-box").hide();
-    $("#sname-box input").attr('lay-verify', '');
-    $("#shost-box input").attr('lay-verify', '');
-    $("#sport-box input").attr('lay-verify', '');
-    $("#spass-box input").attr('lay-verify', '');
-    $("#rhost-box input").attr('lay-verify', 'required');
+    $("#rhost").removeAttr("disabled");
+    $("#rhost").attr('lay-verify', 'required');
+    $(".ssh-input").attr("disabled", "disabled");
+    $(".ssh-input").attr('lay-verify', '');
 }
 
 function showSshView() {
-    $("#rhost-box").hide();
-    $("#sname-box").show();
-    $("#shost-box").show();
-    $("#sport-box").show();
-    $("#spass-box").show();
-    $("#rhost-box input").attr('lay-verify', '');
-    $("#sname-box input").attr('lay-verify', 'required');
-    $("#shost-box input").attr('lay-verify', 'required');
-    $("#sport-box input").attr('lay-verify', 'required');
-    $("#spass-box input").attr('lay-verify', 'required');
+    $("#rhost").val('');
+    $("#rhost").attr("disabled", "disabled");
+    $("#rhost").attr('lay-verify', '');
+    $(".ssh-input").removeAttr("disabled");
+    $(".ssh-input").attr('lay-verify', 'required');
 }
 
 function saveConnect() {
@@ -79,10 +58,11 @@ function saveConnect() {
         data: {
             "text": $("#text").val(),
             "type": $("#type").val(),
-            "name": $("#sname").val(),
+            "isha": $("#isha").val(),
             "rhost": $("#rhost").val(),
             "rport": $("#rport").val(),
             "rpass": $("#rpass").val(),
+            "sname": $("#sname").val(),
             "shost": $("#shost").val(),
             "sport": $("#sport").val(),
             "spass": $("#spass").val()

@@ -15,16 +15,18 @@ public class JschUtil {
         boolean openFlag = true;
         try {
             closeSSH();
-            session = new JSch().getSession(connect.getName(), connect.getShost(), Integer.valueOf(connect.getSport()));
+            session = new JSch().getSession(connect.getSname(), connect.getShost(), Integer.valueOf(connect.getSport()));
             session.setPassword(connect.getSpass());
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
             log.info("已使用SSH通道，SSH服务器版本：" + session.getServerVersion());
-            session.setPortForwardingL(55555, connect.getShost(), Integer.valueOf(connect.getRport()));
+            int aport = session.setPortForwardingL(55555, connect.getShost(), Integer.valueOf(connect.getRport()));
+            log.info(connect.getRhost() + ":" + aport + " -> " + connect.getShost() + ":" + connect.getSport());
         } catch (Exception e) {
             openFlag = false;
-            e.printStackTrace();
+            log.info("连接SSH服务器失败");
             closeSSH();
+            e.printStackTrace();
         }
         return openFlag;
     }

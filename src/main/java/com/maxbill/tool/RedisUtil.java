@@ -57,10 +57,14 @@ public class RedisUtil {
         config.setMaxWaitMillis(MAX_WAIT);
         config.setTestOnBorrow(TEST_ON_BORROW);
         config.setTestOnReturn(TEST_ON_RETURN);
+        Integer port = Integer.valueOf(connect.getRport());
+        if ("1".equals(connect.getType())) {
+            port = 55555;
+        }
         if (StringUtils.isEmpty(connect.getRpass())) {
-            jedisPool = new JedisPool(config, connect.getRhost(), Integer.valueOf(connect.getRport()), TIME_OUT);
+            jedisPool = new JedisPool(config, connect.getRhost(), port, TIME_OUT);
         } else {
-            jedisPool = new JedisPool(config, connect.getRhost(), Integer.valueOf(connect.getRport()), TIME_OUT, connect.getRpass());
+            jedisPool = new JedisPool(config, connect.getRhost(), port, TIME_OUT, connect.getRpass());
         }
     }
 
@@ -787,10 +791,12 @@ public class RedisUtil {
         Connect connect = new Connect();
         connect.setRhost("127.0.0.1");
         connect.setRport("6379");
-        connect.setRpass("123456");
+        connect.setRpass("123456789");
         Jedis jedis = openJedis(connect);
-        jedis.select(3);
-        //testCase(jedis);
+        jedis.select(1);
+        for (int i = 0; i < 10000; i++) {
+            jedis.set("str" + i, "" + i);
+        }
         System.out.println(getRedisLog(jedis));
         System.out.println("exec finish");
         jedis.close();
