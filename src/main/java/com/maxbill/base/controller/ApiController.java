@@ -66,6 +66,7 @@ public class ApiController {
                 responseBean.setMsgs("修改连接失败");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             responseBean.setCode(500);
             responseBean.setMsgs("修改连接异常");
         }

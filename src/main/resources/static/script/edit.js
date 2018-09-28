@@ -1,4 +1,6 @@
 var basePath = $("#basePath").val();
+var type = $("#type").val();
+var isha = $("#isha").val();
 
 document.oncontextmenu = function () {
     return false;
@@ -8,24 +10,14 @@ document.onselectstart = function () {
 };
 
 $(document).ready(function () {
+
     layui.use('form', function () {
         var form = layui.form;
         //渲染表单
         form.render();
-        showConView();
-        if ($("#type").val() == '0') {
-            showConView();
-        } else {
-            showSshView();
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.style(index, {
-                'height': '490px',
-                'position': 'absolute',
-                'top': '20%'
-            });
-        }
+        showDataView();
         //监听提交
-        form.on('submit(saveBtn)', function (data) {
+        form.on('submit(saveBtn)', function () {
             saveConnect();
             return false;
         });
@@ -36,34 +28,36 @@ $(document).ready(function () {
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
     });
+
 });
 
-
-function showConView() {
-    $("#rhost-box").show();
-    $("#spass-box").hide();
-    $("#sname-box").hide();
-    $("#shost-box").hide();
-    $("#sport-box").hide();
-    $("#sname-box input").attr('lay-verify', '');
-    $("#shost-box input").attr('lay-verify', '');
-    $("#sport-box input").attr('lay-verify', '');
-    $("#spass-box input").attr('lay-verify', '');
-    $("#rhost-box input").attr('lay-verify', 'required');
+function showDataView() {
+    if (isha == '0') {
+        $('.div-input05 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E3DFDD');
+    } else {
+        $('.div-input05 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#5FB878');
+    }
+    if (type == '0') {
+        $("#rhost").removeAttr("disabled");
+        $("#rhost").attr('lay-verify', 'required');
+        $("#rhost").css('background', 'transparent');
+        $(".ssh-input").val('');
+        $(".ssh-input").attr("disabled", "disabled");
+        $(".ssh-input").attr('lay-verify', '');
+        $(".ssh-input").css('background', '#EEEAE6');
+        $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E3DFDD');
+    } else {
+        $("#rhost").val('');
+        $("#rhost").attr("disabled", "disabled");
+        $("#rhost").css('background', '#EEEAE6');
+        $("#rhost").attr('lay-verify', '');
+        $(".ssh-input").removeAttr("disabled");
+        $(".ssh-input").attr('lay-verify', 'required');
+        $(".ssh-input").css('background', 'transparent');
+        $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#5FB878');
+    }
 }
 
-function showSshView() {
-    $("#rhost-box").hide();
-    $("#sname-box").show();
-    $("#shost-box").show();
-    $("#sport-box").show();
-    $("#spass-box").show();
-    $("#rhost-box input").attr('lay-verify', '');
-    $("#sname-box input").attr('lay-verify', 'required');
-    $("#shost-box input").attr('lay-verify', 'required');
-    $("#sport-box input").attr('lay-verify', 'required');
-    $("#spass-box input").attr('lay-verify', 'required');
-}
 
 function saveConnect() {
     $.ajax({
@@ -73,7 +67,8 @@ function saveConnect() {
             "id": $("#id").val(),
             "text": $("#text").val(),
             "type": $("#type").val(),
-            "name": $("#sname").val(),
+            "isha": $("#isha").val(),
+            "sname": $("#sname").val(),
             "rhost": $("#rhost").val(),
             "rport": $("#rport").val(),
             "rpass": $("#rpass").val(),

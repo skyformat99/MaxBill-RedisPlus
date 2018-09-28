@@ -40,6 +40,8 @@ public class DataServiceImpl implements DataService {
         } else {
             obj.setRhost("127.0.0.1");
         }
+        //判断是否集群
+
         return this.dataMapper.insertConnect(obj);
     }
 

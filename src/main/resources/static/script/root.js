@@ -133,7 +133,7 @@ function addConnectData() {
     layer.open({
         title: '新增连接',
         type: 2,
-        area: ['650px', '450px'],
+        area: ['455px', '445px'],
         fixed: true,
         maxmin: false,
         skin: 'layui-layer-lan',
@@ -190,7 +190,7 @@ function updConnectData() {
     layer.open({
         title: '编辑连接',
         type: 2,
-        area: ['345px', '330px'],
+        area: ['455px', '445px'],
         fixed: true,
         maxmin: false,
         skin: 'layui-layer-lan',

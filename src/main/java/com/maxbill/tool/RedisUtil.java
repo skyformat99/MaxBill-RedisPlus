@@ -2,15 +2,14 @@ package com.maxbill.tool;
 
 import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.*;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import redis.clients.jedis.Client;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
 import redis.clients.util.Slowlog;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -746,6 +745,7 @@ public class RedisUtil {
         return logList;
     }
 
+
     /**
      * 执行redis命令信息
      */
@@ -787,19 +787,17 @@ public class RedisUtil {
         jedis.zadd("testZset", 5, "set-value05");
     }
 
+
+
+
     public static void main(String[] args) {
-        Connect connect = new Connect();
-        connect.setRhost("127.0.0.1");
-        connect.setRport("6379");
-        connect.setRpass("123456789");
-        Jedis jedis = openJedis(connect);
-        jedis.select(1);
-        for (int i = 0; i < 10000; i++) {
-            jedis.set("str" + i, "" + i);
-        }
-        System.out.println(getRedisLog(jedis));
-        System.out.println("exec finish");
-        jedis.close();
+//        Connect connect = new Connect();
+//        connect.setRhost("192.168.77.141");
+//        connect.setRport("7001");
+//        Jedis jedis = openJedis(connect);
+//        System.out.println(jedis.clusterNodes());
+//        System.out.println("exec finish");
+//        jedis.close();
     }
 
 }

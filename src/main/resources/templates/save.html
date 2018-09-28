@@ -21,74 +21,62 @@
         <div class="save-main">
             <div class="save-show">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">连接类型:</label>
-                    <div class="layui-input-inline div-input">
-                        <select name="isha" id="isha" lay-filter="isha">
-                            <option value="0">单机模式</option>
-                            <option value="1">集群模式</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
                     <label class="layui-form-label">连接名称:</label>
-                    <div class="layui-input-inline div-input">
+                    <div class="layui-input-inline div-input01">
                         <input type="text" class="layui-input" placeholder="连接名称" lay-verify="required" id="text">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">连接地址:</label>
-                    <div class="layui-input-inline div-input">
+                    <div class="layui-input-inline div-input02">
                         <input type="text" class="layui-input" placeholder="连接地址" lay-verify="required" id="rhost">
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">连接端口:</label>
-                    <div class="layui-input-inline div-input">
+                    <label class="layui-form-mid">:</label>
+                    <div class="layui-input-inline div-input03">
                         <input type="text" class="layui-input" placeholder="连接端口" lay-verify="required" id="rport">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">连接密码:</label>
-                    <div class="layui-input-inline div-input">
-                        <input type="text" class="layui-input" placeholder="连接密码" lay-verify="" id="rpass">
+                    <div class="layui-input-inline div-input01">
+                        <input type="password" class="layui-input" placeholder="连接密码" lay-verify="" id="rpass">
                     </div>
                 </div>
             </div>
             <div class="save-hide">
                 <div class="layui-form-item">
                     <label class="layui-form-label">SSH通道:</label>
-                    <div class="layui-input-inline div-input">
-                        <select name="type" id="type" lay-filter="type">
-                            <option value="0">禁用SSH通道</option>
-                            <option value="1">启用SSH通道</option>
-                        </select>
+                    <div class="layui-input-inline div-input04">
+                        <input name="type" lay-skin="primary" title="启用" type="checkbox" lay-filter="type" id="type">
+                    </div>
+                    <label class="layui-form-mid">集群：</label>
+                    <div class="layui-input-inline div-input05">
+                        <input name="isha" lay-skin="primary" title="启用" type="checkbox" lay-filter="isha" id="isha">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">SSH用户:</label>
-                    <div class="layui-input-inline div-input">
+                    <div class="layui-input-inline div-input01">
                         <input type="text" class="layui-input ssh-input" placeholder="SSH用户" lay-verify="required"
                                id="sname">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">SSH地址:</label>
-                    <div class="layui-input-inline div-input ">
+                    <div class="layui-input-inline div-input02">
                         <input type="text" class="layui-input ssh-input" placeholder="SSH地址" lay-verify="required"
                                id="shost">
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">SSH端口:</label>
-                    <div class="layui-input-inline div-input">
+                    <label class="layui-form-mid">:</label>
+                    <div class="layui-input-inline div-input03">
                         <input type="text" class="layui-input ssh-input" placeholder="SSH端口" lay-verify="required"
                                id="sport">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">SSH密码:</label>
-                    <div class="layui-input-inline div-input">
-                        <input type="text" class="layui-input ssh-input" placeholder="SSH密码" lay-verify="required"
+                    <div class="layui-input-inline div-input01">
+                        <input type="password" class="layui-input ssh-input" placeholder="SSH密码" lay-verify="required"
                                id="spass">
                     </div>
                 </div>
@@ -101,8 +89,6 @@
         </div>
     </form>
 </div>
-<br>
-
 <script type="text/javascript" src="${ctx}/plugin/jquery/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
 <script type="text/javascript" src="${ctx}/script/save.js"></script>

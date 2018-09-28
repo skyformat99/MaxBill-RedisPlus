@@ -146,6 +146,14 @@
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
         </dependency>
+        <!--javafx依赖-->
+        <!--
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11</version>
+        </dependency>
+        -->
         <!--单元测试依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
