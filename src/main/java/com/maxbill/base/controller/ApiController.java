@@ -4,16 +4,18 @@ import com.maxbill.base.bean.*;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static com.maxbill.tool.DateUtil.DATE_STR;
 import static com.maxbill.tool.RedisUtil.getRedisInfo;
+import static com.maxbill.tool.StringUtil.FLAG_COLON;
 
 @RestController
 @RequestMapping("/api")
@@ -228,6 +230,41 @@ public class ApiController {
     }
 
 
+    @RequestMapping("/data/treeMany")
+    public ResponseBean treeMany() {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            List<ZTreeBean> treeList = new ArrayList<>();
+            List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+            Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
+            JedisCluster cluster = ClusterUtil.openCulter(DataUtil.getCurrentOpenConnect());
+            Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
+            long total = 0l;
+            for (String nk : clusterNodes.keySet()) {
+                if (masterNode.keySet().contains(nk)) {
+                    Jedis jedis = clusterNodes.get(nk).getResource();
+                    total = total + jedis.dbSize();
+                }
+            }
+            ZTreeBean zTreeBean = new ZTreeBean();
+            zTreeBean.setId(KeyUtil.getUUIDKey());
+            zTreeBean.setName("全部集群节点的KEY" + "(" + total + ")");
+            zTreeBean.setPattern("");
+            zTreeBean.setParent(true);
+            zTreeBean.setCount(total);
+            zTreeBean.setPage(1);
+            zTreeBean.setIndex(0);
+            treeList.add(zTreeBean);
+            responseBean.setData(treeList);
+            //ClusterUtil.closeCulter();
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
     @RequestMapping("/data/likeInit")
     public ResponseBean likeInit(int index, String pattern) {
         ResponseBean responseBean = new ResponseBean();
@@ -257,6 +294,44 @@ public class ApiController {
     }
 
 
+    @RequestMapping("/data/likeMany")
+    public ResponseBean likeMany(String pattern) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            if (StringUtils.isEmpty(pattern)) {
+                pattern = "*";
+            }
+            List<ZTreeBean> treeList = new ArrayList<>();
+            List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+            Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
+            JedisCluster cluster = ClusterUtil.openCulter(DataUtil.getCurrentOpenConnect());
+            Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
+            long total = 0l;
+            for (String nk : clusterNodes.keySet()) {
+                if (masterNode.keySet().contains(nk)) {
+                    Jedis jedis = clusterNodes.get(nk).getResource();
+                    total = total + jedis.keys(pattern).size();
+                }
+            }
+            ZTreeBean zTreeBean = new ZTreeBean();
+            zTreeBean.setId(KeyUtil.getUUIDKey());
+            zTreeBean.setName("全部集群节点的KEY" + "(" + total + ")");
+            zTreeBean.setPattern(pattern);
+            zTreeBean.setParent(true);
+            zTreeBean.setCount(total);
+            zTreeBean.setPage(1);
+            zTreeBean.setIndex(0);
+            treeList.add(zTreeBean);
+            responseBean.setData(treeList);
+            //ClusterUtil.closeCulter();
+        } catch (Exception e) {
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
     @RequestMapping("/data/treeData")
     public ResponseBean treeData(String id, int index, int page, int count, String pattern) {
         ResponseBean responseBean = new ResponseBean();
@@ -274,6 +349,54 @@ public class ApiController {
             } else {
                 responseBean.setCode(0);
                 responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseBean.setCode(500);
+            responseBean.setMsgs("打开连接异常");
+        }
+        return responseBean;
+    }
+
+
+    @RequestMapping("/data/manyData")
+    public ResponseBean manyData(String id, int page, int count, String pattern) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            JedisCluster cluster = DataUtil.getJedisClusterObject();
+            if (null != cluster) {
+                if (StringUtils.isEmpty(pattern)) {
+                    pattern = "*";
+                }
+                List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+                Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
+                Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
+                List<ZTreeBean> treeList = new ArrayList<>();
+                List<String> keyList = new ArrayList<>();
+                for (String nk : clusterNodes.keySet()) {
+                    if (masterNode.keySet().contains(nk)) {
+                        Jedis jedis = clusterNodes.get(nk).getResource();
+                        keyList.addAll(jedis.keys(pattern));
+                    }
+                }
+                int startIndex = (page - 1) * 50;
+                int endIndex = page * 50;
+                if (endIndex > count) {
+                    endIndex = count;
+                }
+                keyList = keyList.subList(startIndex, endIndex);
+                for (String key : keyList) {
+                    ZTreeBean zTreeBean = new ZTreeBean();
+                    zTreeBean.setId(KeyUtil.getUUIDKey());
+                    zTreeBean.setPId(id);
+                    zTreeBean.setName(key);
+                    zTreeBean.setParent(false);
+                    zTreeBean.setIcon("../image/data-key.png");
+                    treeList.add(zTreeBean);
+                }
+                responseBean.setData(treeList);
+            } else {
+
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -2,15 +2,10 @@ package com.maxbill.tool;
 
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.bean.RedisNode;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPoolConfig;
+import org.springframework.util.StringUtils;
+import redis.clients.jedis.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.maxbill.tool.StringUtil.FLAG_COLON;
 
@@ -36,7 +31,7 @@ public class ClusterUtil {
     private static JedisCluster cluster;
 
 
-    public static JedisCluster openCulter() {
+    public static JedisCluster openCulter(Connect connect) {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(MAX_TOTAL);
         config.setMaxIdle(MAX_IDLE);
@@ -44,13 +39,17 @@ public class ClusterUtil {
         config.setTestOnBorrow(TEST_ON_BORROW);
         config.setTestOnReturn(TEST_ON_RETURN);
         Set<HostAndPort> nodes = new LinkedHashSet<>();
-        List<RedisNode> nodeList = getClusterNode("192.168.77.141", 7001);
+        List<RedisNode> nodeList = getClusterNode(connect);
         for (RedisNode node : nodeList) {
             String host = StringUtil.getKeyString(FLAG_COLON, node.getAddr());
             String port = StringUtil.getValueString(FLAG_COLON, node.getAddr());
             nodes.add(new HostAndPort(host, Integer.valueOf(port)));
         }
-        cluster = new JedisCluster(nodes, config);
+        String pass = connect.getRpass();
+        if (StringUtils.isEmpty(pass)) {
+            cluster = new JedisCluster(nodes, TIME_OUT, config);
+        } else {
+        }
         return cluster;
     }
 
@@ -63,11 +62,24 @@ public class ClusterUtil {
         }
     }
 
-    public static List<RedisNode> getClusterNode(String host, int port) {
+
+    public static JedisCluster getCluster(Connect connect) {
+        if (cluster != null) {
+            return cluster;
+        } else {
+            return openCulter(connect);
+        }
+    }
+
+    public static List<RedisNode> getClusterNode(Connect connect) {
         List<RedisNode> nodeList = new ArrayList<>();
         Jedis jedis = null;
         try {
-            jedis = new Jedis(host, port);
+            if ("1".equals(connect.getType())) {
+                jedis = new Jedis(connect.getRhost(), 55555);
+            } else {
+                jedis = new Jedis(connect.getRhost(), Integer.valueOf(connect.getRport()));
+            }
             String clusterNodes = jedis.clusterNodes();
             String[] nodes = clusterNodes.split("\n");
             for (String node : nodes) {
@@ -96,12 +108,58 @@ public class ClusterUtil {
         }
     }
 
+    public static Map<String, RedisNode> getMasterNode(List<RedisNode> nodeList) {
+        Map<String, RedisNode> nodeMap = new HashMap<>();
+        for (RedisNode node : nodeList) {
+            if (node.getFlag().indexOf("master") > -1) {
+                nodeMap.put(node.getAddr(), node);
+            }
+        }
+        return nodeMap;
+    }
+
+
+    public static boolean isCulter(Connect connect) {
+        boolean isCulter = false;
+        Jedis jedis = null;
+        try {
+            if ("1".equals(connect.getType())) {
+                JschUtil.openSSH(connect);
+                jedis = new Jedis(connect.getRhost(), 55555);
+            } else {
+                jedis = new Jedis(connect.getRhost(), Integer.valueOf(connect.getRport()));
+            }
+            String serverInfo = jedis.info("server");
+            String[] server = serverInfo.split("\n");
+            for (String info : server) {
+                String key = StringUtil.getKeyString(FLAG_COLON, info);
+                String value = StringUtil.getValueString(FLAG_COLON, info);
+                if (key.equals("redis_mode") && value.equals("cluster")) {
+                    isCulter = true;
+                }
+            }
+            System.out.println();
+            if (null != jedis) {
+                jedis.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isCulter;
+    }
+
 
     public static void main(String[] args) {
-        openCulter();
-        for (int i = 1; i <= 30; i++) {
-            cluster.set(i + "", i + "");
-        }
-        closeCulter();
+        Connect connect = new Connect();
+        connect.setRhost("192.168.77.141");
+        connect.setRport("7001");
+        connect.setType("0");
+        openCulter(connect);
+        ScanParams scanParams = new ScanParams();
+        scanParams.count(50);
+        scanParams.match("{*}");
+        ScanResult<String> resList = cluster.scan(String.valueOf(0), scanParams);
+        System.out.println(resList.getResult().toString());
+
     }
 }

@@ -2,6 +2,7 @@ package com.maxbill.base.controller;
 
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.service.DataService;
+import com.maxbill.tool.ClusterUtil;
 import com.maxbill.tool.DataUtil;
 import com.maxbill.tool.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,13 @@ public class RouteController {
     @GetMapping("/data")
     public ModelAndView toData(ModelAndView mv) {
         mv.addAllObjects(setPageInfo());
-        mv.setViewName("data");
+        //判断是集群还是单机
+        boolean isCulter = ClusterUtil.isCulter(DataUtil.getCurrentOpenConnect());
+        if (isCulter) {
+            mv.setViewName("data");
+        } else {
+            mv.setViewName("many");
+        }
         return mv;
     }
 

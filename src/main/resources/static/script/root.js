@@ -21,7 +21,6 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
         url: basePath + '/api/connect/select',
         cols: [[
             {field: 'text', title: '名称', event: 'setSign'},
-            {field: 'sname', title: '用户', event: 'setSign'},
             {
                 title: '主机', event: 'setSign',
                 templet: function (data) {
@@ -32,18 +31,7 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
                     }
                 }
             },
-            //{field: 'host', title: '主机', event: 'setSign'},
-            {
-                title: '端口', event: 'setSign',
-                templet: function (data) {
-                    if (data.type == '0') {
-                        return data.rport;
-                    } else {
-                        return data.sport;
-                    }
-                }
-            },
-            //{field: 'port', title: '端口', event: 'setSign'},
+            {field: 'rport', title: '端口', event: 'setSign'},
             {
                 title: '类型', event: 'setSign',
                 templet: function (data) {
@@ -55,12 +43,12 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
                 }
             },
             {
-                title: '协议', event: 'setSign',
+                title: 'SSH', event: 'setSign',
                 templet: function (data) {
                     if (data.type == '0') {
-                        return "---";
+                        return "关闭";
                     } else {
-                        return "SSH";
+                        return "启用";
                     }
                 }
             },

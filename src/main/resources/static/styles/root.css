@@ -38,5 +38,22 @@
     margin: 0px;
 }
 
+.layui-table-tips-main {
+    display: none
+}
+
+.layui-table-tips-c {
+    display: none
+}
+
+.layui-table-click {
+    background-color: lightseagreen;
+}
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: lightskyblue;
+}
+
+
 
 
