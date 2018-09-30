@@ -1,7 +1,5 @@
 //当前选中的键
 var currKey;
-//默认数据库0
-var currIndex = 0;
 //每次加载的数据量
 var pageSize = 50;
 var basePath = $("#basePath").val();
@@ -43,7 +41,7 @@ var zTreeSetting = {
     async: {
         enable: true,
         dataType: "json",
-        url: basePath + '/api/data/manyData',
+        url: basePath + '/api/many/treeData',
         autoParam: ["id", "page", "count", "pattern"],
         dataFilter: dataFilter
     },
@@ -58,13 +56,6 @@ var zTreeSetting = {
 
 //点击分页
 function goPage(treeNode, page) {
-    if (currIndex == -1) {
-        layer.alert("请选择一个要操作的库！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
-        return false;
-    }
     treeNode.page = page;
     if (treeNode.page < 1) {
         treeNode.page = 1;
@@ -72,7 +63,7 @@ function goPage(treeNode, page) {
     if (treeNode.page > treeNode.maxPage) {
         treeNode.page = treeNode.maxPage;
     }
-    var zTree = $.fn.zTree.getZTreeObj("keyTree" + currIndex);
+    var zTree = $.fn.zTree.getZTreeObj("keyTree0");
     zTree.reAsyncChildNodes(treeNode, "refresh");
 }
 
@@ -131,23 +122,14 @@ function dataFilter(treeId, parentNode, childNodes) {
 function ztreeOnClick(event, treeId, treeNode) {
     if (!treeNode.isParent) {
         currKey = treeNode.name;
-        currIndex = treeNode.index;
         getKeyInfo();
     } else {
-        currIndex = treeNode.index;
-        //取消其他根节点点击样式
-        for (var i = 0; i < 15; i++) {
-            if (i != currIndex) {
-                $("#keyTree" + i + "_1_a").removeClass("curSelectedNode");
-            }
-        }
     }
 }
 
 //树节点展开事件
 function ztreeOnExpand(event, treeId, treeNode) {
     if (treeNode.isParent) {
-        currIndex = treeNode.index;
     }
 }
 
@@ -170,14 +152,14 @@ function onAsyncSuccess() {
 function loadKeyTree() {
     var xhr = $.ajax({
         type: "get",
-        url: basePath + '/api/data/treeMany',
+        url: basePath + '/api/many/treeInit',
         sync: true,
         timeout: 10000,
         success: function (data) {
             $.fn.zTree.init($("#keyTree0"), zTreeSetting, data.data[0]);
             $.fn.zTree.getZTreeObj("keyTree0").expandAll(false);
             //展开默认库
-            //$("#keyTree" + currIndex + "_1_switch").click();
+            //$("#keyTree0" + "_1_switch").click();
         },
         complete: function (XMLHttpRequest, status) {
             //请求完成后最终执行参数
@@ -205,7 +187,7 @@ function keydownLoadTree() {
 function loadPatternTree() {
     var xhr = $.ajax({
         type: "post",
-        url: basePath + '/api/data/likeMany',
+        url: basePath + '/api/many/likeInit',
         sync: true,
         data: {
             "pattern": $("#key-like-input").val()
@@ -215,7 +197,7 @@ function loadPatternTree() {
             var ztreeObj = $.fn.zTree.init($("#keyTree0"), zTreeSetting, data.data);
             ztreeObj.expandAll(false);
             //增加默认选中样式
-            //$("#keyTree" + currIndex + "_1_a").addClass("curSelectedNode");
+            //$("#keyTree0" + "_1_a").addClass("curSelectedNode");
             //展开默认库
             $("#keyTree0" + "_1_switch").click();
         },
@@ -253,11 +235,10 @@ function renameKey() {
         function (text, index) {
             var xhr = $.ajax({
                 type: "post",
-                url: basePath + "/api/data/renameKey",
+                url: basePath + "/api/many/renameKey",
                 data: {
                     'oldKey': currKey,
-                    'newKey': text,
-                    'index': currIndex
+                    'newKey': text
                 },
                 timeout: 10000,
                 sync: false,
@@ -306,10 +287,9 @@ function deleteKey() {
     }, function () {
         var xhr = $.ajax({
             type: "post",
-            url: basePath + "/api/data/deleteKey",
+            url: basePath + "/api/many/deleteKey",
             data: {
-                'key': currKey,
-                'index': currIndex
+                'key': currKey
             },
             timeout: 10000,
             sync: false,
@@ -387,11 +367,10 @@ function retimeKey() {
             }
             var xhr = $.ajax({
                 type: "post",
-                url: basePath + "/api/data/retimeKey",
+                url: basePath + "/api/many/retimeKey",
                 data: {
                     'key': currKey,
-                    'time': text,
-                    'index': currIndex
+                    'time': text
                 },
                 timeout: 10000,
                 sync: false,
@@ -423,63 +402,6 @@ function retimeKey() {
     );
 }
 
-//检索key
-function selectKey() {
-    var key = $("#key-input").val();
-    if (key == "") {
-        layer.alert("请输入要查询的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
-        return false;
-    }
-    if (currIndex == -1) {
-        layer.alert("请选择一个要操作的库！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
-        return false;
-    }
-    var xhr = $.ajax({
-        type: "post",
-        url: basePath + '/api/data/keysData',
-        data: {
-            'key': key,
-            'index': currIndex
-        },
-        timeout: 10000,
-        sync: false,
-        success: function (data) {
-            var keyInfo = data.data;
-            if (data.code == 200 && keyInfo) {
-                currKey = key;
-                $("#key-input").val(currKey);
-                $("#key").text(keyInfo.key);
-                $("#type").text(keyInfo.type);
-                $("#size").text(keyInfo.size);
-                $("#ttl").text(keyInfo.ttl);
-                $("#value").text(keyInfo.value);
-            } else {
-                layer.alert(data.msgs, {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        },
-        complete: function (XMLHttpRequest, status) {
-            //请求完成后最终执行参数
-            if (status == 'timeout') {
-                //超时,status还有success,error等值的情况
-                xhr.abort();
-                layer.alert("请求超时，请检查网络连接", {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        }
-    });
-}
-
 //获取key信息
 function getKeyInfo() {
     if (currKey == "" || currKey == null) {
@@ -491,10 +413,9 @@ function getKeyInfo() {
     }
     var xhr = $.ajax({
         type: "post",
-        url: basePath + '/api/data/keysData',
+        url: basePath + '/api/many/keysData',
         data: {
-            'key': currKey,
-            'index': currIndex
+            'key': currKey
         },
         timeout: 10000,
         sync: false,
@@ -655,11 +576,10 @@ function updateStr() {
     }
     var xhr = $.ajax({
         type: "post",
-        url: basePath + '/api/data/updateStr',
+        url: basePath + '/api/many/updateStr',
         data: {
             'key': currKey,
-            'val': $("#currVal").val(),
-            'index': currIndex
+            'val': $("#currVal").val()
         },
         timeout: 10000,
         sync: false,
@@ -709,11 +629,10 @@ function insertList() {
         function (text, index) {
             var xhr = $.ajax({
                 type: "post",
-                url: basePath + "/api/data/insertList",
+                url: basePath + "/api/many/insertList",
                 data: {
                     'key': currKey,
-                    'val': text,
-                    'index': currIndex
+                    'val': text
                 },
                 timeout: 10000,
                 sync: false,
@@ -756,10 +675,9 @@ function deleteList(keyIndex) {
     }
     var xhr = $.ajax({
         type: "post",
-        url: basePath + '/api/data/deleteList',
+        url: basePath + '/api/many/deleteList',
         data: {
             'key': currKey,
-            'index': currIndex,
             'keyIndex': keyIndex
         },
         timeout: 10000,
@@ -810,11 +728,10 @@ function insertSet() {
         function (text, index) {
             var xhr = $.ajax({
                 type: "post",
-                url: basePath + "/api/data/insertSet",
+                url: basePath + "/api/many/insertSet",
                 data: {
                     'key': currKey,
-                    'val': text,
-                    'index': currIndex
+                    'val': text
                 },
                 timeout: 10000,
                 sync: false,
@@ -858,11 +775,10 @@ function deleteSet(val) {
     }
     var xhr = $.ajax({
         type: "post",
-        url: basePath + '/api/data/deleteSet',
+        url: basePath + '/api/many/deleteSet',
         data: {
             'key': currKey,
-            'val': val,
-            'index': currIndex
+            'val': val
         },
         timeout: 10000,
         sync: false,
@@ -912,11 +828,10 @@ function insertZset() {
         function (text, index) {
             var xhr = $.ajax({
                 type: "post",
-                url: basePath + "/api/data/insertZset",
+                url: basePath + "/api/many/insertZset",
                 data: {
                     'key': currKey,
-                    'val': text,
-                    'index': currIndex
+                    'val': text
                 },
                 timeout: 10000,
                 sync: false,
@@ -960,11 +875,10 @@ function deleteZset(val) {
     }
     var xhr = $.ajax({
         type: "post",
-        url: basePath + '/api/data/deleteZset',
+        url: basePath + '/api/many/deleteZset',
         data: {
             'key': currKey,
-            'val': val,
-            'index': currIndex
+            'val': val
         },
         timeout: 10000,
         sync: false,
@@ -1011,12 +925,11 @@ function insertHash() {
             }
             var xhr = $.ajax({
                 type: "post",
-                url: basePath + '/api/data/insertHash',
+                url: basePath + '/api/many/insertHash',
                 data: {
                     'key': currKey,
                     'mapKey': mapKey,
-                    'mapVal': mapVal,
-                    'index': currIndex
+                    'mapVal': mapVal
                 },
                 timeout: 10000,
                 sync: false,
@@ -1062,11 +975,10 @@ function deleteHash(mapKey) {
     }
     var xhr = $.ajax({
         type: "post",
-        url: basePath + '/api/data/deleteHash',
+        url: basePath + '/api/many/deleteHash',
         data: {
             'key': currKey,
-            'mapKey': mapKey,
-            'index': currIndex
+            'mapKey': mapKey
         },
         timeout: 10000,
         sync: false,
