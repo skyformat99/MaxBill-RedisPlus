@@ -430,7 +430,11 @@ function getKeyInfo() {
                 $("#vals1").html(keyInfo.text);
                 $("#vals2").html(getFormatJson(keyInfo.json));
                 $("#vals3").html(keyInfo.raws);
-                $("#vals4").html(getEditView(keyInfo.type, keyInfo.text));
+                if (keyInfo.type == 'string') {
+                    $("#vals4").html(getEditView(keyInfo.type, keyInfo.text));
+                } else {
+                    $("#vals4").html(getEditView(keyInfo.type, keyInfo.json));
+                }
             } else {
                 layer.alert(data.msgs, {
                     skin: 'layui-layer-lan',
@@ -457,7 +461,7 @@ function getEditView(type, data) {
     var view = '';
     switch (type) {
         case "set":
-            var setDataArray = data.split(",");
+            var set = $.parseJSON(data);
             view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertSet()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
@@ -467,11 +471,11 @@ function getEditView(type, data) {
             view += '<colgroup><col><col width="100"></colgroup>';
             view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
             view += '<tbody>';
-            for (var i = 0; i < setDataArray.length; i++) {
+            for (var i = 0; i < set.length; i++) {
                 view += '<tr>';
-                view += '<td>' + setDataArray[i] + '</td>';
+                view += '<td>' + set[i] + '</td>';
                 view += '<td>';
-                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteSet(\'' + setDataArray[i] + '\')">';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteSet(\'' + set[i] + '\')">';
                 view += '<i class="layui-icon">&#x1006;</i>删除</button>';
                 view += '</td>';
                 view += '</tr>';
@@ -481,7 +485,7 @@ function getEditView(type, data) {
             view += '</div>';
             break;
         case "list":
-            var listDataArray = data.split(",");
+            var list = $.parseJSON(data);
             view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertList()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
@@ -491,10 +495,10 @@ function getEditView(type, data) {
             view += '<colgroup><col width="20"><col><col width="100"></colgroup>';
             view += '<thead><tr><th>index</th><th>value</th><th>tool</th></tr></thead>';
             view += '<tbody>';
-            for (var i = 0; i < listDataArray.length; i++) {
+            for (var i = 0; i < list.length; i++) {
                 view += '<tr>';
                 view += '<td>' + i + '</td>';
-                view += '<td>' + listDataArray[i] + '</td>';
+                view += '<td>' + list[i] + '</td>';
                 view += '<td>';
                 view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteList(\'' + i + '\')">';
                 view += '<i class="layui-icon">&#x1006;</i>删除</button>';
@@ -506,7 +510,7 @@ function getEditView(type, data) {
             view += '</div>';
             break;
         case "zset":
-            var zsetDataArray = data.split(",");
+            var zset = $.parseJSON(data);
             view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertZset()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
@@ -516,11 +520,11 @@ function getEditView(type, data) {
             view += '<colgroup><col><col width="100"></colgroup>';
             view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
             view += '<tbody>';
-            for (var i = 0; i < zsetDataArray.length; i++) {
+            for (var i = 0; i < zset.length; i++) {
                 view += '<tr>';
-                view += '<td>' + zsetDataArray[i] + '</td>';
+                view += '<td>' + zset[i] + '</td>';
                 view += '<td>';
-                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteZset(\'' + zsetDataArray[i] + '\')">';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteZset(\'' + zset[i] + '\')">';
                 view += '<i class="layui-icon">&#x1006;</i>删除</button>';
                 view += '</td>';
                 view += '</tr>';
@@ -530,7 +534,7 @@ function getEditView(type, data) {
             view += '</div>';
             break;
         case "hash":
-            var hashDataArray = data.split(",");
+            var map = $.parseJSON(data);
             view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertHash()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
@@ -540,13 +544,12 @@ function getEditView(type, data) {
             view += '<colgroup><col><col><col width="100"></colgroup>';
             view += '<thead><tr><th>key</th><th>value</th><th>tool</th></tr></thead>';
             view += '<tbody>';
-            for (var i = 0; i < hashDataArray.length; i++) {
-                var mapArray = hashDataArray[i].split(":");
+            for (var key in map) {
                 view += '<tr>';
-                view += '<td>' + mapArray[0] + '</td>';
-                view += '<td>' + mapArray[1] + '</td>';
+                view += '<td>' + key + '</td>';
+                view += '<td>' + map[key] + '</td>';
                 view += '<td>';
-                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteHash(\'' + mapArray[0] + '\')">';
+                view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="deleteHash(\'' + key + '\')">';
                 view += '<i class="layui-icon">&#x1006;</i>删除</button>';
                 view += '</td>';
                 view += '</tr>';

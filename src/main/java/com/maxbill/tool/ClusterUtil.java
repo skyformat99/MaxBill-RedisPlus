@@ -126,22 +126,25 @@ public class ClusterUtil {
         boolean isCulter = false;
         Jedis jedis = null;
         try {
+            String pass = connect.getRpass();
             if ("1".equals(connect.getType())) {
                 JschUtil.openSSH(connect);
                 jedis = new Jedis(connect.getRhost(), 55555);
             } else {
                 jedis = new Jedis(connect.getRhost(), Integer.valueOf(connect.getRport()));
             }
+            if (!StringUtils.isEmpty(pass)) {
+                jedis.auth(pass);
+            }
             String serverInfo = jedis.info("server");
             String[] server = serverInfo.split("\n");
             for (String info : server) {
                 String key = StringUtil.getKeyString(FLAG_COLON, info);
                 String value = StringUtil.getValueString(FLAG_COLON, info);
-                if (key.equals("redis_mode") && value.equals("cluster")) {
+                if (key.equals("redis_mode") && value.equals("cluster\r")) {
                     isCulter = true;
                 }
             }
-            System.out.println();
             if (null != jedis) {
                 jedis.close();
             }

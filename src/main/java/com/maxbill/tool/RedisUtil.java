@@ -641,13 +641,8 @@ public class RedisUtil {
         keyBean.setKey(key);
         keyBean.setType(jedis.type(key));
         keyBean.setTtl(jedis.ttl(key));
-        //none (key不存在)
-        //string (字符串)
-        //list (列表)
-        //set (集合)
-        //zset (有序集)
-        //hash (哈希表)
         switch (keyBean.getType()) {
+            //set (集合)
             case "set":
                 Set<String> set = jedis.smembers(key);
                 StringBuffer setBuf = new StringBuffer();
@@ -659,9 +654,7 @@ public class RedisUtil {
                 keyBean.setJson(JSON.toJSONString(set));
                 keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
                 break;
-            case "none":
-                keyBean.setText("");
-                break;
+            //list (列表)
             case "list":
                 List<String> list = jedis.lrange(key, 0, -1);
                 StringBuffer listBuf = new StringBuffer();
@@ -673,6 +666,7 @@ public class RedisUtil {
                 keyBean.setJson(JSON.toJSONString(list));
                 keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
                 break;
+            //zset (有序集)
             case "zset":
                 Set<String> zset = jedis.zrange(key, 0, -1);
                 StringBuffer zsetBuf = new StringBuffer();
@@ -684,6 +678,7 @@ public class RedisUtil {
                 keyBean.setJson(JSON.toJSONString(zset));
                 keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
                 break;
+            //hash (哈希表)
             case "hash":
                 Map<String, String> map = jedis.hgetAll(key);
                 StringBuffer mapBuf = new StringBuffer();
@@ -695,6 +690,7 @@ public class RedisUtil {
                 keyBean.setJson(JSON.toJSONString(map));
                 keyBean.setRaws(keyBean.getText().replace(",", "</br>"));
                 break;
+            //string (字符串)
             case "string":
                 keyBean.setText(jedis.get(key));
                 keyBean.setJson(JSON.toJSONString(keyBean.getText()));
@@ -772,7 +768,7 @@ public class RedisUtil {
         map.put("map03", "map03-value");
         map.put("map04", "map04-value");
         map.put("map05", "map05-value");
-        jedis.hmset("testMap", map);
+        //jedis.hmset("testMap", map);
         /*-------------------Set Test---------------------------*/
         jedis.sadd("testSet", "set-value01");
         jedis.sadd("testSet", "set-value02");
@@ -788,16 +784,29 @@ public class RedisUtil {
     }
 
 
-
-
     public static void main(String[] args) {
-//        Connect connect = new Connect();
-//        connect.setRhost("192.168.77.141");
-//        connect.setRport("7001");
-//        Jedis jedis = openJedis(connect);
-//        System.out.println(jedis.clusterNodes());
-//        System.out.println("exec finish");
-//        jedis.close();
+        Connect connect = new Connect();
+        connect.setRhost("127.0.0.1");
+        connect.setRport("6379");
+        connect.setRpass("123456789");
+        connect.setType("0");
+        Jedis jedis = openJedis(connect);
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        list.add("5");
+        Map map = new HashMap();
+        map.put("map01", JSON.toJSONString(list));
+        map.put("map02", JSON.toJSONString(list));
+        map.put("map03", JSON.toJSONString(list));
+        map.put("map04", JSON.toJSONString(list));
+        map.put("map05", JSON.toJSONString(list));
+        jedis.hmset("testMap", map);
+        testCase(jedis);
+        System.out.println("exec finish");
+        jedis.close();
     }
 
 }

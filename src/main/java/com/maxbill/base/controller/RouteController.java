@@ -48,9 +48,9 @@ public class RouteController {
         //判断是集群还是单机
         boolean isCulter = ClusterUtil.isCulter(DataUtil.getCurrentOpenConnect());
         if (isCulter) {
-            mv.setViewName("data");
-        } else {
             mv.setViewName("many");
+        } else {
+            mv.setViewName("data");
         }
         return mv;
     }
