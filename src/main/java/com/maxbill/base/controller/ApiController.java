@@ -107,16 +107,22 @@ public class ApiController {
                 responseBean.setMsgs("SSH打开失败");
                 responseBean.setData("未连接服务");
             } else {
-                Jedis jedis = RedisUtil.openJedis(connect);
-                if (null != jedis) {
+                if (connect.getIsha().equals("0")) {
+                    Jedis jedis = RedisUtil.openJedis(connect);
+                    if (null != jedis) {
+                        WebUtil.setSessionAttribute("connect", connect);
+                        responseBean.setData("已经连接到： " + connect.getText());
+                        RedisUtil.closeJedis(jedis);
+                    } else {
+                        WebUtil.setSessionAttribute("connect", null);
+                        responseBean.setCode(0);
+                        responseBean.setMsgs("打开连接失败");
+                        responseBean.setData("未连接服务");
+                    }
+                } else {
+                    ClusterUtil.openCulter(connect);
                     WebUtil.setSessionAttribute("connect", connect);
                     responseBean.setData("已经连接到： " + connect.getText());
-                    RedisUtil.closeJedis(jedis);
-                } else {
-                    WebUtil.setSessionAttribute("connect", null);
-                    responseBean.setCode(0);
-                    responseBean.setMsgs("打开连接失败");
-                    responseBean.setData("未连接服务");
                 }
             }
         } catch (Exception e) {
@@ -155,13 +161,29 @@ public class ApiController {
 
     @RequestMapping("/connect/isopen")
     public Integer isopenConnect() {
-        Jedis jedis = DataUtil.getCurrentJedisObject();
-        if (null != jedis) {
-            RedisUtil.closeJedis(jedis);
-            return 1;
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (null != connect) {
+            if (connect.getIsha().equals("0")) {
+                Jedis jedis = DataUtil.getCurrentJedisObject();
+                if (null != jedis) {
+                    RedisUtil.closeJedis(jedis);
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                JedisCluster jedisCluster = DataUtil.getJedisClusterObject();
+                if (null != jedisCluster) {
+                    ClusterUtil.closeCulter();
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
         } else {
             return 0;
         }
+
     }
 
     @RequestMapping("/connect/import")
@@ -281,6 +303,7 @@ public class ApiController {
             responseBean.setData(treeList);
             //ClusterUtil.closeCulter();
         } catch (Exception e) {
+            e.printStackTrace();
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -310,6 +333,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -348,6 +372,7 @@ public class ApiController {
             responseBean.setData(treeList);
             //ClusterUtil.closeCulter();
         } catch (Exception e) {
+            e.printStackTrace();
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -419,7 +444,8 @@ public class ApiController {
                 }
                 responseBean.setData(treeList);
             } else {
-
+                responseBean.setCode(500);
+                responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
             e.printStackTrace();

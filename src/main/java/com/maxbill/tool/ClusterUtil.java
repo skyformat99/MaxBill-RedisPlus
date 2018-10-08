@@ -85,6 +85,9 @@ public class ClusterUtil {
             } else {
                 jedis = new Jedis(connect.getRhost(), Integer.valueOf(connect.getRport()));
             }
+            if (!StringUtils.isEmpty(connect.getRpass())) {
+                jedis.auth(connect.getRpass());
+            }
             String clusterNodes = jedis.clusterNodes();
             String[] nodes = clusterNodes.split("\n");
             for (String node : nodes) {
