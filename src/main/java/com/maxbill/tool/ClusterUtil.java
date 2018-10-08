@@ -59,7 +59,9 @@ public class ClusterUtil {
 
     public static void closeCulter() {
         try {
-            cluster.close();
+            if (cluster != null) {
+                cluster.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -323,7 +325,13 @@ public class ClusterUtil {
 
 
     public static void main(String[] args) {
-
-
+        Connect connect = new Connect();
+        connect.setRport("7001");
+        connect.setRhost("192.168.77.141");
+        connect.setType("0");
+        openCulter(connect);
+        for (int i = 1; i <= 10000; i++) {
+            cluster.set(i + "", i + "");
+        }
     }
 }

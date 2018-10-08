@@ -129,6 +129,29 @@ public class ApiController {
         return responseBean;
     }
 
+    @RequestMapping("/connect/discon")
+    public ResponseBean disconConnect(String id) {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            Connect connect = DataUtil.getCurrentOpenConnect();
+            if (null != connect) {
+                if (connect.getIsha().equals("0")) {
+                    Jedis jedis = RedisUtil.openJedis(connect);
+                    if (null != jedis) {
+                        RedisUtil.closeJedis(jedis);
+                    }
+                } else {
+                    ClusterUtil.closeCulter();
+                }
+                WebUtil.setSessionAttribute("connect", null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseBean.setCode(500);
+        }
+        return responseBean;
+    }
+
 
     @RequestMapping("/connect/isopen")
     public Integer isopenConnect() {

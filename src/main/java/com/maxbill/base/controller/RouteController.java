@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Map;
 @Controller
 public class RouteController {
 
-    private final String APP_VERSION = "Version: 1.1.1";
+    private final String APP_VERSION = "Version: 1.1.5";
 
     @Autowired
     private DataService dataService;
@@ -38,6 +39,26 @@ public class RouteController {
     public ModelAndView toRootEdit(ModelAndView mv, String id) {
         mv.addObject("data", this.dataService.selectConnectById(id));
         mv.setViewName("edit");
+        return mv;
+    }
+
+    @GetMapping("/root/node")
+    public ModelAndView toRootNode(ModelAndView mv, String id) {
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        Connect data = this.dataService.selectConnectById(id);
+        boolean isCulter = ClusterUtil.isCulter(data);
+        if (isCulter) {
+            data.setIsha("集群模式");
+        } else {
+            data.setIsha("单机模式");
+        }
+        mv.addObject("data", data);
+        if (null != connect && connect.getId().equals(id)) {
+            mv.addObject("flag", 1);
+        } else {
+            mv.addObject("flag", 0);
+        }
+        mv.setViewName("node");
         return mv;
     }
 

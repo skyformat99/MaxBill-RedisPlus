@@ -233,6 +233,29 @@ function delConnectData() {
     });
 }
 
+
+/**
+ * 操作连接数据
+ */
+function setConnectData() {
+    if (rowDataId == "" || rowDataId == null) {
+        layer.alert("请选择要操作的数据行！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    layer.open({
+        title: '操作连接',
+        type: 2,
+        area: ['455px', '445px'],
+        fixed: true,
+        maxmin: false,
+        skin: 'layui-layer-lan',
+        content: basePath + '/root/node?id=' + rowDataId
+    });
+}
+
 /**
  * 导入连接
  */
@@ -316,6 +339,31 @@ function openConnect(id) {
                     skin: 'layui-layer-lan',
                     closeBtn: 0
                 });
+            }
+        }
+    });
+}
+
+
+function closeConnect(id) {
+    $.ajax({
+        type: "post",
+        url: basePath + '/api/connect/discon',
+        data: {
+            "id": id
+        },
+        sync: false,
+        success: function (data) {
+            var imgObj = $(".status-message img");
+            var msgObj = $(".status-message .conn");
+            if (data.code == 200) {
+                msgObj.removeClass("conn-ok");
+                msgObj.addClass("conn-no").text("未连接服务");
+                imgObj.attr("src", basePath + "/image/conn-no.png");
+            } else {
+                msgObj.removeClass("conn-no");
+                msgObj.addClass("conn-ok").text(data.data);
+                imgObj.attr("src", basePath + "/image/conn-ok.png");
             }
         }
     });
