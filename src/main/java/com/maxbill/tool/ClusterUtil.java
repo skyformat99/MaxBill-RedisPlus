@@ -69,10 +69,10 @@ public class ClusterUtil {
 
 
     public static JedisCluster getCluster(Connect connect) {
-        if (cluster != null) {
-            return cluster;
-        } else {
+        if (null == cluster || cluster.getClusterNodes().size() == 0) {
             return openCulter(connect);
+        } else {
+            return cluster;
         }
     }
 

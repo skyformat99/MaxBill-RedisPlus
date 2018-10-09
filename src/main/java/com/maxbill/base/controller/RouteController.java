@@ -1,23 +1,30 @@
 package com.maxbill.base.controller;
 
 import com.maxbill.base.bean.Connect;
+import com.maxbill.base.bean.RedisNode;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.ClusterUtil;
 import com.maxbill.tool.DataUtil;
 import com.maxbill.tool.RedisUtil;
+import com.maxbill.tool.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.maxbill.tool.StringUtil.FLAG_COLON;
 
 @Controller
 public class RouteController {
 
-    private final String APP_VERSION = "Version: 1.1.6";
+    private final String APP_VERSION = "Version: 1.1.7";
 
     @Autowired
     private DataService dataService;
@@ -67,12 +74,12 @@ public class RouteController {
     @GetMapping("/data")
     public ModelAndView toData(ModelAndView mv) {
         mv.addAllObjects(setPageInfo());
-        //判断是集群还是单机
-        boolean isCulter = ClusterUtil.isCulter(DataUtil.getCurrentOpenConnect());
-        if (isCulter) {
-            mv.setViewName("many");
-        } else {
+        Connect connect = DataUtil.getCurrentOpenConnect();
+        if (connect.getIsha().equals("0")) {
             mv.setViewName("data");
+        } else {
+            mv.setViewName("many");
+
         }
         return mv;
     }

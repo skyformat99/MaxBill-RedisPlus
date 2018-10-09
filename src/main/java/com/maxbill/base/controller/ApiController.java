@@ -289,6 +289,7 @@ public class ApiController {
                 if (masterNode.keySet().contains(nk)) {
                     Jedis jedis = clusterNodes.get(nk).getResource();
                     total = total + jedis.dbSize();
+                    RedisUtil.closeJedis(jedis);
                 }
             }
             ZTreeBean zTreeBean = new ZTreeBean();
@@ -301,7 +302,7 @@ public class ApiController {
             zTreeBean.setIndex(0);
             treeList.add(zTreeBean);
             responseBean.setData(treeList);
-            //ClusterUtil.closeCulter();
+            ClusterUtil.closeCulter();
         } catch (Exception e) {
             e.printStackTrace();
             responseBean.setCode(500);
@@ -358,6 +359,7 @@ public class ApiController {
                 if (masterNode.keySet().contains(nk)) {
                     Jedis jedis = clusterNodes.get(nk).getResource();
                     total = total + jedis.keys(pattern).size();
+                    RedisUtil.closeJedis(jedis);
                 }
             }
             ZTreeBean zTreeBean = new ZTreeBean();
@@ -370,7 +372,7 @@ public class ApiController {
             zTreeBean.setIndex(0);
             treeList.add(zTreeBean);
             responseBean.setData(treeList);
-            //ClusterUtil.closeCulter();
+            ClusterUtil.closeCulter();
         } catch (Exception e) {
             e.printStackTrace();
             responseBean.setCode(500);
@@ -425,6 +427,7 @@ public class ApiController {
                     if (masterNode.keySet().contains(nk)) {
                         Jedis jedis = clusterNodes.get(nk).getResource();
                         keyList.addAll(jedis.keys(pattern));
+                        RedisUtil.closeJedis(jedis);
                     }
                 }
                 int startIndex = (page - 1) * 50;
@@ -443,6 +446,7 @@ public class ApiController {
                     treeList.add(zTreeBean);
                 }
                 responseBean.setData(treeList);
+                ClusterUtil.closeCulter();
             } else {
                 responseBean.setCode(500);
                 responseBean.setMsgs("打开连接异常");
@@ -489,6 +493,7 @@ public class ApiController {
             if (null != cluster) {
                 if (ClusterUtil.existsKey(cluster, key)) {
                     responseBean.setData(ClusterUtil.getKeyInfo(cluster, key));
+                    ClusterUtil.closeCulter();
                 } else {
                     responseBean.setCode(0);
                     responseBean.setMsgs("该key不存在");

@@ -109,12 +109,12 @@ public class DesktopApp extends Application {
      */
     private WebView getWebView() {
         WebView webView = new WebView();
+        webView.setCache(false);
         webView.setContextMenuEnabled(false);
         webView.setPrefSize(prefWidth, prefHeight);
         webView.setFontSmoothingType(FontSmoothingType.GRAY);
         WebEngine webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
-        System.out.println(webEngine.getUserAgent());
         webEngine.setUserAgent("RedisPlus WebEngine");
         webEngine.load(appPath);
         return webView;

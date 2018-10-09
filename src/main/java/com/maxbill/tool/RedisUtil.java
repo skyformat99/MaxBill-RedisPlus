@@ -94,7 +94,11 @@ public class RedisUtil {
      * 从JedisPool中获取Jedis
      */
     public static Jedis getJedis() {
-        return jedisPool.getResource();
+        if (null != jedisPool) {
+            return jedisPool.getResource();
+        } else {
+            return null;
+        }
     }
 
     /**
