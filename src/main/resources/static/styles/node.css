@@ -1,23 +1,24 @@
-.save-root {
+.node-root {
     width: 455px;
     height: auto;
 }
 
-.save-main {
+.node-main {
     width: 100%;
     height: auto;
     margin-top: 20px;
 }
 
-.save-show {
+.node-show {
     width: 100%;
 }
 
-.save-hide {
+.node-hide {
     width: 100%;
+    display: none;
 }
 
-.save-btns {
+.node-btns {
     width: 100%;
     height: auto;
     margin-top: 20px;
@@ -45,6 +46,10 @@
     line-height: 27px;
     width: 300px !important;
     border: 0px solid grey;
+}
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: #FFFFFF;
 }
 
 

@@ -248,7 +248,7 @@ function setConnectData() {
     layer.open({
         title: '操作连接',
         type: 2,
-        area: ['455px', '445px'],
+        area: ['455px', '500px'],
         fixed: true,
         maxmin: false,
         skin: 'layui-layer-lan',
@@ -304,13 +304,14 @@ function expConnectData() {
  * 打开连接数据
  */
 function openConnect(id) {
+    var result = 0;
     layer.load(2);
     var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/connect/create',
         timeout: 15000,
         data: {"id": id},
-        sync: false,
+        async: false,
         success: function (data) {
             var imgObj = $(".status-message img");
             var msgObj = $(".status-message .conn");
@@ -326,6 +327,7 @@ function openConnect(id) {
                 msgObj.removeClass("conn-no");
                 msgObj.addClass("conn-ok").text(data.data);
                 imgObj.attr("src", basePath + "/image/conn-ok.png");
+                result = 1;
             }
             layer.closeAll('loading');
         },
@@ -342,21 +344,24 @@ function openConnect(id) {
             }
         }
     });
+    return result;
 }
 
 
 function closeConnect(id) {
+    var result = 0;
     $.ajax({
         type: "post",
         url: basePath + '/api/connect/discon',
         data: {
             "id": id
         },
-        sync: false,
+        async: false,
         success: function (data) {
             var imgObj = $(".status-message img");
             var msgObj = $(".status-message .conn");
             if (data.code == 200) {
+                result = 1;
                 msgObj.removeClass("conn-ok");
                 msgObj.addClass("conn-no").text("未连接服务");
                 imgObj.attr("src", basePath + "/image/conn-no.png");
@@ -367,6 +372,7 @@ function closeConnect(id) {
             }
         }
     });
+    return result;
 }
 
 

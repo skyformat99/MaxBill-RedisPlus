@@ -153,7 +153,7 @@ function loadKeyTree() {
     var xhr = $.ajax({
         type: "get",
         url: basePath + '/api/many/treeInit',
-        sync: true,
+        async: true,
         timeout: 10000,
         success: function (data) {
             $.fn.zTree.init($("#keyTree0"), zTreeSetting, data.data[0]);
@@ -188,7 +188,7 @@ function loadPatternTree() {
     var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/many/likeInit',
-        sync: true,
+        async: true,
         data: {
             "pattern": $("#key-like-input").val()
         },
@@ -241,7 +241,7 @@ function renameKey() {
                     'newKey': text
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -292,7 +292,7 @@ function deleteKey() {
                 'key': currKey
             },
             timeout: 10000,
-            sync: false,
+            a: false,
             success: function (data) {
                 layer.close(index);
                 if (data.code == 200) {
@@ -373,7 +373,7 @@ function retimeKey() {
                     'time': text
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -418,7 +418,7 @@ function getKeyInfo() {
             'key': currKey
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             var keyInfo = data.data;
             $("#key-input").val(currKey);
@@ -585,7 +585,7 @@ function updateStr() {
             'val': $("#currVal").val()
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -638,7 +638,7 @@ function insertList() {
                     'val': text
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -684,7 +684,7 @@ function deleteList(keyIndex) {
             'keyIndex': keyIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -737,7 +737,7 @@ function insertSet() {
                     'val': text
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -784,7 +784,7 @@ function deleteSet(val) {
             'val': val
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -837,7 +837,7 @@ function insertZset() {
                     'val': text
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -884,7 +884,7 @@ function deleteZset(val) {
             'val': val
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -935,7 +935,7 @@ function insertHash() {
                     'mapVal': mapVal
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     if (data.code == 200) {
                         getKeyInfo();
@@ -984,7 +984,7 @@ function deleteHash(mapKey) {
             'mapKey': mapKey
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();

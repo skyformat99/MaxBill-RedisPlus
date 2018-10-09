@@ -171,7 +171,7 @@ function loadKeyTree() {
     var xhr = $.ajax({
         type: "get",
         url: basePath + '/api/data/treeInit',
-        sync: true,
+        async: true,
         timeout: 10000,
         success: function (data) {
             for (var i = 0; i < 16; i++) {
@@ -215,7 +215,7 @@ function loadPatternTree() {
     var xhr = $.ajax({
         type: "post",
         url: basePath + '/api/data/likeInit',
-        sync: true,
+        async: true,
         data: {
             "index": currIndex,
             "pattern": $("#key-like-input").val()
@@ -270,7 +270,7 @@ function renameKey() {
                     'index': currIndex
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -322,7 +322,7 @@ function deleteKey() {
                 'index': currIndex
             },
             timeout: 10000,
-            sync: false,
+            async: false,
             success: function (data) {
                 layer.close(index);
                 if (data.code == 200) {
@@ -404,7 +404,7 @@ function retimeKey() {
                     'index': currIndex
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -458,7 +458,7 @@ function selectKey() {
             'index': currIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             var keyInfo = data.data;
             if (data.code == 200 && keyInfo) {
@@ -507,7 +507,7 @@ function getKeyInfo() {
             'index': currIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             var keyInfo = data.data;
             $("#key-input").val(currKey);
@@ -675,7 +675,7 @@ function updateStr() {
             'index': currIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -729,7 +729,7 @@ function insertList() {
                     'index': currIndex
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -776,7 +776,7 @@ function deleteList(keyIndex) {
             'keyIndex': keyIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -830,7 +830,7 @@ function insertSet() {
                     'index': currIndex
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -878,7 +878,7 @@ function deleteSet(val) {
             'index': currIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -932,7 +932,7 @@ function insertZset() {
                     'index': currIndex
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     layer.close(index);
                     if (data.code == 200) {
@@ -980,7 +980,7 @@ function deleteZset(val) {
             'index': currIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();
@@ -1032,7 +1032,7 @@ function insertHash() {
                     'index': currIndex
                 },
                 timeout: 10000,
-                sync: false,
+                async: false,
                 success: function (data) {
                     if (data.code == 200) {
                         getKeyInfo();
@@ -1082,7 +1082,7 @@ function deleteHash(mapKey) {
             'index': currIndex
         },
         timeout: 10000,
-        sync: false,
+        async: false,
         success: function (data) {
             if (data.code == 200) {
                 getKeyInfo();

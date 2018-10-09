@@ -506,6 +506,25 @@ public class ApiController {
     }
 
 
+    @RequestMapping("/many/nodeInfo")
+    public ResponseBean manyNodeInfo() {
+        ResponseBean responseBean = new ResponseBean();
+        try {
+            List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+            if (null != nodeList) {
+                responseBean.setData(nodeList);
+            } else {
+                responseBean.setCode(0);
+                responseBean.setMsgs("打开连接异常");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseBean.setCode(500);
+            responseBean.setMsgs("重命名操作异常");
+        }
+        return responseBean;
+    }
+
     @RequestMapping("/data/renameKey")
     public ResponseBean renameKey(int index, String oldKey, String newKey) {
         ResponseBean responseBean = new ResponseBean();

@@ -18,10 +18,12 @@
 <input id="basePath" type="hidden" value="${ctx}"/>
 <input id="id" type="hidden" value="${data.id}"/>
 <input id="flag" type="hidden" value="${flag}"/>
-<div class="save-root">
+<input id="isha" type="hidden" value="${isha}"/>
+
+<div class="node-root">
     <form class="layui-form">
-        <div class="save-main">
-            <div class="save-show">
+        <div class="node-main">
+            <div class="node-show">
                 <div class="layui-form-item">
                     <label class="layui-form-label">连接名称:</label>
                     <div class="layui-input-inline div-input">${data.text}</div>
@@ -35,11 +37,25 @@
                     <div class="layui-input-inline div-input">${data.isha}</div>
                 </div>
             </div>
-            <div class="save-hide">
-
+            <div class="node-hide">
+                <table class="layui-table" lay-size="sm" style="width: 95%;margin: 0 auto">
+                    <colgroup>
+                        <col>
+                        <col>
+                        <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>主机</th>
+                        <th>角色</th>
+                    </tr>
+                    </thead>
+                    <tbody id="node-body">
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="save-btns">
+        <div class="node-btns">
             <input type="button" id="shutBtn" value="断开" class="layui-btn layui-btn-sm" style="background: #4476A7"/>
             <input type="button" id="backBtn" value="返回" class="layui-btn layui-btn-sm" style="background: #4476A7"/>
         </div>

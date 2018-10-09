@@ -46,11 +46,12 @@ public class RouteController {
     public ModelAndView toRootNode(ModelAndView mv, String id) {
         Connect connect = DataUtil.getCurrentOpenConnect();
         Connect data = this.dataService.selectConnectById(id);
-        boolean isCulter = ClusterUtil.isCulter(data);
-        if (isCulter) {
-            data.setIsha("集群模式");
-        } else {
+        if (data.getIsha().equals("0")) {
             data.setIsha("单机模式");
+            mv.addObject("isha", 0);
+        } else {
+            data.setIsha("集群模式");
+            mv.addObject("isha", 1);
         }
         mv.addObject("data", data);
         if (null != connect && connect.getId().equals(id)) {

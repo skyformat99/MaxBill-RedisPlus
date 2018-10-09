@@ -28,7 +28,7 @@ function toPage(page) {
             type: "post",
             url: basePath + '/api/connect/isopen',
             timeout: 10000,
-            sync: false,
+            async: false,
             success: function (data) {
                 if (data == 1) {
                     window.location.href = basePath + '/' + page;

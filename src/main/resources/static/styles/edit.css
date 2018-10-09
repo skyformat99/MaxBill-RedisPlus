@@ -1,23 +1,23 @@
-.save-root {
+.edit-root {
     width: 455px;
     height: auto;
 }
 
-.save-main {
+.edit-main {
     width: 100%;
     height: auto;
     margin-top: 20px;
 }
 
-.save-show {
+.edit-show {
     width: 100%;
 }
 
-.save-hide {
+.edit-hide {
     width: 100%;
 }
 
-.save-btns {
+.edit-btns {
     width: 100%;
     height: auto;
     margin-top: 20px;

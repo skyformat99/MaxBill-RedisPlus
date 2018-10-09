@@ -28,7 +28,7 @@ function getRealtimeData() {
     $.ajax({
         type: 'get',
         url: "/api/info/realInfo",
-        sync: false,
+        async: false,
         success: function (data) {
             var key = data.data.key;
             var val01 = data.data.val01;

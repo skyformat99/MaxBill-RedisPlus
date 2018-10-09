@@ -22,7 +22,7 @@ function getRedisInfo() {
     var xhr = $.ajax({
         type: "get",
         url: basePath + '/api/conf/confInfo',
-        sync: false,
+        async: false,
         timeout: 10000,
         success: function (data) {
             var html = '';
