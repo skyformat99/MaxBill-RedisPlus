@@ -24,7 +24,7 @@ import static com.maxbill.tool.StringUtil.FLAG_COLON;
 @Controller
 public class RouteController {
 
-    private final String APP_VERSION = "Version: 1.1.7";
+    private final String APP_VERSION = "Version: 1.1.9";
 
     @Autowired
     private DataService dataService;
