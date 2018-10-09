@@ -4,7 +4,7 @@
 
 #### 项目介绍
 
-RedisPlus是为Redis管理开发的桌面客户端软件，支持Windows 、Linux 、Mac三大系统平台，RedisPlus提供更加高效、方便、快捷的使用体验，有着更加现代化的界面风格。该软件参考了RedisStudio的界面逻辑，但是和RedisStudio软件完全没有关系，并不是官方推出的跨平台软件。该软件为开源免费使用（可商用），但是禁止二次开发打包发布盈利，违反必究！ 该软件遵循GPL开源协议，致力于为大家提供一个高效的Redis可视化管理软件。
+RedisPlus是为Redis可视化管理开发的一款开源免费的桌面客户端软件，支持Windows 、Linux、Mac三大系统平台，RedisPlus提供更加高效、方便、快捷的使用体验，有着更加现代化的用户界面风格。该软件支持单机、集群模式连接，同时还支持SSH（单机、集群）通道连接。RedisPlus遵循GPL-3.0开源协议，禁止二次开发打包发布盈利，违反必究！RedisPlus致力于为大家提供一个高效的Redis可视化管理软件。
 
 #### 下载地址
 
@@ -70,16 +70,20 @@ v3.0.0
 
 #### 应用截图
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143612_a7381776_1252126.png "深度截图_com.maxbill.MainApplication_20180917142650.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172521_bf40069c_1252126.png "深度截图_com.maxbill.MainApplication_20181009171856.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143636_9ddd2654_1252126.png "深度截图_com.maxbill.MainApplication_20180917142708.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172530_39aec29a_1252126.png "深度截图_com.maxbill.MainApplication_20181009171912.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143649_8af0a861_1252126.png "深度截图_com.maxbill.MainApplication_20180917142726.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172541_b1cd0e32_1252126.png "深度截图_com.maxbill.MainApplication_20181009171938.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143659_a2e1bd9b_1252126.png "深度截图_com.maxbill.MainApplication_20180917142741.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172551_b432eecb_1252126.png "深度截图_com.maxbill.MainApplication_20181009171959.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143714_81d8a576_1252126.png "深度截图_com.maxbill.MainApplication_20180917142749.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172600_ae6fe53b_1252126.png "深度截图_com.maxbill.MainApplication_20181009172020.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143724_227d3df1_1252126.png "深度截图_com.maxbill.MainApplication_20180917142829.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172612_c9316bd5_1252126.png "深度截图_com.maxbill.MainApplication_20181009172041.png")
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/0917/143733_073bd1ef_1252126.png "深度截图_com.maxbill.MainApplication_20180917142840.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172620_3903bfc1_1252126.png "深度截图_com.maxbill.MainApplication_20181009172051.png")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172629_5e81018d_1252126.png "深度截图_com.maxbill.MainApplication_20181009172106.png")
+
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1009/172640_600f21c9_1252126.png "深度截图_com.maxbill.MainApplication_20181009172116.png")
