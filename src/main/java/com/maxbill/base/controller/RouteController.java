@@ -24,7 +24,7 @@ import static com.maxbill.tool.StringUtil.FLAG_COLON;
 @Controller
 public class RouteController {
 
-    private final String APP_VERSION = "Version: 1.1.9";
+    private final String APP_VERSION = "Version: 1.1.10";
 
     @Autowired
     private DataService dataService;
@@ -86,7 +86,7 @@ public class RouteController {
 
 
     @GetMapping("/info")
-    public ModelAndView toInfo(ModelAndView mv) {
+    public ModelAndView toInfo(ModelAndView mv) throws Exception {
         mv.addObject("info", RedisUtil.getRedisInfoList(DataUtil.getCurrentJedisObject()));
         mv.addAllObjects(setPageInfo());
         mv.setViewName("info");

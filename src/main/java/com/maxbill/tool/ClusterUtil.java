@@ -33,7 +33,7 @@ public class ClusterUtil {
     private static JedisCluster cluster;
 
 
-    public static JedisCluster openCulter(Connect connect) {
+    public static JedisCluster openCulter(Connect connect) throws Exception {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(MAX_TOTAL);
         config.setMaxIdle(MAX_IDLE);
@@ -68,7 +68,7 @@ public class ClusterUtil {
     }
 
 
-    public static JedisCluster getCluster(Connect connect) {
+    public static JedisCluster getCluster(Connect connect) throws Exception {
         if (null == cluster || cluster.getClusterNodes().size() == 0) {
             return openCulter(connect);
         } else {
@@ -76,44 +76,39 @@ public class ClusterUtil {
         }
     }
 
-    public static List<RedisNode> getClusterNode(Connect connect) {
+    public static List<RedisNode> getClusterNode(Connect connect) throws Exception {
         List<RedisNode> nodeList = new ArrayList<>();
         Jedis jedis = null;
-        try {
-            if ("1".equals(connect.getType())) {
-                jedis = new Jedis(connect.getRhost(), 55555);
-            } else {
-                jedis = new Jedis(connect.getRhost(), Integer.valueOf(connect.getRport()));
-            }
-            if (!StringUtils.isEmpty(connect.getRpass())) {
-                jedis.auth(connect.getRpass());
-            }
-            String clusterNodes = jedis.clusterNodes();
-            String[] nodes = clusterNodes.split("\n");
-            for (String node : nodes) {
-                String[] nodeFileds = node.split(" ");
-                RedisNode redisNode = new RedisNode();
-                redisNode.setId(nodeFileds[0]);
-                redisNode.setAddr(nodeFileds[1]);
-                redisNode.setFlag(nodeFileds[2]);
-                redisNode.setPid(nodeFileds[3]);
-                redisNode.setPing(nodeFileds[4]);
-                redisNode.setPong(nodeFileds[5]);
-                redisNode.setEpoch(nodeFileds[6]);
-                redisNode.setState(nodeFileds[7]);
-                if (nodeFileds.length == 9) {
-                    redisNode.setHash(nodeFileds[8]);
-                }
-                nodeList.add(redisNode);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (null != jedis) {
-                jedis.close();
-            }
-            return nodeList;
+        if ("1".equals(connect.getType())) {
+            jedis = new Jedis(connect.getRhost(), 55555);
+        } else {
+            jedis = new Jedis(connect.getRhost(), Integer.valueOf(connect.getRport()));
         }
+        if (!StringUtils.isEmpty(connect.getRpass())) {
+            jedis.auth(connect.getRpass());
+        }
+        String clusterNodes = jedis.clusterNodes();
+        String[] nodes = clusterNodes.split("\n");
+        for (String node : nodes) {
+            String[] nodeFileds = node.split(" ");
+            RedisNode redisNode = new RedisNode();
+            redisNode.setId(nodeFileds[0]);
+            redisNode.setAddr(nodeFileds[1]);
+            redisNode.setFlag(nodeFileds[2]);
+            redisNode.setPid(nodeFileds[3]);
+            redisNode.setPing(nodeFileds[4]);
+            redisNode.setPong(nodeFileds[5]);
+            redisNode.setEpoch(nodeFileds[6]);
+            redisNode.setState(nodeFileds[7]);
+            if (nodeFileds.length == 9) {
+                redisNode.setHash(nodeFileds[8]);
+            }
+            nodeList.add(redisNode);
+        }
+        if (null != jedis) {
+            jedis.close();
+        }
+        return nodeList;
     }
 
     public static Map<String, RedisNode> getMasterNode(List<RedisNode> nodeList) {
@@ -327,7 +322,7 @@ public class ClusterUtil {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Connect connect = new Connect();
         connect.setRport("7001");
         connect.setRhost("192.168.77.141");

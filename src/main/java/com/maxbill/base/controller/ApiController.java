@@ -1,25 +1,29 @@
 package com.maxbill.base.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.*;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.SocketUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import redis.clients.jedis.*;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static com.maxbill.tool.DateUtil.DATE_STR;
 import static com.maxbill.tool.RedisUtil.getRedisInfo;
-import static com.maxbill.tool.StringUtil.FLAG_COLON;
 
 @RestController
 @RequestMapping("/api")
 public class ApiController {
+
+    private static Logger log = Logger.getLogger(ApiController.class);
 
     @Autowired
     private DataService dataService;
@@ -33,6 +37,7 @@ public class ApiController {
             tableData.setCount(dataList.size());
             tableData.setData(dataList);
         } catch (Exception e) {
+            log.error(e);
             tableData.setCode(500);
             tableData.setMsgs("加载数据失败");
         }
@@ -50,7 +55,7 @@ public class ApiController {
                 responseBean.setMsgs("新增连接失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("新增连接异常");
         }
@@ -68,7 +73,7 @@ public class ApiController {
                 responseBean.setMsgs("修改连接失败");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("修改连接异常");
         }
@@ -86,6 +91,7 @@ public class ApiController {
                 responseBean.setMsgs("删除连接失败");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("删除连接异常");
         }
@@ -98,35 +104,35 @@ public class ApiController {
         ResponseBean responseBean = new ResponseBean();
         try {
             Connect connect = this.dataService.selectConnectById(id);
-            Boolean openFlag = null;
             if ("1".equals(connect.getType())) {
-                openFlag = JschUtil.openSSH(connect);
+                JschUtil.openSSH(connect);
             }
-            if (null != openFlag && !openFlag) {
-                responseBean.setCode(0);
-                responseBean.setMsgs("SSH打开失败");
-                responseBean.setData("未连接服务");
-            } else {
-                if (connect.getIsha().equals("0")) {
-                    Jedis jedis = RedisUtil.openJedis(connect);
-                    if (null != jedis) {
-                        WebUtil.setSessionAttribute("connect", connect);
-                        responseBean.setData("已经连接到： " + connect.getText());
-                        RedisUtil.closeJedis(jedis);
-                    } else {
-                        WebUtil.setSessionAttribute("connect", null);
-                        responseBean.setCode(0);
-                        responseBean.setMsgs("打开连接失败");
-                        responseBean.setData("未连接服务");
-                    }
+            if (connect.getIsha().equals("0")) {
+                Jedis jedis = RedisUtil.openJedis(connect);
+                if (null != jedis) {
+                    WebUtil.setSessionAttribute("connect", connect);
+                    responseBean.setData("已经连接到： " + connect.getText());
+                    RedisUtil.closeJedis(jedis);
                 } else {
-                    ClusterUtil.openCulter(connect);
+                    WebUtil.setSessionAttribute("connect", null);
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("打开连接失败");
+                    responseBean.setData("未连接服务");
+                }
+            } else {
+                JedisCluster cluster = ClusterUtil.openCulter(connect);
+                if (null == cluster || cluster.getClusterNodes().size() == 0) {
+                    responseBean.setCode(0);
+                    responseBean.setMsgs("连接集群失败，请检查连接信息!");
+                    responseBean.setData("未连接服务");
+                    WebUtil.setSessionAttribute("connect", null);
+                } else {
                     WebUtil.setSessionAttribute("connect", connect);
                     responseBean.setData("已经连接到： " + connect.getText());
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             WebUtil.setSessionAttribute("connect", null);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
@@ -152,7 +158,7 @@ public class ApiController {
                 WebUtil.setSessionAttribute("connect", null);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
         }
         return responseBean;
@@ -161,86 +167,34 @@ public class ApiController {
 
     @RequestMapping("/connect/isopen")
     public Integer isopenConnect() {
-        Connect connect = DataUtil.getCurrentOpenConnect();
-        if (null != connect) {
-            if (connect.getIsha().equals("0")) {
-                Jedis jedis = DataUtil.getCurrentJedisObject();
-                if (null != jedis) {
-                    RedisUtil.closeJedis(jedis);
-                    return 1;
+        try {
+            Connect connect = DataUtil.getCurrentOpenConnect();
+            if (null != connect) {
+                if (connect.getIsha().equals("0")) {
+                    Jedis jedis = DataUtil.getCurrentJedisObject();
+                    if (null != jedis) {
+                        RedisUtil.closeJedis(jedis);
+                        return 1;
+                    } else {
+                        return 0;
+                    }
                 } else {
-                    return 0;
+                    JedisCluster jedisCluster = DataUtil.getJedisClusterObject();
+                    if (null != jedisCluster) {
+                        ClusterUtil.closeCulter();
+                        return 1;
+                    } else {
+                        return 0;
+                    }
                 }
             } else {
-                JedisCluster jedisCluster = DataUtil.getJedisClusterObject();
-                if (null != jedisCluster) {
-                    ClusterUtil.closeCulter();
-                    return 1;
-                } else {
-                    return 0;
-                }
+                return 0;
             }
-        } else {
+        } catch (Exception e) {
+            log.error(e);
             return 0;
         }
-
     }
-
-    @RequestMapping("/connect/import")
-    public ResponseBean importConnect(MultipartFile file) {
-        ResponseBean responseBean = new ResponseBean();
-        try {
-            List<Connect> dataLIst = ExcelUtil.importExcel(file.getInputStream());
-            if (!dataLIst.isEmpty()) {
-                for (Connect connect : dataLIst) {
-                    this.dataService.insertConnect(connect);
-                }
-                responseBean.setMsgs("导入连接成功");
-            } else {
-                responseBean.setMsgs("导入连接为空");
-            }
-        } catch (Exception e) {
-            responseBean.setCode(500);
-            responseBean.setMsgs("导入连接异常");
-        }
-        return responseBean;
-    }
-
-
-    @RequestMapping("/connect/export")
-    public ResponseBean exportConnect() {
-        ResponseBean responseBean = new ResponseBean();
-        try {
-            ExcelBean excelBean = new ExcelBean();
-            excelBean.setName("连接信息");
-            List<String> titles = new ArrayList();
-            titles.add("连接名称");
-            titles.add("连接主机");
-            titles.add("连接端口");
-            titles.add("连接密码");
-            titles.add("SSH用户");
-            titles.add("SSH主机");
-            titles.add("SSH端口");
-            titles.add("SSH密码");
-            titles.add("连接类型");
-            titles.add("创建时间");
-            excelBean.setTitles(titles);
-            excelBean.setRows(this.dataService.selectConnect());
-            String filePath = System.getProperty("user.home") + "/";
-            String fileName = DateUtil.formatDate(new Date(), DATE_STR) + "-redis-connect" + ".xlsx";
-            boolean exportFlag = ExcelUtil.exportExcel(excelBean, filePath + fileName);
-            if (exportFlag) {
-                responseBean.setMsgs("成功导出连接至用户目录");
-            } else {
-                responseBean.setMsgs("导出连接失败");
-            }
-        } catch (Exception e) {
-            responseBean.setCode(500);
-            responseBean.setMsgs("导出连接异常");
-        }
-        return responseBean;
-    }
-
 
     @RequestMapping("/data/treeInit")
     public ResponseBean treeInit() {
@@ -249,8 +203,17 @@ public class ApiController {
             List<ZTreeBean> treeList = new ArrayList<>();
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
+                String role = jedis.info("server");
                 for (int i = 0; i < 16; i++) {
-                    long dbSize = RedisUtil.dbSize(jedis, i);
+                    long dbSize = 0l;
+                    if (i > 0 && role.indexOf("redis_mode:cluster") > -1) {
+                        break;
+                    }
+                    if (role.indexOf("redis_mode:cluster") > -1) {
+                        dbSize = RedisUtil.dbSize(jedis, null);
+                    } else {
+                        dbSize = RedisUtil.dbSize(jedis, i);
+                    }
                     ZTreeBean zTreeBean = new ZTreeBean();
                     zTreeBean.setId(KeyUtil.getUUIDKey());
                     zTreeBean.setName("DB" + i + " (" + dbSize + ")");
@@ -268,6 +231,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -304,7 +268,7 @@ public class ApiController {
             responseBean.setData(treeList);
             ClusterUtil.closeCulter();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -334,7 +298,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -374,7 +338,7 @@ public class ApiController {
             responseBean.setData(treeList);
             ClusterUtil.closeCulter();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -401,7 +365,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -452,7 +416,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -477,7 +441,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -503,7 +467,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -523,7 +487,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("重命名操作异常");
         }
@@ -553,7 +517,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("重命名操作异常");
         }
@@ -582,7 +546,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("重命名操作异常");
         }
@@ -607,7 +571,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("重命名操作异常");
         }
@@ -632,7 +596,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("重命名操作异常");
         }
@@ -658,6 +622,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -682,6 +647,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -707,6 +673,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -730,6 +697,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -754,6 +722,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -778,6 +747,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -803,6 +773,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -826,6 +797,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -851,6 +823,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -875,6 +848,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -900,6 +874,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -923,6 +898,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -948,6 +924,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -972,6 +949,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -997,6 +975,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -1021,6 +1000,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -1046,6 +1026,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -1070,6 +1051,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -1095,6 +1077,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -1119,6 +1102,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
         }
@@ -1150,7 +1134,7 @@ public class ApiController {
         } catch (Exception e) {
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
-            e.printStackTrace();
+            log.error(e);
         }
         return responseBean;
     }
@@ -1169,6 +1153,7 @@ public class ApiController {
                 responseBean.setMsgs("打开连接异常");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("请求数据异常");
         }
@@ -1190,7 +1175,7 @@ public class ApiController {
                 responseBean.setMsgs("请求数据异常");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("修改配置异常");
         }
@@ -1209,6 +1194,7 @@ public class ApiController {
                 responseBean.setMsgs("发送失败");
             }
         } catch (Exception e) {
+            log.error(e);
             responseBean.setCode(500);
             responseBean.setMsgs("发送异常，请检查网络");
         }

@@ -225,8 +225,10 @@ public class RedisUtil {
     /**
      * 获取库的key值
      */
-    public static long dbSize(Jedis jedis, int index) {
-        jedis.select(index);
+    public static long dbSize(Jedis jedis, Integer index) {
+        if (null != index) {
+            jedis.select(index);
+        }
         return jedis.dbSize();
     }
 

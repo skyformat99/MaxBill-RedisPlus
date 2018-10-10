@@ -16,7 +16,7 @@ public class DataUtil {
         return (Connect) WebUtil.getSessionAttribute("connect");
     }
 
-    public static Jedis getCurrentJedisObject() {
+    public static Jedis getCurrentJedisObject() throws Exception {
         Connect connect = getCurrentOpenConnect();
         if (null != connect) {
             Jedis jedis = null;
@@ -39,7 +39,7 @@ public class DataUtil {
     }
 
 
-    public static JedisCluster getJedisClusterObject() {
+    public static JedisCluster getJedisClusterObject() throws Exception {
         Connect connect = getCurrentOpenConnect();
         if (null != connect) {
             return ClusterUtil.getCluster(connect);
