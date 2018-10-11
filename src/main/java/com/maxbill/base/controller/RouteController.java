@@ -24,7 +24,7 @@ import static com.maxbill.tool.StringUtil.FLAG_COLON;
 @Controller
 public class RouteController {
 
-    private final String APP_VERSION = "Version: 1.1.10";
+    private final String APP_VERSION = "Version: 1.1.11";
 
     @Autowired
     private DataService dataService;
@@ -58,6 +58,9 @@ public class RouteController {
             mv.addObject("isha", 0);
         } else {
             data.setIsha("集群模式");
+            if (data.getType().equals("1")) {
+                data.setRhost(data.getShost());
+            }
             mv.addObject("isha", 1);
         }
         mv.addObject("data", data);

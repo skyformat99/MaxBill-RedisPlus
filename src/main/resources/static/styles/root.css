@@ -2,7 +2,7 @@
     height: 100%;
     float: left;
     width: 240px;
-    border-right: 1px solid silver;
+    border-right: 1px solid #E6E6E6;
 }
 
 .handle-left-item {
@@ -47,11 +47,11 @@
 }
 
 .layui-table-click {
-    background-color: lightskyblue;
+    background-color: #CFE6F3;
 }
 
 .layui-table tbody tr:hover, .layui-table-hover {
-    background-color: lightskyblue;
+    background-color: #CFE6F3;
 }
 
 
