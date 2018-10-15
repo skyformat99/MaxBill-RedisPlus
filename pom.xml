@@ -196,7 +196,7 @@
                     <!--供应商-->
                     <vendor>MaxBill</vendor>
                     <!--版本信息-->
-                    <nativeReleaseVersion>v1.1.0</nativeReleaseVersion>
+                    <nativeReleaseVersion>v2.0.0</nativeReleaseVersion>
                 </configuration>
             </plugin>
         </plugins>
