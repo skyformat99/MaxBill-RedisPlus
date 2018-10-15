@@ -195,6 +195,8 @@
                     </bundleArguments>
                     <!--供应商-->
                     <vendor>MaxBill</vendor>
+                    <!--允许所有权限-->
+                    <allPermissions>true</allPermissions>
                     <!--版本信息-->
                     <nativeReleaseVersion>v2.0.0</nativeReleaseVersion>
                     <!--说明信息-->
