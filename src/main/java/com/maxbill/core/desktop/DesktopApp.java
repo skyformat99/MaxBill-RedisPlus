@@ -32,7 +32,7 @@ public class DesktopApp extends Application {
     private final String appName = "RedisPlus";
     private final String appShow = "/static/styles/winui.css";
     private final String appFont = "/static/rcfont/redisplus.ttf";
-    private final String appPath = "http://127.0.0.1:9999/root";
+    private final String appPath = "https://www.hcharts.cn/demo/highcharts/dynamic-update";
     private final String appIcon = "/static/image/task-logo.png";
 
 
@@ -199,7 +199,6 @@ public class DesktopApp extends Application {
         winClose.setAlignment(Pos.BASELINE_CENTER);
         winClose.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                this.shutdown();
                 //Platform.exit();
                 System.exit(0);
             }
@@ -217,17 +216,6 @@ public class DesktopApp extends Application {
         AnchorPane.setRightAnchor(winClose, 5.0);
         topView.getChildren().add(titleView);
         return topView;
-    }
-
-    /**
-     * 关闭内置服务容器
-     */
-    private void shutdown() {
-        ConfigurableApplicationContext context = MainApplication.context;
-        if (null != context) {
-            //关闭容器服务
-            context.close();
-        }
     }
 
 }
