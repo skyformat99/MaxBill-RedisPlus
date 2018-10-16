@@ -1,12 +1,10 @@
 package com.maxbill.base.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.*;
 import com.maxbill.base.service.DataService;
 import com.maxbill.tool.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.SocketUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -133,6 +131,7 @@ public class ApiController {
             }
         } catch (Exception e) {
             log.error(e);
+            e.printStackTrace();
             WebUtil.setSessionAttribute("connect", null);
             responseBean.setCode(500);
             responseBean.setMsgs("打开连接异常");
