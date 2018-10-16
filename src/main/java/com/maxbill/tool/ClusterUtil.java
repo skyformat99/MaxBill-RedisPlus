@@ -104,7 +104,7 @@ public class ClusterUtil {
                 redisNode.setHash(nodeFileds[8]);
             }
             if (redisNode.getAddr().indexOf("@") > -1) {
-                redisNode.setAddr(redisNode.getAddr().replace("@", ":"));
+                redisNode.setAddr(redisNode.getAddr().split("@")[0]);
             }
             nodeList.add(redisNode);
         }
