@@ -1,0 +1,55 @@
+#main-view {
+    -fx-border-width: 1;
+    -fx-border-color: silver;
+
+}
+
+#tops-view {
+    -fx-border-width: 0;
+    -fx-background-color: #D6D6D7;
+}
+
+#tops-view-image {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+    -fx-background-image: url('../image/tops-view-image.png');
+}
+
+#tops-view-items {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+    -fx-background-image: url('../image/tops-view-items.png');
+}
+
+#tops-view-abate {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+    -fx-background-image: url('../image/tops-view-abate.png');
+}
+
+#tops-view-raise {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+    -fx-background-image: url('../image/tops-view-raise.png');
+}
+
+#tops-view-close {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+    -fx-background-image: url('../image/tops-view-close.png');
+}
+
+#tops-view-items:hover,
+#tops-view-cover:hover,
+#tops-view-abate:hover,
+#tops-view-raise:hover,
+#tops-view-close:hover {
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+    -fx-background-color: #ECE9EF;
+}
