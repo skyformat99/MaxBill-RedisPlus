@@ -1,9 +1,13 @@
 package com.maxbill.core.desktop;
 
+import com.maxbill.MainApplication;
+import com.maxbill.base.controller.ConnectController;
 import com.maxbill.tool.ItemUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -23,6 +27,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import netscape.javascript.JSObject;
 
 public class Desktop extends Application {
 
@@ -46,10 +51,10 @@ public class Desktop extends Application {
 
     @Override
     public void start(Stage winStage) throws Exception {
+        winStage.setTitle("RedisPlus");
         winStage.initStyle(StageStyle.TRANSPARENT);
         BorderPane mainView = getMainView(winStage);
         winStage.setScene(new Scene(mainView, minWidth, minHeight));
-        winStage.setTitle("自定义窗口");
         winStage.getIcons().add(new Image(ItemUtil.DESKTOP_TASK_LOGO));
         doWinStage(winStage);
         doWinState(winStage, mainView);
@@ -66,6 +71,7 @@ public class Desktop extends Application {
         mainView.getStylesheets().add(ItemUtil.DESKTOP_STYLE);
         mainView.setTop(getTopsView(winStage));
         mainView.setCenter(getBodyView());
+        mainView.setBottom(getEndsView());
         return mainView;
     }
 
@@ -77,42 +83,42 @@ public class Desktop extends Application {
         GridPane topsView = new GridPane();
         topsView.setId("tops-view");
         topsView.setHgap(10);
-        Label winImage = new Label();
-        Label winTitle = new Label();
-        Label winItems = new Label();
-        Label winAbate = new Label();
-        Label winRaise = new Label();
-        Label winClose = new Label();
-        winTitle.setText("标题信息");
-        winImage.setId("tops-view-image");
-        winTitle.setId("tops-view-title");
-        winItems.setId("tops-view-items");
-        winAbate.setId("tops-view-abate");
-        winRaise.setId("tops-view-raise");
-        winClose.setId("tops-view-close");
-        winImage.setPrefSize(27, 23);
-        winItems.setPrefSize(27, 23);
-        winAbate.setPrefSize(27, 23);
-        winRaise.setPrefSize(27, 23);
-        winClose.setPrefSize(27, 23);
-        topsView.add(winImage, 0, 0);
-        topsView.add(winTitle, 1, 0);
-        topsView.add(winItems, 2, 0);
-        topsView.add(winAbate, 3, 0);
-        topsView.add(winRaise, 4, 0);
-        topsView.add(winClose, 5, 0);
+        Label topImage = new Label();
+        Label topTitle = new Label();
+        Label topItems = new Label();
+        Label topAbate = new Label();
+        Label topRaise = new Label();
+        Label topClose = new Label();
+        topTitle.setText("RedisPlus");
+        topImage.setId("tops-view-image");
+        topTitle.setId("tops-view-title");
+        topItems.setId("tops-view-items");
+        topAbate.setId("tops-view-abate");
+        topRaise.setId("tops-view-raise");
+        topClose.setId("tops-view-close");
+        topImage.setPrefSize(27, 23);
+        topItems.setPrefSize(27, 23);
+        topAbate.setPrefSize(27, 23);
+        topRaise.setPrefSize(27, 23);
+        topClose.setPrefSize(27, 23);
+        topsView.add(topImage, 0, 0);
+        topsView.add(topTitle, 1, 0);
+        topsView.add(topItems, 2, 0);
+        topsView.add(topAbate, 3, 0);
+        topsView.add(topRaise, 4, 0);
+        topsView.add(topClose, 5, 0);
         topsView.setPadding(new Insets(5));
         topsView.setAlignment(Pos.CENTER_LEFT);
-        GridPane.setHgrow(winTitle, Priority.ALWAYS);
+        GridPane.setHgrow(topTitle, Priority.ALWAYS);
         //事件监听
         //1.监听操作选项事件
-        winItems.setOnMouseClicked(event -> doWinItems(winItems));
+        topItems.setOnMouseClicked(event -> doWinItems(topItems));
         //2.监听窗口最小事件
-        winAbate.setOnMouseClicked(event -> doWinAbate(winStage));
+        topAbate.setOnMouseClicked(event -> doWinAbate(winStage));
         //3.监听窗口最大事件
-        winRaise.setOnMouseClicked(event -> doWinRaise(winStage));
+        topRaise.setOnMouseClicked(event -> doWinRaise(winStage));
         //4.监听窗口关闭事件
-        winClose.setOnMouseClicked(event -> doWinClose(winStage));
+        topClose.setOnMouseClicked(event -> doWinClose(winStage));
         return topsView;
     }
 
@@ -127,9 +133,51 @@ public class Desktop extends Application {
         webView.setFontSmoothingType(FontSmoothingType.GRAY);
         WebEngine webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
-        webEngine.setUserAgent("RedisPlus WebEngine");
-        webEngine.load("https://www.baidu.com/");
+        String utl = Desktop.class.getResource("/page/connect.html").toExternalForm();
+        webEngine.load(utl);
+        ReadOnlyObjectProperty<Worker.State> woker = webEngine.getLoadWorker().stateProperty();
+        woker.addListener((obs, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                JSObject jsObject = (JSObject) webEngine.executeScript("window");
+                ConnectController connectController = MainApplication.context.getBean(ConnectController.class);
+                jsObject.setMember("connectRouter", connectController);
+                System.out.println("页面加载成功");
+            }
+        });
         return new VBox(webView);
+    }
+
+    /**
+     * 内容窗体
+     */
+    public GridPane getEndsView() {
+        GridPane endsView = new GridPane();
+        endsView.setId("ends-view");
+        endsView.setHgap(10);
+        Label endImage = new Label();
+        Label endTitle = new Label();
+        Label endOther = new Label();
+        Label endOrder = new Label();
+        endTitle.setMinWidth(200.00);
+        endTitle.setText(ItemUtil.DESKTOP_STATUS_NO);
+        endOrder.setMinWidth(80.00);
+        endOrder.setText(ItemUtil.DESKTOP_VERSION);
+        endImage.setId("ends-view-image");
+        endTitle.setId("ends-view-title");
+        endOther.setId("ends-view-other");
+        endOrder.setId("ends-view-order");
+        endImage.setPrefSize(27, 23);
+        endTitle.setPrefSize(27, 23);
+        endOther.setPrefSize(27, 23);
+        endOrder.setPrefSize(27, 23);
+        endsView.add(endImage, 0, 0);
+        endsView.add(endTitle, 1, 0);
+        endsView.add(endOther, 2, 0);
+        endsView.add(endOrder, 3, 0);
+        endsView.setPadding(new Insets(3));
+        endsView.setAlignment(Pos.BASELINE_RIGHT);
+        GridPane.setHgrow(endTitle, Priority.ALWAYS);
+        return endsView;
     }
 
 
@@ -242,7 +290,7 @@ public class Desktop extends Application {
         mainView.setOnMousePressed(event -> {
             event.consume();
             xOffset = event.getSceneX();
-            if (event.getSceneY() > 45) {
+            if (event.getSceneY() > 46) {
                 yOffset = 0;
             } else {
                 yOffset = event.getSceneY();

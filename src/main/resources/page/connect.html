@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../plugin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../style/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../style/connect.css"/>
+</head>
+<body>
+<div class="root">
+    <div class="topbar">
+        <div class="topbar-menu">
+            <a href="javascript:toPage('root')" class="topbar-menu-item curr">
+                <img src="../image/TIM图片20181019175516.png"/><span>连接</span>
+            </a>
+            <a href="javascript:toPage('data')" class="topbar-menu-item">
+                <img src="../image/menu02.png"/><span>数据</span>
+            </a>
+            <a href="javascript:toPage('info')" class="topbar-menu-item">
+                <img src="../image/menu03.png"/><span>信息</span>
+            </a>
+            <a href="javascript:toPage('conf')" class="topbar-menu-item">
+                <img src="../image/menu04.png"/><span>配置</span>
+            </a>
+            <a href="javascript:toPage('book')" class="topbar-menu-item">
+                <img src="../image/menu05.png"/><span>指南</span>
+            </a>
+            <a href="javascript:toPage('self')" class="topbar-menu-item">
+                <img src="../image/menu06.png"/><span>关于</span>
+            </a>
+        </div>
+        <div class="topbar-logo"><img src="../image/page-logo.png"/></div>
+    </div>
+    <div class="handle">
+        <div class="handle-left">
+            <div class="handle-left-main">
+                <span class="handle-left-item">
+                    <i class="layui-icon">&#xe654;</i>
+                    <cite id="add" onclick="addConnectData()">添加连接</cite>
+                </span>
+                <span class="handle-left-item">
+                    <i class="layui-icon">&#xe666;</i>
+                    <cite id="get" onclick="getConnectData()">刷新连接</cite>
+                </span>
+                <span class="handle-left-item">
+                    <i class="layui-icon">&#xe642;</i>
+                    <cite id="upd" onclick="updConnectData()">编辑连接</cite>
+                </span>
+                <span class="handle-left-item">
+                    <i class="layui-icon">&#xe640;</i>
+                    <cite id="del" onclick="delConnectData()">移除连接</cite>
+                </span>
+                <span class="handle-left-item">
+                    <i class="layui-icon">&#xe631;</i>
+                    <cite id="del" onclick="setConnectData()">操作连接</cite>
+                </span>
+            </div>
+            <div class="handle-left-full">
+            </div>
+        </div>
+        <div class="handle-right" id="tableDiv">
+            <table id="dataList" lay-filter="dataList"></table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../plugin/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="../plugin/layui/layui.js"></script>
+<script type="text/javascript" src="../script/script.js"></script>
+<script type="text/javascript" src="../script/root.js"></script>
+</body>
+</html>

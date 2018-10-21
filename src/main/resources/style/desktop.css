@@ -1,7 +1,7 @@
 #main-view {
     -fx-border-width: 1;
     -fx-border-color: silver;
-
+    -fx-background-color: white;
 }
 
 #tops-view {
@@ -52,4 +52,24 @@
     -fx-cursor: hand;
     -fx-background-radius: 5px;
     -fx-background-color: #ECE9EF;
+}
+
+#ends-view {
+    -fx-border-width: 0;
+    -fx-background-color: #CFE6F3;
+}
+
+#ends-view-image {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: stretch stretch;
+    -fx-background-position: center center;
+    -fx-background-image: url('../image/conn-no.png');
+}
+
+#ends-view-title {
+
+}
+
+#ends-view-order {
+    -fx-text-alignment: right;
 }

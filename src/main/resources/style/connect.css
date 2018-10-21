@@ -1,0 +1,74 @@
+.handle-left {
+    height: 100%;
+    float: left;
+    width: 240px;
+}
+
+.handle-left-main {
+    height: 255px;
+    float: left;
+    width: 240px;
+    border-right: 1px solid silver;
+}
+
+.handle-left-full {
+    top: 325px;
+    left: 0px;
+    width: 240px;
+    bottom: 0px;
+    position: absolute;
+    border-right: 1px solid silver;
+}
+
+.handle-left-item {
+    color: #2F4056;
+    height: 50px;
+    display: block;
+    line-height: 50px;
+    border-bottom: 1px solid silver;
+}
+
+.handle-left-item i {
+    margin-left: 20px;
+}
+
+.handle-left-item cite {
+    margin-left: 5px;
+}
+
+.handle-left-item:hover {
+    background-color: #EEEDEF;
+}
+
+.handle-left-item cite:hover {
+    cursor: pointer;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 240px;
+}
+
+.layui-table-view {
+    margin: 0px;
+}
+
+.layui-table-tips-main {
+    display: none
+}
+
+.layui-table-tips-c {
+    display: none
+}
+
+.layui-table-click {
+    background-color: #CFE6F3;
+}
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: #CFE6F3;
+}
+
+
+
+
