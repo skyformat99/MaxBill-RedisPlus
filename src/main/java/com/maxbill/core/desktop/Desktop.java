@@ -47,6 +47,7 @@ public class Desktop extends Application {
     private boolean isBottom;
     //是否处于右下角调整窗口状态
     private boolean isBottomRight;
+    private WebView webView;
 
 
     @Override
@@ -127,8 +128,8 @@ public class Desktop extends Application {
      * 内容窗体
      */
     public VBox getBodyView() {
-        WebView webView = new WebView();
-        webView.setCache(false);
+        webView = new WebView();
+        webView.setCache(true);
         webView.setContextMenuEnabled(false);
         webView.setFontSmoothingType(FontSmoothingType.GRAY);
         WebEngine webEngine = webView.getEngine();
@@ -327,12 +328,14 @@ public class Desktop extends Application {
             winStage.setY(rectangle2d.getMinY());
             winStage.setWidth(rectangle2d.getWidth());
             winStage.setHeight(rectangle2d.getHeight());
+            webView.setPrefSize(rectangle2d.getWidth(), rectangle2d.getHeight());
         } else {
             // 缩放回原来的大小
             winStage.setX(x);
             winStage.setY(y);
             winStage.setWidth(width);
             winStage.setHeight(height);
+            webView.setPrefSize(width, height);
         }
     }
 

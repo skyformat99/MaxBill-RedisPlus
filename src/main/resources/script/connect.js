@@ -91,9 +91,9 @@ function addConnectData() {
         type: 2,
         area: ['455px', '445px'],
         fixed: true,
-        maxmin: false,
+        //maxmin: false,
         skin: 'layui-layer-lan',
-        content: basePath + '/root/save'
+        content: '../page/connect-save.html'
     });
 }
 
@@ -223,50 +223,6 @@ function setConnectData() {
         content: basePath + '/root/node?id=' + rowDataId
     });
 }
-
-/**
- * 导入连接
- */
-function impConnectData() {
-    layer.msg('正在导入连接数据操作');
-}
-
-/**
- * 导出连接
- */
-function expConnectData() {
-    var index = layer.confirm('确认导出连接？', {
-        btn: ['确定', '取消'],
-        skin: 'layui-layer-lan',
-        closeBtn: 0
-    }, function () {
-        var xhr = $.ajax({
-            type: "post",
-            url: basePath + '/api/connect/export',
-            timeout: 10000,
-            success: function (data) {
-                layer.close(index);
-                layer.open({
-                    content: data.msgs,
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            },
-            complete: function (XMLHttpRequest, status) {
-                //请求完成后最终执行参数
-                if (status == 'timeout') {
-                    //超时,status还有success,error等值的情况
-                    xhr.abort();
-                    layer.alert("请求超时，请检查网络连接", {
-                        skin: 'layui-layer-lan',
-                        closeBtn: 0
-                    });
-                }
-            }
-        });
-    });
-}
-
 
 /**
  * 打开连接数据

@@ -1,0 +1,103 @@
+<#assign ctx=springMacroRequestContext.contextPath/>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="${ctx}/plugin/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/styles/style.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/styles/edit.css"/>
+</head>
+<body>
+<input id="basePath" type="hidden" value="${ctx}"/>
+<input id="id" type="hidden" value="${data.id}"/>
+<input id="type" type="hidden" value="${data.type}"/>
+<input id="isha" type="hidden" value="${data.isha}"/>
+<div class="edit-root">
+    <form class="layui-form">
+        <div class="edit-main">
+            <div class="edit-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">连接名称:</label>
+                    <div class="layui-input-inline div-input01">
+                        <input type="text" class="layui-input" placeholder="连接名称" lay-verify="required" id="text"
+                               value="${data.text}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">连接地址:</label>
+                    <div class="layui-input-inline div-input02">
+                        <input type="text" class="layui-input" placeholder="连接地址" lay-verify="required" id="rhost"
+                               value="${data.rhost}">
+                    </div>
+                    <label class="layui-form-mid">:</label>
+                    <div class="layui-input-inline div-input03">
+                        <input type="text" class="layui-input" placeholder="连接端口" lay-verify="required" id="rport"
+                               value="${data.rport}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">连接密码:</label>
+                    <div class="layui-input-inline div-input01">
+                        <input type="password" class="layui-input" placeholder="连接密码" lay-verify="" id="rpass"
+                               value="${data.rpass}">
+                    </div>
+                </div>
+            </div>
+            <div class="edit-hide">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SSH通道:</label>
+                    <div class="layui-input-inline div-input04">
+                        <input name="type" lay-skin="primary" title="启用" type="checkbox" lay-filter="type" id="type">
+                    </div>
+                    <label class="layui-form-mid">集群：</label>
+                    <div class="layui-input-inline div-input05">
+                        <input name="isha" lay-skin="primary" title="启用" type="checkbox" lay-filter="isha" id="isha">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SSH用户:</label>
+                    <div class="layui-input-inline div-input01">
+                        <input type="text" class="layui-input ssh-input" placeholder="SSH用户" lay-verify="required"
+                               id="sname" value="${data.sname}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SSH地址:</label>
+                    <div class="layui-input-inline div-input02">
+                        <input type="text" class="layui-input ssh-input" placeholder="SSH地址" lay-verify="required"
+                               id="shost" value="${data.shost}">
+                    </div>
+                    <label class="layui-form-mid">:</label>
+                    <div class="layui-input-inline div-input03">
+                        <input type="text" class="layui-input ssh-input" placeholder="SSH端口" lay-verify="required"
+                               id="sport" value="${data.sport}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SSH密码:</label>
+                    <div class="layui-input-inline div-input01">
+                        <input type="password" class="layui-input ssh-input" placeholder="SSH密码" lay-verify="required"
+                               id="spass" value="${data.spass}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="edit-btns">
+            <input type="button" value="保存" class="layui-btn layui-btn-sm" lay-filter="saveBtn" lay-submit
+                   style="background: #4476A7"/>
+            <input type="button" id="backBtn" value="取消" class="layui-btn layui-btn-sm" style="background: #4476A7"/>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="${ctx}/plugin/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="${ctx}/plugin/layui/layui.js"></script>
+<script type="text/javascript" src="${ctx}/script/edit.js"></script>
+</body>
+</html>
