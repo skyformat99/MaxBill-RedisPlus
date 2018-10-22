@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -22,7 +21,6 @@ public class ConnectController {
     }
 
     public String insertConnect(String json) {
-        System.out.println(json);
         Map resultMap = new HashMap();
         try {
             JSONObject data = JSON.parseObject(json);
@@ -45,6 +43,50 @@ public class ConnectController {
             resultMap.put("msgs", "新增连接异常");
         }
         return JSON.toJSONString(resultMap);
+    }
+
+    public String updateConnect(String json) {
+        Map resultMap = new HashMap();
+        try {
+            JSONObject data = JSON.parseObject(json);
+            Connect connect = new Connect();
+            connect.setId(data.getString("id"));
+            connect.setText(data.getString("text"));
+            connect.setType(data.getString("type"));
+            connect.setIsha(data.getString("isha"));
+            connect.setRhost(data.getString("rhost"));
+            connect.setRport(data.getString("rport"));
+            connect.setRpass(data.getString("rpass"));
+            connect.setShost(data.getString("shost"));
+            connect.setSport(data.getString("sport"));
+            connect.setSpass(data.getString("sname"));
+            connect.setSpass(data.getString("spass"));
+            this.dataService.updateConnect(connect);
+            resultMap.put("code", 200);
+            resultMap.put("msgs", "修改连接成功");
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "修改连接异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
+
+    public String deleteConnect(String id) {
+        Map resultMap = new HashMap();
+        try {
+            this.dataService.deleteConnectById(id);
+            resultMap.put("code", 200);
+            resultMap.put("msgs", "删除连接成功");
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "删除连接异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
+    public String querysConnect(String id) {
+        return JSON.toJSONString(this.dataService.selectConnectById(id));
     }
 
 }

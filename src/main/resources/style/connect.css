@@ -37,6 +37,7 @@
 }
 
 .handle-left-item:hover {
+    cursor: pointer;
     background-color: #EEEDEF;
 }
 

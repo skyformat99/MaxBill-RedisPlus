@@ -346,6 +346,7 @@ public class Desktop extends Application {
     public void doWinClose(Stage winStage) {
         winStage.close();
         Platform.exit();
+        System.exit(0);
     }
 
 }

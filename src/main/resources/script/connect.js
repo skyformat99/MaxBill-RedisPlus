@@ -1,18 +1,13 @@
 var $;
 var layer;
-var table;
-var basePath;
+var tableObj;
 var rowDataId;
-// $(document).ready(function(){
-//     //do something
-// });
-layui.use(['jquery', 'table', 'layer', 'upload'], function () {
+layui.use(['jquery', 'table', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;
-    table = layui.table;
-    var data=connectRouter.selectConnect();
+    var data = connectRouter.selectConnect();
     //加载连接数据
-    table.render({
+    tableObj = layui.table.render({
         id: 'dataList',
         elem: '#dataList',
         height: 'full-70',
@@ -54,6 +49,7 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
         ]],
         page: true,
         done: function (res) {
+            layer.msg('双击行连接服务!');
             var tbody = $('#tableDiv').find('.layui-table-body').find("table").find("tbody");
             //单击行选中数据
             tbody.children("tr").on('click', function () {
@@ -67,42 +63,33 @@ layui.use(['jquery', 'table', 'layer', 'upload'], function () {
                 var obj = res.data[id];
                 openConnect(obj.id);
             });
-            //悬浮提示信息
-            /*
-            tbody.children("tr").on('mouseover', function () {
-                layer.tips('双击行连接服务...', this, {
-                    tips: [3, '#3595CC'],
-                    time: 1000
-                });
-            });
-            */
             rowDataId = '';
         }
     });
-
 });
 
-/**
- * 添加连接数据
- */
+/**添加连接数据*/
 function addConnectData() {
     layer.open({
         title: '新增连接',
         type: 2,
         area: ['455px', '445px'],
         fixed: true,
-        //maxmin: false,
+        maxmin: false,
+        resize: false,
         skin: 'layui-layer-lan',
         content: '../page/connect-save.html'
     });
 }
 
-/**
- * 刷新连接列表
- */
+/**刷新连接列表*/
 function getConnectData() {
     layer.load(2);
-    table.reload("dataList", {
+    var data = connectRouter.selectConnect();
+    tableObj.reload({
+        height: 'full-70',
+        data: JSON.parse(data),
+        page: {curr: 1},
         done: function (res) {
             var tbody = $('#tableDiv').find('.layui-table-body').find("table").find("tbody");
             //单击行选中数据
@@ -117,30 +104,16 @@ function getConnectData() {
                 var obj = res.data[id];
                 openConnect(obj.id);
             });
-            //悬浮提示信息
-            /*
-            tbody.children("tr").on('mouseover', function () {
-                layer.tips('双击行连接服务...', this, {
-                    tips: [3, '#3595CC'],
-                    time: 1000
-                });
-            });
-            */
             rowDataId = '';
             layer.closeAll('loading');
         }
     });
 }
 
-/**
- * 编辑连接数据
- */
+/**编辑连接数据*/
 function updConnectData() {
     if (rowDataId == "" || rowDataId == null) {
-        layer.alert("请选择要操作的数据行！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+        layer.msg('请选择要操作的数据行！');
         return false;
     }
     layer.open({
@@ -149,20 +122,16 @@ function updConnectData() {
         area: ['455px', '445px'],
         fixed: true,
         maxmin: false,
+        resize: false,
         skin: 'layui-layer-lan',
-        content: basePath + '/root/edit?id=' + rowDataId
+        content: '../page/connect-edit.html'
     });
 }
 
-/**
- * 删除连接数据
- */
+/**删除连接数据*/
 function delConnectData() {
     if (rowDataId == "" || rowDataId == null) {
-        layer.alert("请选择要操作的数据行！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+        layer.msg('请选择要操作的数据行！');
         return false;
     }
     var index = layer.confirm('确认删除连接？', {
@@ -170,47 +139,25 @@ function delConnectData() {
         skin: 'layui-layer-lan',
         closeBtn: 0
     }, function () {
-        var xhr = $.ajax({
-            type: "post",
-            url: basePath + '/api/connect/delete',
-            data: {"id": rowDataId},
-            timeout: 10000,
-            success: function (data) {
-                layer.close(index);
-                if (data.code == 200) {
-                    getConnectData();
-                } else {
-                    layer.alert(data.msgs, {
-                        skin: 'layui-layer-lan',
-                        closeBtn: 0
-                    });
-                }
-            },
-            complete: function (XMLHttpRequest, status) {
-                //请求完成后最终执行参数
-                if (status == 'timeout') {
-                    //超时,status还有success,error等值的情况
-                    xhr.abort();
-                    layer.alert("请求超时，请检查网络连接", {
-                        skin: 'layui-layer-lan',
-                        closeBtn: 0
-                    });
-                }
-            }
-        });
+        var resultJson = parent.connectRouter.deleteConnect(rowDataId)
+        var result = JSON.parse(resultJson);
+        layer.close(index);
+        if (result.code == 200) {
+            getConnectData();
+        } else {
+            layer.alert(result.msgs, {
+                skin: 'layui-layer-lan',
+                closeBtn: 0
+            });
+        }
     });
 }
 
 
-/**
- * 操作连接数据
- */
+/**操作连接数据*/
 function setConnectData() {
     if (rowDataId == "" || rowDataId == null) {
-        layer.alert("请选择要操作的数据行！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+        layer.msg('请选择要操作的数据行！');
         return false;
     }
     layer.open({
@@ -224,9 +171,7 @@ function setConnectData() {
     });
 }
 
-/**
- * 打开连接数据
- */
+/**打开连接数据*/
 function openConnect(id) {
     var result = 0;
     layer.load(2);
