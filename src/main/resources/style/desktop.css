@@ -60,14 +60,13 @@
 }
 
 #ends-view-image {
+    -fx-min-width: 16;
+    -fx-max-width: 16;
+    -fx-min-height: 16;
+    -fx-max-height: 16;
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
-    -fx-background-image: url('../image/conn-no.png');
-}
-
-#ends-view-title {
-
 }
 
 #ends-view-order {

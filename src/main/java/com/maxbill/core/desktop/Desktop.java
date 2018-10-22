@@ -13,14 +13,14 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -47,17 +47,19 @@ public class Desktop extends Application {
     private boolean isBottom;
     //是否处于右下角调整窗口状态
     private boolean isBottomRight;
-    private WebView webView;
+    private static WebView webView;
+    private static BorderPane mainView;
 
 
     @Override
     public void start(Stage winStage) throws Exception {
         winStage.setTitle("RedisPlus");
         winStage.initStyle(StageStyle.TRANSPARENT);
-        BorderPane mainView = getMainView(winStage);
+        mainView = getMainView(winStage);
         winStage.setScene(new Scene(mainView, minWidth, minHeight));
         winStage.getIcons().add(new Image(ItemUtil.DESKTOP_TASK_LOGO));
         doWinStage(winStage);
+        doWinRaise(winStage);
         doWinState(winStage, mainView);
         winStage.show();
     }
@@ -142,14 +144,13 @@ public class Desktop extends Application {
                 JSObject jsObject = (JSObject) webEngine.executeScript("window");
                 ConnectController connectController = MainApplication.context.getBean(ConnectController.class);
                 jsObject.setMember("connectRouter", connectController);
-                System.out.println("页面加载成功");
             }
         });
         return new VBox(webView);
     }
 
     /**
-     * 内容窗体
+     * 底部窗体
      */
     public GridPane getEndsView() {
         GridPane endsView = new GridPane();
@@ -160,8 +161,8 @@ public class Desktop extends Application {
         Label endOther = new Label();
         Label endOrder = new Label();
         endTitle.setMinWidth(200.00);
-        endTitle.setText(ItemUtil.DESKTOP_STATUS_NO);
         endOrder.setMinWidth(80.00);
+        endTitle.setText(ItemUtil.DESKTOP_STATUS_NO);
         endOrder.setText(ItemUtil.DESKTOP_VERSION);
         endImage.setId("ends-view-image");
         endTitle.setId("ends-view-title");
@@ -177,6 +178,9 @@ public class Desktop extends Application {
         endsView.add(endOrder, 3, 0);
         endsView.setPadding(new Insets(3));
         endsView.setAlignment(Pos.BASELINE_RIGHT);
+        endTitle.setTextFill(Paint.valueOf("red"));
+        endOrder.setTextFill(Paint.valueOf("#1766A2"));
+        endImage.setGraphic(new ImageView(new Image(ItemUtil.DESKTOP_STATUS_IMAGE_NO)));
         GridPane.setHgrow(endTitle, Priority.ALWAYS);
         return endsView;
     }
@@ -330,12 +334,19 @@ public class Desktop extends Application {
             winStage.setHeight(rectangle2d.getHeight());
             webView.setPrefSize(rectangle2d.getWidth(), rectangle2d.getHeight());
         } else {
-            // 缩放回原来的大小
-            winStage.setX(x);
-            winStage.setY(y);
-            winStage.setWidth(width);
-            winStage.setHeight(height);
-            webView.setPrefSize(width, height);
+            if (x == 0 && y == 0 && width == 0 && height == 0) {
+                winStage.setWidth(minWidth);
+                winStage.setHeight(minHeight);
+                winStage.centerOnScreen();
+                webView.setPrefSize(minWidth, minHeight);
+            } else {
+                // 缩放回原来的大小
+                winStage.setX(x);
+                winStage.setY(y);
+                winStage.setWidth(width);
+                winStage.setHeight(height);
+                webView.setPrefSize(width, height);
+            }
         }
     }
 
@@ -347,6 +358,35 @@ public class Desktop extends Application {
         winStage.close();
         Platform.exit();
         System.exit(0);
+    }
+
+    public static Node getTopsBar(String id) {
+        Node node = mainView.getCenter();
+        return node.lookup("#" + id);
+    }
+
+    public static Node getEndsBar(String id) {
+        Node node = mainView.getBottom();
+        return node.lookup("#" + id);
+    }
+
+
+    public static void setEndsViewTitle(String msg, String type) {
+        Label label = (Label) getEndsBar("ends-view-title");
+        label.setText(msg);
+        switch (type) {
+            case "no":
+                label.setTextFill(Paint.valueOf("red"));
+                break;
+            case "ok":
+                label.setTextFill(Paint.valueOf("green"));
+                break;
+        }
+    }
+
+    public static void setEndsViewImage(String src) {
+        Label label = (Label) getEndsBar("ends-view-image");
+        label.setGraphic(new ImageView(new Image(src)));
     }
 
 }
