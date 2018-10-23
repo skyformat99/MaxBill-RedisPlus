@@ -1,7 +1,6 @@
 package com.maxbill.core.desktop;
 
 import com.maxbill.MainApplication;
-import com.maxbill.base.controller.ConnectController;
 import com.maxbill.base.controller.OtherController;
 import com.maxbill.tool.ItemUtil;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -78,7 +77,7 @@ public class AlertBox {
             case "设置":
                 imgSrc = "/image/top-menu01.png";
                 break;
-            case "建议":
+            case "反馈":
                 imgSrc = "/image/top-menu04.png";
                 break;
             case "关于":
@@ -107,7 +106,7 @@ public class AlertBox {
             case "设置":
                 htmlSrc = ItemUtil.ALERT_BOX_SETTING;
                 break;
-            case "建议":
+            case "反馈":
                 htmlSrc = ItemUtil.ALERT_BOX_ADVICE;
                 break;
             case "关于":
