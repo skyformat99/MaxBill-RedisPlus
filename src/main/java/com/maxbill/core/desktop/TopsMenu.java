@@ -21,13 +21,13 @@ public class TopsMenu extends ContextMenu {
         menuItem01.setText("  设置");
         menuItem01.setGraphic(new ImageView(new Image("/image/top-menu01.png")));
         MenuItem menuItem02 = new MenuItem();
-        menuItem02.setText("  帮助");
+        menuItem02.setText("  反馈");
         menuItem02.setGraphic(new ImageView(new Image("/image/top-menu02.png")));
         MenuItem menuItem03 = new MenuItem();
-        menuItem03.setText("  社区");
+        menuItem03.setText("  帮助");
         menuItem03.setGraphic(new ImageView(new Image("/image/top-menu03.png")));
         MenuItem menuItem04 = new MenuItem();
-        menuItem04.setText("  反馈");
+        menuItem04.setText("  版本");
         menuItem04.setGraphic(new ImageView(new Image("/image/top-menu04.png")));
         MenuItem menuItem05 = new MenuItem();
         menuItem05.setText("  关于");
@@ -45,13 +45,13 @@ public class TopsMenu extends ContextMenu {
             new AlertBox().display("设置");
         });
         menuItem02.setOnAction(event -> {
-            DesktopUtil.openBrowse(ItemUtil.ALERT_BOX_HELP);
+            new AlertBox().display("反馈");
         });
         menuItem03.setOnAction(event -> {
-            DesktopUtil.openBrowse(ItemUtil.ALERT_BOX_TEAM);
+            new AlertBox().display("帮助");
         });
         menuItem04.setOnAction(event -> {
-            new AlertBox().display("反馈");
+            new AlertBox().display("版本");
         });
         menuItem05.setOnAction(event -> {
             new AlertBox().display("关于");

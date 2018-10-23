@@ -78,7 +78,13 @@ public class AlertBox {
                 imgSrc = "/image/top-menu01.png";
                 break;
             case "反馈":
-                imgSrc = "/image/top-menu04.png";
+                imgSrc = "/image/top-menu02.png";
+                break;
+            case "帮助":
+                imgSrc = "/image/top-menu03.png";
+                break;
+            case "版本":
+                imgSrc = "/image/top-menu03.png";
                 break;
             case "关于":
                 imgSrc = "/image/top-menu05.png";
@@ -108,6 +114,12 @@ public class AlertBox {
                 break;
             case "反馈":
                 htmlSrc = ItemUtil.ALERT_BOX_ADVICE;
+                break;
+            case "帮助":
+                htmlSrc = ItemUtil.ALERT_BOX_HELP;
+                break;
+            case "版本":
+                htmlSrc = ItemUtil.ALERT_BOX_VERSION;
                 break;
             case "关于":
                 htmlSrc = ItemUtil.ALERT_BOX_ABOUT;
