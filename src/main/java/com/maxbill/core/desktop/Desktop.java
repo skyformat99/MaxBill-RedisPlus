@@ -61,6 +61,8 @@ public class Desktop extends Application {
         doWinStage(winStage);
         doWinRaise(winStage);
         doWinState(winStage, mainView);
+        winStage.setAlwaysOnTop(false);
+        winStage.centerOnScreen();
         winStage.show();
     }
 

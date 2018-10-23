@@ -53,10 +53,10 @@ function loadPageData() {
     $("#rport").val(connect.rport);
     $("#rpass").val(connect.rpass);
     if (connect.type == '1') {
-        $("#sname").val();
-        $("#shost").val();
-        $("#sport").val();
-        $("#spass").val();
+        $("#sname").val(connect.sname);
+        $("#shost").val(connect.shost);
+        $("#sport").val(connect.sport);
+        $("#spass").val(connect.spass);
     }
 }
 
