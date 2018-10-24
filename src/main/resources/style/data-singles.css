@@ -1,0 +1,217 @@
+.handle-left {
+    height: 100%;
+    float: left;
+    width: 400px;
+    overflow: hidden;
+    border-right: 1px solid silver;
+}
+
+.handle-left-main {
+    height: 50px;
+    float: left;
+    width: 400px;
+    border-right: 1px solid silver;
+    border-bottom: 1px solid silver;
+}
+
+.handle-left-full {
+    top: 120px;
+    left: 0px;
+    float: left;
+    width: 400px;
+    bottom: 0px;
+    position: absolute;
+    overflow-y: auto;
+    border-right: 1px solid silver;
+}
+
+.key-like {
+    width: 99.8%;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 8px;
+    margin-right: 17px;
+    border: #eaeaea 1px solid;
+}
+
+.query-like-input {
+    float: left;
+    margin-top: 11px;
+    border-radius: 3px;
+    padding-left: 10px;
+    width: 303px !important;
+    height: 28px !important;
+    border: 1px solid silver;
+}
+
+.query-like-button {
+    width: 67px !important;
+    margin-left: 1px !important;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 400px;
+}
+
+.handle-right-main {
+    height: 190px;
+    width: 100%;
+}
+
+.handle-right-full {
+    top: 260px;
+    left: 400px;
+    right: 0px;
+    bottom: 0px;
+    overflow-y: auto;
+    position: absolute;
+}
+
+.key-deal {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 auto;
+    padding: 10px;
+    border-bottom: silver 1px solid;
+}
+
+.key-info {
+    margin: 0 auto;
+    padding: 10px;
+}
+
+.key-view {
+    width: 100%;
+    height: 40px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #CFE6F3;
+}
+
+.key-vals-show {
+    height: auto;
+    line-height: 25px;
+    padding: 15px;
+    display: block;
+    word-wrap: break-word;
+}
+
+.key-vals-hide {
+    display: none;
+}
+
+.layui-table {
+    width: 99.8%;
+    margin: 0 auto;
+}
+
+.layui-table tbody tr:hover, .layui-table-hover {
+    background-color: #FFFFFF;
+}
+
+.layui-layer-lan {
+    width: 280px;
+}
+
+.layui-layer-dialog .layui-layer-content {
+    position: relative;
+    padding: 20px;
+    line-height: 24px;
+    word-break: break-all;
+    overflow: hidden;
+    font-size: 14px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.my-layui-col {
+    padding-left: 15px;
+}
+
+.layui-layer-content .layui-layer-input {
+    display: block;
+    width: 230px;
+    height: 36px;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    line-height: 30px;
+    padding-left: 10px;
+    border: 1px solid #e6e6e6;
+    color: #333;
+}
+
+.query-input {
+    float: left;
+    margin-top: 11px;
+    border-radius: 3px;
+    padding-left: 10px;
+    height: 28px !important;
+    border: 1px solid silver;
+}
+
+.query-button {
+    margin-left: 1px !important;
+}
+
+.ztree li span.button.firstPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -16px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.prevPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -48px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.nextPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -64px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.lastPage {
+    float: right;
+    margin-left: 2px;
+    margin-right: 0;
+    background-position: -144px -32px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree .level1 {
+    margin-top: 5px !important;
+}
+
+.ztree li a:hover {
+    color: #009E94;
+}
+
+.key-vals-textarea {
+    min-height: 220px;
+    height: 220px !important;
+    resize: none !important;
+}
+
+.key-vals-tool {
+    margin-bottom: 2px;
+    margin-left: 1px;
+}
+
+.data-table-box {
+    height: 383px;
+    overflow-y: auto;
+}

@@ -16,10 +16,14 @@ layui.use(['jquery', 'form', 'layer'], function () {
     layer = layui.layer;
     form = layui.form;
     connect = JSON.parse(parent.connectRouter.querysConnect(parent.rowDataId));
-    flag = parent.connectRouter.isopenConnect(connect.isha);
+    flag = parent.connectRouter.isopenConnect();
     $("#name").text(connect.text);
     $("#addr").text(connect.rhost + ":" + connect.rport);
-    $("#isha").text(connect.isha);
+    if (connect.isha == 1) {
+        $("#isha").text("集群模式");
+    } else {
+        $("#isha").text("单机模式");
+    }
     if (flag === 1) {
         $("#shutBtn").val("断开");
         if (connect.isha === "1") {

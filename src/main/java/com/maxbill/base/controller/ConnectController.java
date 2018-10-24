@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.service.DataService;
+import com.maxbill.core.desktop.Desktop;
 import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -183,22 +184,51 @@ public class ConnectController {
     /**
      * 检测连接状态
      */
-    public Integer isopenConnect(String isha) {
-        if (isha.equals("0")) {
-            Object jedis = DataUtil.getConfig("currentJedisObject");
-            if (null != jedis) {
-                return 1;
+    public Integer isopenConnect() {
+        Connect connect = (Connect) DataUtil.getConfig("currentOpenConnect");
+        if (null != connect) {
+            if (connect.getIsha().equals("0")) {
+                Object jedis = DataUtil.getConfig("currentJedisObject");
+                if (null != jedis) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             } else {
-                return 0;
+                Object jedisCluster = DataUtil.getConfig("jedisClusterObject");
+                if (null != jedisCluster) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
         } else {
-            Object jedisCluster = DataUtil.getConfig("jedisClusterObject");
-            if (null != jedisCluster) {
-                return 1;
-            } else {
-                return 0;
-            }
+            return 0;
         }
+    }
+
+    public void changeWebview(int pageNo) {
+        switch (pageNo) {
+            case 1:
+                Desktop.setWebViewPage(ItemUtil.PAGE_CONNECT);
+                break;
+            case 2:
+                Connect connect = (Connect) DataUtil.getConfig("currentOpenConnect");
+                if (connect.getIsha().equals("0")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_DATA_SINGLES);
+                }
+                if (connect.getIsha().equals("1")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_DATA_CLUSTER);
+                }
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
+
     }
 
 }

@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%
+}
+
+body {
+    background-image: url("../image/error01.png");
+}
+
+#wrapper {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    position: relative;
+    min-width: 320px
+}
+
+#wrapper .fluid {
+    width: 100%
+}
+
+#error-wrapper {
+    width: 320px;
+    padding: 30px 0;
+    margin: auto;
+    position: relative
+}
+
+#error-wrapper #error-root {
+    width: 38px;
+    height: 38px;
+    z-index: 10;
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -27px;
+    background: url("../image/error02.png") no-repeat center center
+}
+
+#error-wrapper #error-code {
+    width: 285px;
+    height: 170px;
+    padding: 127px 16px 0 16px;
+    position: relative;
+    margin: auto;
+    z-index: 5;
+    line-height: 1;
+    font-size: 32px;
+    text-align: center;
+    background: url("../image/error03.png") no-repeat center center;
+    -webkit-transform-origin: center top;
+    -moz-transform-origin: center top;
+    transform-origin: center top;
+    -webkit-animation: error-swing infinite 2s ease-in-out alternate;
+    -moz-animation: error-swing infinite 2s ease-in-out alternate;
+    animation: error-swing infinite 2s ease-in-out alternate
+}
+
+#error-wrapper #error-code span {
+    font-size: 95px;
+    display: block
+}
+
+#error-wrapper #error-msgs {
+    color: #e15656;
+    text-align: center;
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+#error-wrapper #error-text {
+    color: #4E5465;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+#error-wrapper #error-back {
+    text-align: center;
+}
+
+#error-wrapper #error-back a {
+    width: 80px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+    color: #fff;
+    background: #a6d037;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -o-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+@-webkit-keyframes error-swing {
+    0% {
+        -webkit-transform: rotate(1deg)
+    }
+    100% {
+        -webkit-transform: rotate(-2deg)
+    }
+}
+
+@-moz-keyframes error-swing {
+    0% {
+        -moz-transform: rotate(1deg)
+    }
+    100% {
+        -moz-transform: rotate(-2deg)
+    }
+}
+
+@keyframes error-swing {
+    0% {
+        transform: rotate(1deg)
+    }
+    100% {
+        transform: rotate(-2deg)
+    }
+}
+

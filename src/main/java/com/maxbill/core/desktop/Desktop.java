@@ -2,6 +2,8 @@ package com.maxbill.core.desktop;
 
 import com.maxbill.MainApplication;
 import com.maxbill.base.controller.ConnectController;
+import com.maxbill.base.controller.DataClusterController;
+import com.maxbill.base.controller.DataSinglesController;
 import com.maxbill.tool.ItemUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -48,6 +50,7 @@ public class Desktop extends Application {
     //是否处于右下角调整窗口状态
     private boolean isBottomRight;
     private static WebView webView;
+    private static WebEngine webEngine;
     private static BorderPane mainView;
 
 
@@ -136,16 +139,21 @@ public class Desktop extends Application {
         webView.setCache(true);
         webView.setContextMenuEnabled(false);
         webView.setFontSmoothingType(FontSmoothingType.GRAY);
-        WebEngine webEngine = webView.getEngine();
+        webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
-        String utl = Desktop.class.getResource("/page/connect.html").toExternalForm();
+        String utl = Desktop.class.getResource(ItemUtil.PAGE_CONNECT).toExternalForm();
         webEngine.load(utl);
         ReadOnlyObjectProperty<Worker.State> woker = webEngine.getLoadWorker().stateProperty();
         woker.addListener((obs, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
                 JSObject jsObject = (JSObject) webEngine.executeScript("window");
                 ConnectController connectController = MainApplication.context.getBean(ConnectController.class);
+                DataSinglesController dataSinglesController = MainApplication.context.getBean(DataSinglesController.class);
+                DataClusterController dataClusterController = MainApplication.context.getBean(DataClusterController.class);
                 jsObject.setMember("connectRouter", connectController);
+                jsObject.setMember("dataSinglesRouter", dataSinglesController);
+                jsObject.setMember("dataClusterRouter", dataClusterController);
+                System.out.println("current page is " + webEngine.getLocation());
             }
         });
         return new VBox(webView);
@@ -389,6 +397,11 @@ public class Desktop extends Application {
     public static void setEndsViewImage(String src) {
         Label label = (Label) getEndsBar("ends-view-image");
         label.setGraphic(new ImageView(new Image(src)));
+    }
+
+    public static void setWebViewPage(String url) {
+        String utl = Desktop.class.getResource(url).toExternalForm();
+        webEngine.load(utl);
     }
 
 }

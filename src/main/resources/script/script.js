@@ -1,7 +1,3 @@
-var $;
-var layer;
-var basePath;
-
 document.oncontextmenu = function () {
     return false;
 };
@@ -9,36 +5,53 @@ document.onselectstart = function () {
     return false;
 };
 
-layui.use(['jquery', 'layer'], function () {
-    $ = layui.jquery;
-    layer = layui.layer;
-    basePath = $("#basePath").val();
-    //动态计算handle高度
-    // var clientHeight = $(document).height();
-    // var handleHeight = clientHeight - 100;
-    // $(".handle").height(handleHeight);
-});
-
-
-function toPage(page) {
-    if (page == 'root' || page == 'book'|| page == 'self') {
-        window.location.href = basePath + '/' + page;
-    } else {
-        $.ajax({
-            type: "post",
-            url: basePath + '/api/connect/isopen',
-            timeout: 10000,
-            async: false,
-            success: function (data) {
-                if (data == 1) {
-                    window.location.href = basePath + '/' + page;
-                } else {
-                    layer.alert('请先连接一个可用的服务！', {
-                        skin: 'layui-layer-lan',
-                        closeBtn: 0
-                    });
-                }
-            }
+function toPage(flag, page) {
+    var isOpen = connectRouter.isopenConnect();
+    if (flag === 1 && isOpen === 0) {
+        layer.alert('请先连接一个可用的服务！', {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
         });
+        return false;
     }
+    connectRouter.changeWebview(page);
+}
+
+function toPageBack(flag, page) {
+    layer.load(2);
+    var connect = JSON.parse(connectRouter.querysConnect(rowDataId));
+    var isOpen = connectRouter.isopenConnect();
+    layer.closeAll('loading');
+    if (flag === 1 && isOpen === 0) {
+        layer.alert('请先连接一个可用的服务！', {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    var src = '../page/';
+    switch (page) {
+        case 1:
+            src = src + 'connect.html';
+            break;
+        case 2:
+            if (connect.isha === '0') {
+                src = src + 'data-singles.html';
+            }
+            if (connect.isha === '1') {
+                src = src + 'data-cluster.html';
+            }
+            layer.msg(src);
+            break;
+        case 3:
+            src = src + 'infobox.html';
+            break;
+        case 4:
+            src = src + 'configs.html';
+            break;
+        case 5:
+            src = src + 'monitor.html';
+            break;
+    }
+    window.location.href = src;
 }

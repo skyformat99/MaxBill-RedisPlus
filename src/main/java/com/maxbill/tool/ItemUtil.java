@@ -16,6 +16,9 @@ public class ItemUtil {
     public static final String ALERT_BOX_VERSION = "/page/alert-version.html";
     public static final String ALERT_BOX_ADVICE = "/page/alert-advice.html";
     public static final String ALERT_BOX_ABOUT = "/page/alert-about.html";
+    public static final String PAGE_CONNECT = "/page/connect.html";
+    public static final String PAGE_DATA_SINGLES = "/page/data-singles.html";
+    public static final String PAGE_DATA_CLUSTER = "/page/data-cluster.html";
 
 
 }
