@@ -198,11 +198,10 @@ function keydownLoadTree() {
 //模糊匹配
 function loadLikeTree() {
     if (null == currNode0) {
-        layer.alert("请选择一个要操作的库！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
-        return false;
+        var zTreeObj = $.fn.zTree.getZTreeObj("keyTree0");
+        currNode0 = zTreeObj.getNodesByFilter(function (node) {
+            return node.level === 0
+        }, true);
     }
     layer.load(2);
     var pattern = $("#key-like-input").val();
@@ -211,12 +210,10 @@ function loadLikeTree() {
     layer.closeAll('loading');
     if (data.code === 200) {
         var ztreeObj = $.fn.zTree.init($("#keyTree" + currNode0.index), zTreeSetting, data.data);
-        currNode0 = ztreeObj.getNodeByTId(data.data.id);
-        loadDbData(currNode0.index, pattern);
-        //增加默认选中样式
-        //$("#keyTree" + currIndex + "_1_a").addClass("curSelectedNode");
-        //展开默认库
-        $("#keyTree" + currIndex + "_1_switch").click();
+        currNode0 = ztreeObj.getNodesByFilter(function (node) {
+            return node.level === 0
+        }, true);
+        loadDbData(currNode0, pattern);
     } else {
         layer.alert(data.msgs, {
             skin: 'layui-layer-lan',
@@ -227,64 +224,87 @@ function loadLikeTree() {
 
 //重命名key
 function renameKey() {
-    if (currKey == "" || currKey == null) {
+    if (null === currNode1) {
         layer.alert("请选择要操作的key！", {
             skin: 'layui-layer-lan',
             closeBtn: 0
         });
         return false;
     }
-    layer.prompt(
-        {
-            title: '输入新的key',
-            formType: 3,
-            value: currKey,
-            skin: 'layui-layer-lan',
-            closeBtn: 0,
-        },
-        function (text, index) {
-            var xhr = $.ajax({
-                type: "post",
-                url: basePath + "/api/data/renameKey",
-                data: {
-                    'oldKey': currKey,
-                    'newKey': text,
-                    'index': currIndex
-                },
-                timeout: 10000,
-                async: false,
-                success: function (data) {
-                    layer.close(index);
-                    if (data.code == 200) {
-                        currKey = text;
-                        getKeyInfo();
-                        loadKeyTree();
-                    } else {
-                        layer.alert(data.msgs, {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                },
-                complete: function (XMLHttpRequest, status) {
-                    //请求完成后最终执行参数
-                    if (status == 'timeout') {
-                        xhr.abort();
-                        //超时,status还有success,error等值的情况
-                        layer.alert("请求超时，请检查网络连接", {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                }
+    layer.prompt({
+        title: '输入新的key',
+        formType: 3,
+        value: currNode1.name,
+        skin: 'layui-layer-lan',
+        closeBtn: 0,
+    }, function (text, index) {
+        layer.load(2);
+        var json = dataSinglesRouter.renameKey(currNode0.index, currNode1.name, text);
+        var data = JSON.parse(json);
+        layer.closeAll('loading');
+        layer.close(index);
+        if (data.code === 200) {
+            currNode1.name = text;
+            var zTreeObj = $.fn.zTree.getZTreeObj("keyTree" + currNode0.index);
+            zTreeObj.updateNode(currNode1);
+            layer.msg(data.msgs);
+            getKeysInfo();
+        } else {
+            layer.alert(data.msgs, {
+                skin: 'layui-layer-lan',
+                closeBtn: 0
             });
         }
-    );
+    });
 }
+
+
+//设置key的失效时间
+function retimeKey() {
+    if (null === currNode1) {
+        layer.alert("请选择要操作的key！", {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+        return false;
+    }
+    layer.prompt({
+        title: '输入TTL的值',
+        formType: 3,
+        value: -1,
+        skin: 'layui-layer-lan',
+        closeBtn: 0,
+    }, function (text, index) {
+        if (text == -1) {
+            layer.close(index);
+            return;
+        }
+        var checkFlag = /^(0|[1-9][0-9]*)$/.test(text);
+        if (!checkFlag) {
+            layer.msg('只能输入整数值');
+            return;
+        }
+        layer.load(2);
+        var json = dataSinglesRouter.retimeKey(currNode0.index, currNode1.name, text);
+        var data = JSON.parse(json);
+        layer.closeAll('loading');
+        layer.close(index);
+        if (data.code === 200) {
+            getKeysInfo();
+            layer.msg(data.msgs);
+        } else {
+            layer.alert(data.msgs, {
+                skin: 'layui-layer-lan',
+                closeBtn: 0
+            });
+        }
+    });
+}
+
 
 //删除key
 function deleteKey() {
-    if (currKey == "" || currKey == null) {
+    if (null === currNode1) {
         layer.alert("请选择要操作的key！", {
             skin: 'layui-layer-lan',
             closeBtn: 0
@@ -296,123 +316,40 @@ function deleteKey() {
         skin: 'layui-layer-lan',
         closeBtn: 0
     }, function () {
-        var xhr = $.ajax({
-            type: "post",
-            url: basePath + "/api/data/deleteKey",
-            data: {
-                'key': currKey,
-                'index': currIndex
-            },
-            timeout: 10000,
-            async: false,
-            success: function (data) {
-                layer.close(index);
-                if (data.code == 200) {
-                    currKey = "";
-                    currKey = "";
-                    loadKeyTree();
-                    $("#key").text("");
-                    $("#type").text("");
-                    $("#size").text("");
-                    $("#ttl").text("");
-                    $("#value").text("");
-                } else {
-                    layer.alert(data.msgs, {
-                        skin: 'layui-layer-lan',
-                        closeBtn: 0
-                    });
-                }
-            },
-            complete: function (XMLHttpRequest, status) {
-                //请求完成后最终执行参数
-                if (status == 'timeout') {
-                    //超时,status还有success,error等值的情况
-                    xhr.abort();
-                    layer.alert("请求超时，请检查网络连接", {
-                        skin: 'layui-layer-lan',
-                        closeBtn: 0
-                    });
-                }
-            }
-        });
+        layer.load(2);
+        var json = dataSinglesRouter.deleteKey(currNode0.index, currNode1.name);
+        var data = JSON.parse(json);
+        layer.closeAll('loading');
+        layer.close(index);
+        if (data.code === 200) {
+            var zTreeObj = $.fn.zTree.getZTreeObj("keyTree" + currNode0.index);
+            zTreeObj.removeNode(currNode1);
+            currNode1 = null;
+            $("#key").text("");
+            $("#type").text("");
+            $("#size").text("");
+            $("#ttl").text("");
+            $("#value").text("");
+            layer.msg(data.msgs);
+        } else {
+            layer.alert(data.msgs, {
+                skin: 'layui-layer-lan',
+                closeBtn: 0
+            });
+        }
     });
 }
 
 //重新加载key
 function reloadKey() {
-    if (currKey == "" || currKey == null) {
+    if (null === currNode1) {
         layer.alert("请选择要操作的key！", {
             skin: 'layui-layer-lan',
             closeBtn: 0
         });
         return false;
     }
-    getKeyInfo();
-}
-
-//设置key的失效时间
-function retimeKey() {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
-        return false;
-    }
-    layer.prompt(
-        {
-            title: '输入TTL的值',
-            formType: 3,
-            value: -1,
-            skin: 'layui-layer-lan',
-            closeBtn: 0,
-        },
-        function (text, index) {
-            if (text == -1) {
-                layer.close(index);
-                return;
-            }
-            var checkFlag = /^(0|[1-9][0-9]*)$/.test(text);
-            if (!checkFlag) {
-                layer.msg('只能输入整数值');
-                return;
-            }
-            var xhr = $.ajax({
-                type: "post",
-                url: basePath + "/api/data/retimeKey",
-                data: {
-                    'key': currKey,
-                    'time': text,
-                    'index': currIndex
-                },
-                timeout: 10000,
-                async: false,
-                success: function (data) {
-                    layer.close(index);
-                    if (data.code == 200) {
-                        getKeyInfo();
-                        layer.msg('设置成功');
-                    } else {
-                        layer.alert(data.msgs, {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                },
-                complete: function (XMLHttpRequest, status) {
-                    //请求完成后最终执行参数
-                    if (status == 'timeout') {
-                        xhr.abort();
-                        //超时,status还有success,error等值的情况
-                        layer.alert("请求超时，请检查网络连接", {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                }
-            });
-        }
-    );
+    getKeysInfo();
 }
 
 

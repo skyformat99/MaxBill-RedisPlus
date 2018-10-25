@@ -33,28 +33,10 @@ public class DataUtil {
         return confMap.get(key);
     }
 
-//    public static Jedis getCurrentJedisObject() throws Exception {
-//        Connect connect = getCurrentOpenConnect();
-//        if (null != connect) {
-//            Jedis jedis = null;
-//            if (connect.getIsha().equals("0")) {
-//                jedis = RedisUtil.getJedis();
-//            } else {
-//                JedisCluster cluster = ClusterUtil.openCulter(DataUtil.getCurrentOpenConnect());
-//                Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
-//                for (String nk : clusterNodes.keySet()) {
-//                    if (StringUtil.getValueString(FLAG_COLON, nk).equals(connect.getRport())) {
-//                        jedis = clusterNodes.get(nk).getResource();
-//                    }
-//                }
-//                ClusterUtil.closeCulter();
-//            }
-//            return jedis;
-//        } else {
-//            return null;
-//        }
-//    }
-//
+    public static Jedis getCurrentJedisObject() {
+        return (Jedis) DataUtil.getConfig("currentJedisObject");
+    }
+
 //
 //    public static JedisCluster getJedisClusterObject() throws Exception {
 //        Connect connect = getCurrentOpenConnect();
