@@ -84,28 +84,32 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><span id="key">--</span></td>
-                            <td><span id="type">--</span></td>
-                            <td><span id="size">--</span></td>
-                            <td><span id="ttl">--</span></td>
+                            <td><textarea id="key" class="table-textarea" readonly>--</textarea></td>
+                            <td><textarea id="type" class="table-textarea" readonly>--</textarea></td>
+                            <td><textarea id="size" class="table-textarea" readonly>--</textarea></td>
+                            <td><textarea id="ttl" class="table-textarea" readonly>--</textarea></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="key-view">
-                    <form class="layui-form" action="">
-                        <input type="radio" lay-filter="vals" name="vals" value="1" title="TEXT" checked>
-                        <input type="radio" lay-filter="vals" name="vals" value="2" title="JSON">
-                        <input type="radio" lay-filter="vals" name="vals" value="3" title="RAWS">
-                        <input type="radio" lay-filter="vals" name="vals" value="4" title="EDIT">
-                    </form>
+                    <div class="key-view-tool">
+                        <form class="layui-form">
+                            <input type="radio" lay-filter="vals" name="vals" value="1" title="TEXT" checked>
+                            <input type="radio" lay-filter="vals" name="vals" value="2" title="JSON">
+                            <input type="radio" lay-filter="vals" name="vals" value="3" title="RAWS">
+                            <input type="radio" lay-filter="vals" name="vals" value="4" title="EDIT">
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="handle-right-full">
-                <div id="vals1" class="vals key-vals-show"></div>
-                <div id="vals2" class="vals key-vals-hide"></div>
-                <div id="vals3" class="vals key-vals-hide"></div>
-                <div id="vals4" class="vals key-vals-hide"></div>
+                <div class="key-vals-tool">
+                    <textarea id="vals1" class="vals key-vals-show" style="border: none" readonly></textarea>
+                    <textarea id="vals2" class="vals key-vals-hide" style="border: none" readonly></textarea>
+                    <textarea id="vals3" class="vals key-vals-hide" style="border: none" readonly></textarea>
+                    <div id="vals4" class="vals key-vals-hide"></div>
+                </div>
             </div>
         </div>
     </div>

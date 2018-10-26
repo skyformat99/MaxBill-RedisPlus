@@ -1,6 +1,6 @@
 var $;
-var layer;
 var form;
+var layer;
 var connect;
 
 document.oncontextmenu = function () {
@@ -12,8 +12,8 @@ document.onselectstart = function () {
 
 layui.use(['jquery', 'form', 'layer'], function () {
     $ = layui.jquery;
-    layer = layui.layer;
     form = layui.form;
+    layer = layui.layer;
     //渲染表单
     form.render();
     loadPageData();

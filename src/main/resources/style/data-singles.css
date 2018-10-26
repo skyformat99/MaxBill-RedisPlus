@@ -83,23 +83,56 @@
 }
 
 .key-view {
-    width: 100%;
-    height: 40px;
+    margin: 0 auto;
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+.key-view-tool {
+    height: 38px;
     line-height: 30px;
     text-align: center;
     background-color: #CFE6F3;
+    border: 1px solid #CFE6F3;
+}
+
+.key-vals-tool {
+    top: 10px;
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+    padding: 10px;
+    position: absolute;
+    border: 1px solid #E2E2E3;
 }
 
 .key-vals-show {
     height: auto;
-    line-height: 25px;
-    padding: 15px;
     display: block;
+    line-height: 25px;
     word-wrap: break-word;
 }
 
 .key-vals-hide {
     display: none;
+}
+
+.key-vals-textarea {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+    overflow-y: auto;
+    resize: none !important;
+}
+
+.table-textarea {
+    width: 80px;
+    height: 16px;
+    border: none;
+    line-height: 16px;
+    overflow: hidden;
 }
 
 .layui-table {
@@ -198,17 +231,6 @@
 
 .ztree li a:hover {
     color: #009E94;
-}
-
-.key-vals-textarea {
-    min-height: 220px;
-    height: 220px !important;
-    resize: none !important;
-}
-
-.key-vals-tool {
-    margin-bottom: 2px;
-    margin-left: 1px;
 }
 
 .data-table-box {

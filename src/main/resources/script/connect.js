@@ -17,7 +17,7 @@ layui.use(['jquery', 'table', 'layer'], function () {
             {
                 title: '主机', event: 'setSign',
                 templet: function (data) {
-                    if (data.type == '0') {
+                    if (data.type === '0') {
                         return data.rhost;
                     } else {
                         return data.shost;
@@ -28,7 +28,7 @@ layui.use(['jquery', 'table', 'layer'], function () {
             {
                 title: '类型', event: 'setSign',
                 templet: function (data) {
-                    if (data.isha == '0') {
+                    if (data.isha === '0') {
                         return "单机";
                     } else {
                         return "集群";

@@ -456,10 +456,11 @@ function getEditView(type, data) {
             view += '</div>';
             break;
         case "string":
-            view += '<textarea id="currVal" class="layui-textarea key-vals-textarea">' + data + '</textarea>';
             view += '<div class="key-vals-tool">';
+            view += '<textarea id="currVal" class="layui-textarea key-vals-textarea">' + data + '</textarea>';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateStr()">';
-            view += '<i class="layui-icon">&#x1005;</i>提交</button></div>';
+            view += '<i class="layui-icon">&#x1005;</i>提交</button>';
+            view += '</div>';
             break;
     }
     return view;
