@@ -223,13 +223,15 @@ public class ConnectController {
                 }
                 break;
             case 3:
+                Desktop.setWebViewPage(ItemUtil.PAGE_INFO);
                 break;
             case 4:
+                Desktop.setWebViewPage(ItemUtil.PAGE_CONF);
                 break;
             case 5:
+                Desktop.setWebViewPage(ItemUtil.PAGE_CONF);
                 break;
         }
-
     }
 
 }

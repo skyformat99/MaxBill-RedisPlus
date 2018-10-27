@@ -1,15 +1,15 @@
 package com.maxbill.core.desktop;
 
 import com.maxbill.MainApplication;
-import com.maxbill.base.controller.ConnectController;
-import com.maxbill.base.controller.DataClusterController;
-import com.maxbill.base.controller.DataSinglesController;
+import com.maxbill.base.controller.*;
 import com.maxbill.tool.ItemUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -25,11 +25,16 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebErrorEvent;
+import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import netscape.javascript.JSObject;
+
+import java.io.File;
+import java.sql.SQLOutput;
 
 public class Desktop extends Application {
 
@@ -143,18 +148,32 @@ public class Desktop extends Application {
         webEngine.setJavaScriptEnabled(true);
         String utl = Desktop.class.getResource(ItemUtil.PAGE_CONNECT).toExternalForm();
         webEngine.load(utl);
-        ReadOnlyObjectProperty<Worker.State> woker = webEngine.getLoadWorker().stateProperty();
-        woker.addListener((obs, oldValue, newValue) -> {
+        webEngine.setOnResized((WebEvent<Rectangle2D> ev) -> {
+            Rectangle2D r = ev.getData();
+            System.out.println(r.getWidth());
+            System.out.println(r.getHeight());
+        });
+        //String baseUrl = System.getProperty("user.home");
+        //webEngine.setUserDataDirectory(new File(baseUrl + "/.redis_plus/temp"));
+        Worker<Void> woker = webEngine.getLoadWorker();
+        woker.stateProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
                 JSObject jsObject = (JSObject) webEngine.executeScript("window");
                 ConnectController connectController = MainApplication.context.getBean(ConnectController.class);
                 DataSinglesController dataSinglesController = MainApplication.context.getBean(DataSinglesController.class);
                 DataClusterController dataClusterController = MainApplication.context.getBean(DataClusterController.class);
+                InfoController infoController = MainApplication.context.getBean(InfoController.class);
+                ConfController confController = MainApplication.context.getBean(ConfController.class);
                 jsObject.setMember("connectRouter", connectController);
                 jsObject.setMember("dataSinglesRouter", dataSinglesController);
                 jsObject.setMember("dataClusterRouter", dataClusterController);
-                System.out.println("current page is " + webEngine.getLocation());
+                jsObject.setMember("infoRouter", infoController);
+                jsObject.setMember("confRouter", confController);
+                System.out.println("current page load path : " + webEngine.getLocation());
             }
+        });
+        woker.exceptionProperty().addListener((ObservableValue<? extends Throwable> ov, Throwable t, Throwable t1) -> {
+            System.out.println("current page exextion info : " + t1.getMessage());
         });
         return new VBox(webView);
     }

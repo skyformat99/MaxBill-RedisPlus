@@ -1,0 +1,42 @@
+.handle-left {
+    height: 100%;
+    float: left;
+    width: 50%;
+    overflow: hidden;
+    border-right: 1px solid silver;
+}
+
+.handle-left-main {
+    height: 300px;
+    float: left;
+    width: 100%;
+    border-right: 1px solid silver;
+    border-bottom: 1px solid silver;
+    /*background-color: #01AAED;*/
+}
+
+.handle-left-full {
+    top: 370px;
+    left: 0px;
+    float: left;
+    width: 50%;
+    bottom: 0px;
+    position: absolute;
+    overflow-y: auto;
+    border-right: 1px solid silver;
+}
+
+.layui-table {
+    /*width: 95%;*/
+    margin: 0px auto;
+}
+
+.handle-right {
+    height: 100%;
+    margin-left: 50%;
+}
+
+.layui-collapse {
+    /*width: 95%;*/
+    margin: 0px auto;
+}

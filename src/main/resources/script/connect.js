@@ -1,15 +1,23 @@
 var $;
-var data;
 var layer;
-var tableObj;
+var table;
 var rowDataId;
+var data = null;
 
 layui.use(['jquery', 'table', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;
+    table = layui.table;
     data = connectRouter.selectConnect();
-    //加载连接数据
-    tableObj = layui.table.render({
+    if (data == null) {
+        connectRouter.changeWebview(1);
+    }
+    initConnectData();
+});
+
+/*初始化连接数据*/
+function initConnectData() {
+    table.render({
         id: 'dataList',
         elem: '#dataList',
         height: 'full-70',
@@ -68,7 +76,7 @@ layui.use(['jquery', 'table', 'layer'], function () {
             rowDataId = '';
         }
     });
-});
+}
 
 /**添加连接数据*/
 function addConnectData() {
@@ -88,7 +96,7 @@ function addConnectData() {
 function getConnectData() {
     layer.load(2);
     var data = connectRouter.selectConnect();
-    tableObj.reload({
+    table.reload({
         height: 'full-70',
         data: JSON.parse(data),
         page: {curr: 1},
@@ -191,7 +199,7 @@ function openConnect(id) {
     return result;
 }
 
-
+/**断开连接数据*/
 function closeConnect(id) {
     var result = 0;
     layer.load(2);

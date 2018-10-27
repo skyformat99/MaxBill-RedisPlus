@@ -333,7 +333,6 @@ public class RedisUtil {
             redisInfo.setCpu(returnCpuInfo(redisInfoBean).toString());
             redisInfo.setUsers(returnUsersInfo(jedis));
         }
-        closeJedis(jedis);
         return redisInfo;
     }
 
@@ -363,12 +362,12 @@ public class RedisUtil {
                         serverBuf.append("</br>");
                         break;
                     case "arch_bits":
-                        serverBuf.append("系统架构: ").append(value);
-                        serverBuf.append("</br>");
+                        //serverBuf.append("系统架构: ").append(value);
+                        //serverBuf.append("</br>");
                         break;
                     case "multiplexing_api":
-                        serverBuf.append("事件机制: ").append(value);
-                        serverBuf.append("</br>");
+                        //serverBuf.append("事件机制: ").append(value);
+                        //serverBuf.append("</br>");
                         break;
                     case "process_id":
                         serverBuf.append("进程编号: ").append(value);
@@ -733,9 +732,9 @@ public class RedisUtil {
     /**
      * 修改redis配置信息
      */
-    public static void setRedisConfig(Jedis jedis, Map<String, String[]> confMap) {
+    public static void setRedisConfig(Jedis jedis, Map<String, String> confMap) {
         for (String key : confMap.keySet()) {
-            jedis.configSet(key, confMap.get(key)[0]);
+            jedis.configSet(key, confMap.get(key));
         }
     }
 
