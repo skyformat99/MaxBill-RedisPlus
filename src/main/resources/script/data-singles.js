@@ -1,7 +1,6 @@
 var $;
 var form;
 var layer;
-var currKey;
 var currNode0;
 var currNode1;
 
@@ -289,7 +288,6 @@ function retimeKey() {
     });
 }
 
-
 //删除key
 function deleteKey() {
     if (null == currNode1) {
@@ -310,10 +308,11 @@ function deleteKey() {
             var zTreeObj = $.fn.zTree.getZTreeObj("keyTree" + currNode0.index);
             zTreeObj.removeNode(currNode1);
             currNode1 = null;
-            $("#keys").text("");
-            $("#type").text("");
-            $("#size").text("");
-            $("#ttls").text("");
+            $("#keys").text("--");
+            $("#type").text("--");
+            $("#size").text("--");
+            $("#ttls").text("--");
+            $(".vals").html("");
             layer.msg(data.msgs);
         } else {
             layer.alert(data.msgs, {
@@ -333,6 +332,10 @@ function reloadKey() {
     getKeysInfo();
 }
 
+//添加新KEY
+function insertKey() {
+    layer.msg("开发中...");
+}
 
 //数据编辑视图
 function getEditView(type, data) {
@@ -443,39 +446,19 @@ function updateStr() {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    var xhr = $.ajax({
-        type: "post",
-        url: basePath + '/api/data/updateStr',
-        data: {
-            'key': currKey,
-            'val': $("#currVal").val(),
-            'index': currIndex
-        },
-        timeout: 10000,
-        async: false,
-        success: function (data) {
-            if (data.code == 200) {
-                getKeyInfo();
-                layer.msg('修改成功');
-            } else {
-                layer.alert(data.msgs, {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        },
-        complete: function (XMLHttpRequest, status) {
-            //请求完成后最终执行参数
-            if (status == 'timeout') {
-                //超时,status还有success,error等值的情况
-                xhr.abort();
-                layer.alert("请求超时，请检查网络连接", {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        }
-    });
+    layer.load(2);
+    var json = dataSinglesRouter.updateStr(currNode0.index, currNode1.name, $("#currVal").val());
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        getKeysInfo();
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 
@@ -485,51 +468,28 @@ function insertList() {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    layer.prompt(
-        {
-            title: '输入添加的值',
-            formType: 3,
-            value: "",
-            skin: 'layui-layer-lan',
-            closeBtn: 0,
-        },
-        function (text, index) {
-            var xhr = $.ajax({
-                type: "post",
-                url: basePath + "/api/data/insertList",
-                data: {
-                    'key': currKey,
-                    'val': text,
-                    'index': currIndex
-                },
-                timeout: 10000,
-                async: false,
-                success: function (data) {
-                    layer.close(index);
-                    if (data.code == 200) {
-                        getKeyInfo();
-                        layer.msg('添加成功');
-                    } else {
-                        layer.alert(data.msgs, {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                },
-                complete: function (XMLHttpRequest, status) {
-                    //请求完成后最终执行参数
-                    if (status == 'timeout') {
-                        xhr.abort();
-                        //超时,status还有success,error等值的情况
-                        layer.alert("请求超时，请检查网络连接", {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                }
+    layer.prompt({
+        title: '输入添加的值',
+        formType: 3,
+        value: "",
+        skin: 'layui-layer-lan',
+        closeBtn: 0,
+    }, function (text, index) {
+        layer.load(2);
+        var json = dataSinglesRouter.insertVal(3, currNode0.index, currNode1.name, text);
+        var data = JSON.parse(json);
+        layer.closeAll('loading');
+        layer.close(index);
+        if (data.code === 200) {
+            getKeysInfo();
+            layer.msg(data.msgs);
+        } else {
+            layer.alert(data.msgs, {
+                skin: 'layui-layer-lan',
+                closeBtn: 0
             });
         }
-    );
+    });
 }
 
 //删除list的item
@@ -538,39 +498,19 @@ function deleteList(keyIndex) {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    var xhr = $.ajax({
-        type: "post",
-        url: basePath + '/api/data/deleteList',
-        data: {
-            'key': currKey,
-            'index': currIndex,
-            'keyIndex': keyIndex
-        },
-        timeout: 10000,
-        async: false,
-        success: function (data) {
-            if (data.code == 200) {
-                getKeyInfo();
-                layer.msg('删除成功');
-            } else {
-                layer.alert(data.msgs, {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        },
-        complete: function (XMLHttpRequest, status) {
-            //请求完成后最终执行参数
-            if (status == 'timeout') {
-                //超时,status还有success,error等值的情况
-                xhr.abort();
-                layer.alert("请求超时，请检查网络连接", {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        }
-    });
+    layer.load(2);
+    var json = dataSinglesRouter.deleteVal(3, currNode0.index, currNode1.name, keyIndex);
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        getKeysInfo();
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 
@@ -580,51 +520,28 @@ function insertSet() {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    layer.prompt(
-        {
-            title: '输入添加的值',
-            formType: 3,
-            value: "",
-            skin: 'layui-layer-lan',
-            closeBtn: 0,
-        },
-        function (text, index) {
-            var xhr = $.ajax({
-                type: "post",
-                url: basePath + "/api/data/insertSet",
-                data: {
-                    'key': currKey,
-                    'val': text,
-                    'index': currIndex
-                },
-                timeout: 10000,
-                async: false,
-                success: function (data) {
-                    layer.close(index);
-                    if (data.code == 200) {
-                        getKeyInfo();
-                        layer.msg('添加成功');
-                    } else {
-                        layer.alert(data.msgs, {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                },
-                complete: function (XMLHttpRequest, status) {
-                    //请求完成后最终执行参数
-                    if (status == 'timeout') {
-                        xhr.abort();
-                        //超时,status还有success,error等值的情况
-                        layer.alert("请求超时，请检查网络连接", {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                }
+    layer.prompt({
+        title: '输入添加的值',
+        formType: 3,
+        value: "",
+        skin: 'layui-layer-lan',
+        closeBtn: 0,
+    }, function (text, index) {
+        layer.load(2);
+        var json = dataSinglesRouter.insertVal(1, currNode0.index, currNode1.name, text);
+        var data = JSON.parse(json);
+        layer.closeAll('loading');
+        layer.close(index);
+        if (data.code === 200) {
+            getKeysInfo();
+            layer.msg(data.msgs);
+        } else {
+            layer.alert(data.msgs, {
+                skin: 'layui-layer-lan',
+                closeBtn: 0
             });
         }
-    );
+    });
 }
 
 
@@ -634,39 +551,19 @@ function deleteSet(val) {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    var xhr = $.ajax({
-        type: "post",
-        url: basePath + '/api/data/deleteSet',
-        data: {
-            'key': currKey,
-            'val': val,
-            'index': currIndex
-        },
-        timeout: 10000,
-        async: false,
-        success: function (data) {
-            if (data.code == 200) {
-                getKeyInfo();
-                layer.msg('删除成功');
-            } else {
-                layer.alert(data.msgs, {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        },
-        complete: function (XMLHttpRequest, status) {
-            //请求完成后最终执行参数
-            if (status == 'timeout') {
-                //超时,status还有success,error等值的情况
-                xhr.abort();
-                layer.alert("请求超时，请检查网络连接", {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        }
-    });
+    layer.load(2);
+    var json = dataSinglesRouter.deleteVal(1, currNode0.index, currNode1.name, val);
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        getKeysInfo();
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 
@@ -676,51 +573,28 @@ function insertZset() {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    layer.prompt(
-        {
-            title: '输入添加的值',
-            formType: 3,
-            value: "",
-            skin: 'layui-layer-lan',
-            closeBtn: 0,
-        },
-        function (text, index) {
-            var xhr = $.ajax({
-                type: "post",
-                url: basePath + "/api/data/insertZset",
-                data: {
-                    'key': currKey,
-                    'val': text,
-                    'index': currIndex
-                },
-                timeout: 10000,
-                async: false,
-                success: function (data) {
-                    layer.close(index);
-                    if (data.code == 200) {
-                        getKeyInfo();
-                        layer.msg('添加成功');
-                    } else {
-                        layer.alert(data.msgs, {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                },
-                complete: function (XMLHttpRequest, status) {
-                    //请求完成后最终执行参数
-                    if (status == 'timeout') {
-                        xhr.abort();
-                        //超时,status还有success,error等值的情况
-                        layer.alert("请求超时，请检查网络连接", {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                }
+    layer.prompt({
+        title: '输入添加的值',
+        formType: 3,
+        value: "",
+        skin: 'layui-layer-lan',
+        closeBtn: 0,
+    }, function (text, index) {
+        layer.load(2);
+        var json = dataSinglesRouter.insertVal(2, currNode0.index, currNode1.name, text);
+        var data = JSON.parse(json);
+        layer.closeAll('loading');
+        layer.close(index);
+        if (data.code === 200) {
+            getKeysInfo();
+            layer.msg(data.msgs);
+        } else {
+            layer.alert(data.msgs, {
+                skin: 'layui-layer-lan',
+                closeBtn: 0
             });
         }
-    );
+    });
 }
 
 
@@ -730,39 +604,19 @@ function deleteZset(val) {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    var xhr = $.ajax({
-        type: "post",
-        url: basePath + '/api/data/deleteZset',
-        data: {
-            'key': currKey,
-            'val': val,
-            'index': currIndex
-        },
-        timeout: 10000,
-        async: false,
-        success: function (data) {
-            if (data.code == 200) {
-                getKeyInfo();
-                layer.msg('删除成功');
-            } else {
-                layer.alert(data.msgs, {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        },
-        complete: function (XMLHttpRequest, status) {
-            //请求完成后最终执行参数
-            if (status == 'timeout') {
-                //超时,status还有success,error等值的情况
-                xhr.abort();
-                layer.alert("请求超时，请检查网络连接", {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        }
-    });
+    layer.load(2);
+    var json = dataSinglesRouter.deleteVal(2, currNode0.index, currNode1.name, val);
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        getKeysInfo();
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 //增加hash的item
@@ -781,46 +635,27 @@ function insertHash() {
             if (mapVal === '') {
                 return;
             }
-            var xhr = $.ajax({
-                type: "post",
-                url: basePath + '/api/data/insertHash',
-                data: {
-                    'key': currKey,
-                    'mapKey': mapKey,
-                    'mapVal': mapVal,
-                    'index': currIndex
-                },
-                timeout: 10000,
-                async: false,
-                success: function (data) {
-                    if (data.code == 200) {
-                        getKeyInfo();
-                        layer.msg('添加成功');
-                        layer.close(index);
-                    } else {
-                        layer.alert(data.msgs, {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                },
-                complete: function (XMLHttpRequest, status) {
-                    //请求完成后最终执行参数
-                    if (status == 'timeout') {
-                        //超时,status还有success,error等值的情况
-                        xhr.abort();
-                        layer.alert("请求超时，请检查网络连接", {
-                            skin: 'layui-layer-lan',
-                            closeBtn: 0
-                        });
-                    }
-                }
-            });
+            layer.load(2);
+            var mapVal = mapKey + ":" + mapVal;
+            var json = dataSinglesRouter.insertVal(2, currNode0.index, currNode1.name, mapVal);
+            var data = JSON.parse(json);
+            layer.closeAll('loading');
+            layer.close(index);
+            if (data.code === 200) {
+                getKeysInfo();
+                layer.msg(data.msgs);
+            } else {
+                layer.alert(data.msgs, {
+                    skin: 'layui-layer-lan',
+                    closeBtn: 0
+                });
+            }
         }
     });
-    $(".layui-layer-content").html("");
-    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapKey\" class=\"layui-layer-input\" placeholder=\"请输入KEY\"/>");
-    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapVal\" class=\"layui-layer-input\" placeholder=\"请输入VAL\"/>");
+    var layerContent = $(".layui-layer-content");
+    layerContent.html("");
+    layerContent.append("<input type=\"text\" value=\"\" id= \"mapKey\" class=\"layui-layer-input\" placeholder=\"请输入KEY\"/>");
+    layerContent.append("<input type=\"text\" value=\"\" id= \"mapVal\" class=\"layui-layer-input\" placeholder=\"请输入VAL\"/>");
 }
 
 //删除hash的item
@@ -829,38 +664,18 @@ function deleteHash(mapKey) {
         layer.msg("请选择要操作的KEY！");
         return false;
     }
-    var xhr = $.ajax({
-        type: "post",
-        url: basePath + '/api/data/deleteHash',
-        data: {
-            'key': currKey,
-            'mapKey': mapKey,
-            'index': currIndex
-        },
-        timeout: 10000,
-        async: false,
-        success: function (data) {
-            if (data.code == 200) {
-                getKeyInfo();
-                layer.msg('删除成功');
-            } else {
-                layer.alert(data.msgs, {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        },
-        complete: function (XMLHttpRequest, status) {
-            //请求完成后最终执行参数
-            if (status == 'timeout') {
-                //超时,status还有success,error等值的情况
-                xhr.abort();
-                layer.alert("请求超时，请检查网络连接", {
-                    skin: 'layui-layer-lan',
-                    closeBtn: 0
-                });
-            }
-        }
-    });
+    layer.load(2);
+    var json = dataSinglesRouter.deleteVal(2, currNode0.index, currNode1.name, mapKey);
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        getKeysInfo();
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 

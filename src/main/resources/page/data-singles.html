@@ -65,6 +65,9 @@
                     <button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="reloadKey()">
                         <i class="layui-icon">&#xe666;</i>刷新
                     </button>
+                    <button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertKey()">
+                        <i class="layui-icon">&#xe61f;</i>新增
+                    </button>
                 </div>
                 <div class="key-info">
                     <table class="layui-table">
@@ -97,7 +100,7 @@
                         <form class="layui-form">
                             <input type="radio" lay-filter="vals" name="vals" value="1" title="TEXT" checked>
                             <input type="radio" lay-filter="vals" name="vals" value="2" title="JSON">
-                            <input type="radio" lay-filter="vals" name="vals" value="3" title="RAWS">
+                            <input type="radio" lay-filter="vals" name="vals" value="3" title="ROWS">
                             <input type="radio" lay-filter="vals" name="vals" value="4" title="EDIT">
                         </form>
                     </div>
@@ -117,6 +120,7 @@
 </div>
 <script type="text/javascript" src="../plugin/layui/layui.js"></script>
 <script type="text/javascript" src="../plugin/ztree/zTree.js"></script>
+<script type="text/javascript" src="../script/nocopy.js"></script>
 <script type="text/javascript" src="../script/script.js"></script>
 <script type="text/javascript" src="../script/json.js"></script>
 <script type="text/javascript" src="../script/data-singles.js"></script>

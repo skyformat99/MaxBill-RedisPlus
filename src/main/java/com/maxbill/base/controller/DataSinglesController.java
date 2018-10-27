@@ -212,236 +212,111 @@ public class DataSinglesController {
         return JSON.toJSONString(resultMap);
     }
 
+    public String updateStr(int index, String key, String val) {
+        Map resultMap = new HashMap();
+        try {
+            Jedis jedis = getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    RedisUtil.updateStr(jedis, index, key, val);
+                    resultMap.put("code", 200);
+                    resultMap.put("msgs", "修改数据成功");
+                } else {
+                    resultMap.put("code", 500);
+                    resultMap.put("msgs", "该KEY不存在");
+                }
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "操作数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
 
-//
-//    @RequestMapping("/data/updateStr")
-//    public ResponseBean updateStr(int index, String key, String val) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.updateStr(jedis, index, key, val);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//    @RequestMapping("/data/insertSet")
-//    public ResponseBean insertSet(int index, String key, String val) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.insertSet(jedis, index, key, val);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//    @RequestMapping("/data/insertZset")
-//    public ResponseBean insertZset(int index, String key, String val) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.insertZset(jedis, index, key, val);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//    @RequestMapping("/data/insertList")
-//    public ResponseBean insertList(int index, String key, String val) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.insertList(jedis, index, key, val);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//    RequestMapping("/data/insertHash")
-//
-//    public ResponseBean insertHash(int index, String key, String mapKey, String mapVal) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.insertHash(jedis, index, key, mapKey, mapVal);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//    @RequestMapping("/data/deleteSet")
-//    public ResponseBean deleteSet(int index, String key, String val) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.deleteSet(jedis, index, key, val);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//
-//    @RequestMapping("/data/deleteZset")
-//    public ResponseBean deleteZset(int index, String key, String val) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.deleteZset(jedis, index, key, val);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//
-//    @RequestMapping("/data/deleteList")
-//    public ResponseBean deleteList(int index, String key, long keyIndex) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.deleteList(jedis, index, key, keyIndex);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
-//
-//
-//    @RequestMapping("/data/deleteHash")
-//    public ResponseBean deleteHash(int index, String key, String mapKey) {
-//        ResponseBean responseBean = new ResponseBean();
-//        try {
-//            Jedis jedis = getCurrentJedisObject();
-//            if (null != jedis) {
-//                if (RedisUtil.existsKey(jedis, index, key)) {
-//                    RedisUtil.deleteHash(jedis, index, key, mapKey);
-//                } else {
-//                    responseBean.setCode(0);
-//                    responseBean.setMsgs("'" + key + "' 该key不存在");
-//                }
-//                RedisUtil.closeJedis(jedis);
-//            } else {
-//                responseBean.setCode(0);
-//                responseBean.setMsgs("打开连接异常");
-//            }
-//        } catch (Exception e) {
-//            log.error(e);
-//            responseBean.setCode(500);
-//            responseBean.setMsgs("打开连接异常");
-//        }
-//        return responseBean;
-//    }
+    public String insertVal(int type, int index, String key, String val) {
+        Map resultMap = new HashMap();
+        try {
+            Jedis jedis = getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    //1:set,2:zset,3:list,4:hash
+                    switch (type) {
+                        case 1:
+                            RedisUtil.insertSet(jedis, index, key, val);
+                            break;
+                        case 2:
+                            RedisUtil.insertZset(jedis, index, key, val);
+                            break;
+                        case 3:
+                            RedisUtil.insertList(jedis, index, key, val);
+                            break;
+                        case 4:
+                            String[] valArray = val.split(":");
+                            String mapKey = valArray[0];
+                            String mapVal = valArray[1];
+                            RedisUtil.insertHash(jedis, index, key, mapKey, mapVal);
+                            break;
+                    }
+                    resultMap.put("code", 200);
+                    resultMap.put("msgs", "添加数据成功");
+                } else {
+                    resultMap.put("code", 500);
+                    resultMap.put("msgs", "该KEY不存在");
+                }
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "添加数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
 
+
+    public String deleteVal(int type, int index, String key, String val) {
+        Map resultMap = new HashMap();
+        try {
+            Jedis jedis = getCurrentJedisObject();
+            if (null != jedis) {
+                if (RedisUtil.existsKey(jedis, index, key)) {
+                    //1:set,2:zset,3:list,4:hash
+                    switch (type) {
+                        case 1:
+                            RedisUtil.deleteSet(jedis, index, key, val);
+                            break;
+                        case 2:
+                            RedisUtil.deleteZset(jedis, index, key, val);
+                            break;
+                        case 3:
+                            long keyIndex = Long.parseLong(val);
+                            RedisUtil.deleteList(jedis, index, key, keyIndex);
+                            break;
+                        case 4:
+                            String mapKey = val;
+                            RedisUtil.deleteHash(jedis, index, key, mapKey);
+                            break;
+                    }
+                    resultMap.put("code", 200);
+                    resultMap.put("msgs", "删除数据成功");
+                } else {
+                    resultMap.put("code", 500);
+                    resultMap.put("msgs", "该KEY不存在");
+                }
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "删除数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
 
 }
