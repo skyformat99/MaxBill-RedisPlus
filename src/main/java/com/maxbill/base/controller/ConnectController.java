@@ -27,6 +27,7 @@ public class ConnectController {
      * 查询连接列表
      */
     public String selectConnect() {
+        System.out.println("查询连接数据中...");
         return JSON.toJSONString(this.dataService.selectConnect());
     }
 

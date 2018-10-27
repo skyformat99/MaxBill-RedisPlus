@@ -1,11 +1,13 @@
 var $;
+var data;
 var layer;
 var tableObj;
 var rowDataId;
+
 layui.use(['jquery', 'table', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;
-    var data = connectRouter.selectConnect();
+    data = connectRouter.selectConnect();
     //加载连接数据
     tableObj = layui.table.render({
         id: 'dataList',

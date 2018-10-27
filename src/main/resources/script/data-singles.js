@@ -48,10 +48,7 @@ var zTreeSetting = {
 //点击分页
 function goPage(treeNode, page) {
     if (null == currNode0) {
-        layer.alert("请选择一个要操作的库！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+        layer.msg("请选择一个要操作的库！");
         return false;
     }
     treeNode.page = page;
@@ -155,10 +152,7 @@ function loadDbData(node, pattern) {
 //获取key信息
 function getKeysInfo() {
     if (null == currNode1) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     layer.load(2);
@@ -167,10 +161,10 @@ function getKeysInfo() {
     layer.closeAll('loading');
     if (data.code === 200) {
         var keyInfo = data.data;
-        $("#key").text(keyInfo.key);
+        $("#keys").text(keyInfo.key);
         $("#type").text(keyInfo.type);
         $("#size").text(keyInfo.size);
-        $("#ttl").text(keyInfo.ttl);
+        $("#ttls").text(keyInfo.ttl);
         $("#vals1").html(keyInfo.text);
         $("#vals2").html(getFormatJson(keyInfo.json));
         $("#vals3").html(keyInfo.raws);
@@ -224,11 +218,8 @@ function loadLikeTree() {
 
 //重命名key
 function renameKey() {
-    if (null === currNode1) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     layer.prompt({
@@ -261,11 +252,8 @@ function renameKey() {
 
 //设置key的失效时间
 function retimeKey() {
-    if (null === currNode1) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     layer.prompt({
@@ -304,11 +292,8 @@ function retimeKey() {
 
 //删除key
 function deleteKey() {
-    if (null === currNode1) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     var index = layer.confirm('确认删除该项？', {
@@ -325,11 +310,10 @@ function deleteKey() {
             var zTreeObj = $.fn.zTree.getZTreeObj("keyTree" + currNode0.index);
             zTreeObj.removeNode(currNode1);
             currNode1 = null;
-            $("#key").text("");
+            $("#keys").text("");
             $("#type").text("");
             $("#size").text("");
-            $("#ttl").text("");
-            $("#value").text("");
+            $("#ttls").text("");
             layer.msg(data.msgs);
         } else {
             layer.alert(data.msgs, {
@@ -342,11 +326,8 @@ function deleteKey() {
 
 //重新加载key
 function reloadKey() {
-    if (null === currNode1) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     getKeysInfo();
@@ -359,14 +340,12 @@ function getEditView(type, data) {
     switch (type) {
         case "set":
             var set = $.parseJSON(data);
-            view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertSet()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
-            view += '</div>';
             view += '<div class="data-table-box">';
             view += '<table class="layui-table">';
             view += '<colgroup><col><col width="100"></colgroup>';
-            view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
+            view += '<thead><tr><th>值</th><th>操作</th></tr></thead>';
             view += '<tbody>';
             for (var i = 0; i < set.length; i++) {
                 view += '<tr>';
@@ -383,14 +362,12 @@ function getEditView(type, data) {
             break;
         case "list":
             var list = $.parseJSON(data);
-            view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertList()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
-            view += '</div>';
             view += '<div class="data-table-box">';
             view += '<table class="layui-table">';
-            view += '<colgroup><col width="20"><col><col width="100"></colgroup>';
-            view += '<thead><tr><th>index</th><th>value</th><th>tool</th></tr></thead>';
+            view += '<colgroup><col width="60"><col><col width="100"></colgroup>';
+            view += '<thead><tr><th>位置</th><th>值</th><th>操作</th></tr></thead>';
             view += '<tbody>';
             for (var i = 0; i < list.length; i++) {
                 view += '<tr>';
@@ -408,14 +385,12 @@ function getEditView(type, data) {
             break;
         case "zset":
             var zset = $.parseJSON(data);
-            view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertZset()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
-            view += '</div>';
             view += '<div class="data-table-box">';
             view += '<table class="layui-table">';
             view += '<colgroup><col><col width="100"></colgroup>';
-            view += '<thead><tr><th>value</th><th>tool</th></tr></thead>';
+            view += '<thead><tr><th>值</th><th>操作</th></tr></thead>';
             view += '<tbody>';
             for (var i = 0; i < zset.length; i++) {
                 view += '<tr>';
@@ -432,14 +407,12 @@ function getEditView(type, data) {
             break;
         case "hash":
             var map = $.parseJSON(data);
-            view += '<div class="key-vals-tool">';
             view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="insertHash()">';
             view += '<i class="layui-icon">&#xe61f;</i>添加</button>';
-            view += '</div>';
             view += '<div class="data-table-box">';
             view += '<table class="layui-table">';
             view += '<colgroup><col><col><col width="100"></colgroup>';
-            view += '<thead><tr><th>key</th><th>value</th><th>tool</th></tr></thead>';
+            view += '<thead><tr><th>键</th><th>值</th><th>操作</th></tr></thead>';
             view += '<tbody>';
             for (var key in map) {
                 view += '<tr>';
@@ -456,11 +429,9 @@ function getEditView(type, data) {
             view += '</div>';
             break;
         case "string":
-            view += '<div class="key-vals-tool">';
-            view += '<textarea id="currVal" class="layui-textarea key-vals-textarea">' + data + '</textarea>';
-            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color" onclick="updateStr()">';
+            view += '<textarea id="currVal" class="layui-textarea key-vals-text">' + data + '</textarea>';
+            view += '<button class="layui-btn layui-btn-primary layui-btn-sm set-color key-vals-btns" onclick="updateStr()">';
             view += '<i class="layui-icon">&#x1005;</i>提交</button>';
-            view += '</div>';
             break;
     }
     return view;
@@ -468,11 +439,8 @@ function getEditView(type, data) {
 
 //修改string类型
 function updateStr() {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     var xhr = $.ajax({
@@ -513,11 +481,8 @@ function updateStr() {
 
 //新增list的item
 function insertList() {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     layer.prompt(
@@ -569,11 +534,8 @@ function insertList() {
 
 //删除list的item
 function deleteList(keyIndex) {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     var xhr = $.ajax({
@@ -614,11 +576,8 @@ function deleteList(keyIndex) {
 
 //新增set的item
 function insertSet() {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     layer.prompt(
@@ -671,11 +630,8 @@ function insertSet() {
 
 //删除set的item
 function deleteSet(val) {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     var xhr = $.ajax({
@@ -716,11 +672,8 @@ function deleteSet(val) {
 
 //新增set的item
 function insertZset() {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     layer.prompt(
@@ -773,11 +726,8 @@ function insertZset() {
 
 //删除zset的item
 function deleteZset(val) {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     var xhr = $.ajax({
@@ -869,17 +819,14 @@ function insertHash() {
         }
     });
     $(".layui-layer-content").html("");
-    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapKey\" class=\"layui-layer-input\" placeholder=\"请输入Key\"/>");
-    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapVal\" class=\"layui-layer-input\" placeholder=\"请输入Val\"/>");
+    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapKey\" class=\"layui-layer-input\" placeholder=\"请输入KEY\"/>");
+    $(".layui-layer-content").append("<input type=\"text\" value=\"\" id= \"mapVal\" class=\"layui-layer-input\" placeholder=\"请输入VAL\"/>");
 }
 
 //删除hash的item
 function deleteHash(mapKey) {
-    if (currKey == "" || currKey == null) {
-        layer.alert("请选择要操作的key！", {
-            skin: 'layui-layer-lan',
-            closeBtn: 0
-        });
+    if (null == currNode1) {
+        layer.msg("请选择要操作的KEY！");
         return false;
     }
     var xhr = $.ajax({

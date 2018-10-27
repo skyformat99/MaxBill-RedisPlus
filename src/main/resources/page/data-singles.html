@@ -84,16 +84,16 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><textarea id="key" class="table-textarea" readonly>--</textarea></td>
-                            <td><textarea id="type" class="table-textarea" readonly>--</textarea></td>
-                            <td><textarea id="size" class="table-textarea" readonly>--</textarea></td>
-                            <td><textarea id="ttl" class="table-textarea" readonly>--</textarea></td>
+                            <td><span id="keys">--</span></td>
+                            <td><span id="type">--</span></td>
+                            <td><span id="size">--</span></td>
+                            <td><span id="ttls">--</span></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="key-view">
-                    <div class="key-view-tool">
+                    <div class="key-tool-view">
                         <form class="layui-form">
                             <input type="radio" lay-filter="vals" name="vals" value="1" title="TEXT" checked>
                             <input type="radio" lay-filter="vals" name="vals" value="2" title="JSON">
@@ -104,10 +104,10 @@
                 </div>
             </div>
             <div class="handle-right-full">
-                <div class="key-vals-tool">
-                    <textarea id="vals1" class="vals key-vals-show" style="border: none" readonly></textarea>
-                    <textarea id="vals2" class="vals key-vals-hide" style="border: none" readonly></textarea>
-                    <textarea id="vals3" class="vals key-vals-hide" style="border: none" readonly></textarea>
+                <div class="key-vals-view">
+                    <div id="vals1" class="vals key-vals-show"></div>
+                    <div id="vals2" class="vals key-vals-hide"></div>
+                    <div id="vals3" class="vals key-vals-hide"></div>
                     <div id="vals4" class="vals key-vals-hide"></div>
                 </div>
             </div>

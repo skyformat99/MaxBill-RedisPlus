@@ -79,60 +79,71 @@
 
 .key-info {
     margin: 0 auto;
-    padding: 10px;
+    padding: 10px 9px 10px 9px;
 }
 
 .key-view {
     margin: 0 auto;
-    padding-left: 11px;
-    padding-right: 11px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-.key-view-tool {
-    height: 38px;
-    line-height: 30px;
+.key-tool-view {
+    height: 40px;
+    line-height: 35px;
     text-align: center;
     background-color: #CFE6F3;
-    border: 1px solid #CFE6F3;
 }
 
-.key-vals-tool {
+.key-vals-view {
     top: 10px;
-    left: 12px;
-    right: 12px;
+    left: 10px;
+    right: 10px;
     bottom: 10px;
     padding: 10px;
     position: absolute;
     border: 1px solid #E2E2E3;
+    background-color: #F2F2F2;
 }
 
 .key-vals-show {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
     height: auto;
     display: block;
+    overflow-y: auto;
     line-height: 25px;
+    position: absolute;
     word-wrap: break-word;
+    background-color: #F2F2F2;
 }
 
 .key-vals-hide {
     display: none;
 }
 
-.key-vals-textarea {
+.key-vals-text {
     top: 0px;
     left: 0px;
     right: 0px;
-    bottom: 0px;
-    position: absolute;
+    bottom: 35px;
     overflow-y: auto;
+    position: absolute;
     resize: none !important;
 }
 
-.table-textarea {
-    width: 80px;
-    height: 16px;
-    border: none;
-    line-height: 16px;
-    overflow: hidden;
+.key-vals-btns {
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+}
+
+.data-table-box {
+    height: auto;
+    margin-top: 5px;
+    overflow-y: auto;
 }
 
 .layui-table {
@@ -233,7 +244,3 @@
     color: #009E94;
 }
 
-.data-table-box {
-    height: 383px;
-    overflow-y: auto;
-}

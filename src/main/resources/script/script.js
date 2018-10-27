@@ -1,10 +1,3 @@
-document.oncontextmenu = function () {
-    return false;
-};
-document.onselectstart = function () {
-    return false;
-};
-
 function toPage(flag, page) {
     var isOpen = connectRouter.isopenConnect();
     if (flag === 1 && isOpen === 0) {

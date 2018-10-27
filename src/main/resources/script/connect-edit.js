@@ -3,13 +3,6 @@ var form;
 var layer;
 var connect;
 
-document.oncontextmenu = function () {
-    return false;
-};
-document.onselectstart = function () {
-    return false;
-};
-
 layui.use(['jquery', 'form', 'layer'], function () {
     $ = layui.jquery;
     form = layui.form;
