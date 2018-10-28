@@ -10,6 +10,14 @@ function toPage(flag, page) {
     connectRouter.changeWebview(page);
 }
 
+function outJsObj() {
+    console.log(connectRouter);
+    console.log(dataSinglesRouter);
+    console.log(dataClusterRouter);
+    console.log(infoRouter);
+    console.log(confRouter);
+}
+
 function formatDate(time) {
     var format = "YY-MM-DD hh:mm:ss";
     var date = new Date(time);

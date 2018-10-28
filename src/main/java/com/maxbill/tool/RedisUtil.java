@@ -743,7 +743,6 @@ public class RedisUtil {
      */
     public static List<Slowlog> getRedisLog(Jedis jedis) {
         List<Slowlog> logList = jedis.slowlogGet(100);
-        System.out.println(logList);
         return logList;
     }
 

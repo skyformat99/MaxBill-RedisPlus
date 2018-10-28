@@ -229,7 +229,7 @@ public class ConnectController {
                 Desktop.setWebViewPage(ItemUtil.PAGE_CONF);
                 break;
             case 5:
-                Desktop.setWebViewPage(ItemUtil.PAGE_CONF);
+                Desktop.setWebViewPage(ItemUtil.PAGE_MONITOR);
                 break;
         }
     }

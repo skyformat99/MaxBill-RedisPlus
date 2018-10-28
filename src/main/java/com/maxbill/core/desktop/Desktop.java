@@ -3,6 +3,7 @@ package com.maxbill.core.desktop;
 import com.maxbill.MainApplication;
 import com.maxbill.base.controller.*;
 import com.maxbill.tool.ItemUtil;
+import com.sun.javafx.webkit.WebConsoleListener;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -153,29 +154,38 @@ public class Desktop extends Application {
             System.out.println(r.getWidth());
             System.out.println(r.getHeight());
         });
+        System.out.println("userPath:" + webEngine.getUserDataDirectory());
         //String baseUrl = System.getProperty("user.home");
         //webEngine.setUserDataDirectory(new File(baseUrl + "/.redis_plus/temp"));
         Worker<Void> woker = webEngine.getLoadWorker();
         woker.stateProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
-                JSObject jsObject = (JSObject) webEngine.executeScript("window");
-                ConnectController connectController = MainApplication.context.getBean(ConnectController.class);
-                DataSinglesController dataSinglesController = MainApplication.context.getBean(DataSinglesController.class);
-                DataClusterController dataClusterController = MainApplication.context.getBean(DataClusterController.class);
-                InfoController infoController = MainApplication.context.getBean(InfoController.class);
-                ConfController confController = MainApplication.context.getBean(ConfController.class);
-                jsObject.setMember("connectRouter", connectController);
-                jsObject.setMember("dataSinglesRouter", dataSinglesController);
-                jsObject.setMember("dataClusterRouter", dataClusterController);
-                jsObject.setMember("infoRouter", infoController);
-                jsObject.setMember("confRouter", confController);
-                System.out.println("current page load path : " + webEngine.getLocation());
+                setJsMember();
+                System.out.println("Current Page Load Path : " + webEngine.getLocation());
             }
+            if (webEngine.getLoadWorker().getException() != null && newValue == Worker.State.FAILED) {
+                System.out.println("Current Page Exextion Info : " + webEngine.getLoadWorker().getException().toString());
+            }
+            System.out.println("WebEngine Current State: [" + newValue.toString() + "] ");
         });
-        woker.exceptionProperty().addListener((ObservableValue<? extends Throwable> ov, Throwable t, Throwable t1) -> {
-            System.out.println("current page exextion info : " + t1.getMessage());
+        WebConsoleListener.setDefaultListener((WebView webView, String message, int lineNumber, String sourceId) -> {
+            System.out.println("Console: [" + sourceId + ":" + lineNumber + "] " + message);
         });
         return new VBox(webView);
+    }
+
+    public void setJsMember() {
+        JSObject jsObject = (JSObject) webEngine.executeScript("window");
+        ConnectController connectController = MainApplication.context.getBean(ConnectController.class);
+        DataSinglesController dataSinglesController = MainApplication.context.getBean(DataSinglesController.class);
+        DataClusterController dataClusterController = MainApplication.context.getBean(DataClusterController.class);
+        InfoController infoController = MainApplication.context.getBean(InfoController.class);
+        ConfController confController = MainApplication.context.getBean(ConfController.class);
+        jsObject.setMember("connectRouter", connectController);
+        jsObject.setMember("dataSinglesRouter", dataSinglesController);
+        jsObject.setMember("dataClusterRouter", dataClusterController);
+        jsObject.setMember("infoRouter", infoController);
+        jsObject.setMember("confRouter", confController);
     }
 
     /**

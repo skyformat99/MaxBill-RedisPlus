@@ -3,6 +3,7 @@ var form;
 var layer;
 
 layui.use(['form', 'jquery', 'layer'], function () {
+    outJsObj();
     $ = layui.jquery;
     form = layui.form;
     layer = layui.layer;

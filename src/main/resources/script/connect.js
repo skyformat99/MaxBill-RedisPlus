@@ -5,6 +5,7 @@ var rowDataId;
 var data = null;
 
 layui.use(['jquery', 'table', 'layer'], function () {
+    outJsObj();
     $ = layui.jquery;
     layer = layui.layer;
     table = layui.table;

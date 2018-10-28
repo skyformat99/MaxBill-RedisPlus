@@ -5,6 +5,7 @@ var currNode0;
 var currNode1;
 
 layui.use(['form', 'layer', 'jquery'], function () {
+    outJsObj();
     $ = layui.jquery;
     layer = layui.layer;
     form = layui.form;

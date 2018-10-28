@@ -2,6 +2,7 @@ var $;
 var layer;
 
 layui.use(['jquery', 'layer', 'element'], function () {
+    outJsObj();
     $ = layui.jquery;
     layer = layui.layer;
     initBaseInfo();

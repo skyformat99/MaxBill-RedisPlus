@@ -21,6 +21,8 @@ public class ItemUtil {
     public static final String PAGE_DATA_CLUSTER = "/page/data-cluster.html";
     public static final String PAGE_INFO = "/page/info.html";
     public static final String PAGE_CONF = "/page/conf.html";
+    public static final String PAGE_MONITOR = "/page/monitor.html";
+
 
 
 
