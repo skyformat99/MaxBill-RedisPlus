@@ -59,9 +59,26 @@ public class Desktop extends Application {
     private static WebEngine webEngine;
     private static BorderPane mainView;
 
+    //注入的JS对象
+    private static ConnectController connectController = null;
+    private static DataSinglesController dataSinglesController = null;
+    private static DataClusterController dataClusterController = null;
+    private static InfoController infoController = null;
+    private static ConfController confController = null;
+
 
     @Override
-    public void start(Stage winStage) throws Exception {
+    public void init() {
+        connectController = MainApplication.context.getBean(ConnectController.class);
+        dataSinglesController = MainApplication.context.getBean(DataSinglesController.class);
+        dataClusterController = MainApplication.context.getBean(DataClusterController.class);
+        infoController = MainApplication.context.getBean(InfoController.class);
+        confController = MainApplication.context.getBean(ConfController.class);
+    }
+
+
+    @Override
+    public void start(Stage winStage) {
         winStage.setTitle("RedisPlus");
         winStage.initStyle(StageStyle.TRANSPARENT);
         mainView = getMainView(winStage);
@@ -163,10 +180,14 @@ public class Desktop extends Application {
                 setJsMember();
                 System.out.println("Current Page Load Path : " + webEngine.getLocation());
             }
+            if (newValue == Worker.State.FAILED) {
+                webEngine.load(webEngine.getLocation());
+            }
             if (webEngine.getLoadWorker().getException() != null && newValue == Worker.State.FAILED) {
                 System.out.println("Current Page Exextion Info : " + webEngine.getLoadWorker().getException().toString());
             }
             System.out.println("WebEngine Current State: [" + newValue.toString() + "] ");
+            setJsMember();
         });
         WebConsoleListener.setDefaultListener((WebView webView, String message, int lineNumber, String sourceId) -> {
             System.out.println("Console: [" + sourceId + ":" + lineNumber + "] " + message);
@@ -174,13 +195,8 @@ public class Desktop extends Application {
         return new VBox(webView);
     }
 
-    public void setJsMember() {
+    private static void setJsMember() {
         JSObject jsObject = (JSObject) webEngine.executeScript("window");
-        ConnectController connectController = MainApplication.context.getBean(ConnectController.class);
-        DataSinglesController dataSinglesController = MainApplication.context.getBean(DataSinglesController.class);
-        DataClusterController dataClusterController = MainApplication.context.getBean(DataClusterController.class);
-        InfoController infoController = MainApplication.context.getBean(InfoController.class);
-        ConfController confController = MainApplication.context.getBean(ConfController.class);
         jsObject.setMember("connectRouter", connectController);
         jsObject.setMember("dataSinglesRouter", dataSinglesController);
         jsObject.setMember("dataClusterRouter", dataClusterController);
@@ -431,6 +447,13 @@ public class Desktop extends Application {
     public static void setWebViewPage(String url) {
         String utl = Desktop.class.getResource(url).toExternalForm();
         webEngine.load(utl);
+        Worker<Void> woker = webEngine.getLoadWorker();
+        woker.stateProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                setJsMember();
+                System.out.println("Current Page Load Path : " + webEngine.getLocation());
+            }
+        });
     }
 
 }

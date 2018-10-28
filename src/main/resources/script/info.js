@@ -18,7 +18,7 @@ function initBaseInfo() {
         $("#server").html(redisData.server);
         $("#client").html(redisData.client);
         $("#memory").html(redisData.memory);
-        $("#persistence").html(redisData.persistence);
+        //$("#persistence").html(redisData.persistence);
         $("#stats").html(redisData.stats);
         $("#cpu").html(redisData.cpu);
         var html = '';
@@ -68,7 +68,7 @@ function initLogsInfo() {
         var html = '';
         var logs = data.data;
         for (var i = 0; i < logs.length; i++) {
-            html += '<tr>';
+            html += '<tr style="height: 32px">';
             html += '<td>' + logs[i].id + '</td>';
             html += '<td>' + formatTimestamp(logs[i].timeStamp) + '</td>';
             html += '<td>' + logs[i].executionTime + '</td>';
