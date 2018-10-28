@@ -1,9 +1,7 @@
 package com.maxbill.base.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.maxbill.base.bean.KeyBean;
 import com.maxbill.base.bean.ZTreeBean;
-import com.maxbill.tool.DataUtil;
 import com.maxbill.tool.KeyUtil;
 import com.maxbill.tool.RedisUtil;
 import org.springframework.stereotype.Component;

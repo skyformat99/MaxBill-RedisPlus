@@ -1,24 +1,6 @@
 var $;
 var layer;
 var table;
-var chart1;
-var chart2;
-var chart3;
-var chart4;
-var data01 = [
-    {name: '0', value: 0},
-    {name: '0', value: 0},
-    {name: '0', value: 0},
-    {name: '0', value: 0},
-    {name: '0', value: 0}
-];
-var data02 = [
-    {name: '0', value: 0},
-    {name: '0', value: 0},
-    {name: '0', value: 0},
-    {name: '0', value: 0},
-    {name: '0', value: 0}
-];
 
 layui.use(['jquery', 'layer'], function () {
     $ = layui.jquery;
@@ -41,11 +23,12 @@ Highcharts.setOptions({
     }
 });
 
-function activeLastPointToolip(chart) {
-    var points = chart.series[0].points;
+function activeLastPointToolip(chart, index) {
+    var points = chart.series[index].points;
     chart.tooltip.refresh(points[points.length - 1]);
 }
 
+//内存信息监控
 function showCharts1() {
     Highcharts.chart('container1', {
         chart: {
@@ -56,15 +39,14 @@ function showCharts1() {
                     var chart = this;
                     var series01 = this.series[0];
                     var series02 = this.series[1];
-                    activeLastPointToolip(chart);
+                    activeLastPointToolip(chart, 0);
                     setInterval(function () {
-                        //获取实时内存数据
-
-                        var x = (new Date()).getTime(), // 当前时间
-                            y = Math.random();          // 随机值
-                        series01.addPoint([x, y], true, true);
-                        series02.addPoint([x, y], true, true);
-                        activeLastPointToolip(chart);
+                        var json = infoRouter.getMemInfo();
+                        var data = JSON.parse(json);
+                        var x = (new Date()).getTime();
+                        series01.addPoint([x, data.val01], true, true);
+                        series02.addPoint([x, data.val02], true, true);
+                        activeLastPointToolip(chart, 0);
                     }, 1000);
                 }
             }
@@ -73,7 +55,7 @@ function showCharts1() {
             enabled: false
         },
         title: {
-            text: '当前内存占用量实时监控（MB）'
+            text: '内存占用量实时监控'
         },
         xAxis: {
             type: 'datetime',
@@ -81,13 +63,21 @@ function showCharts1() {
         },
         yAxis: {
             title: {
-                text: null
+                text: "单位：MB"
+            }
+        },
+        plotOptions: {
+            spline: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
             }
         },
         tooltip: {
             formatter: function () {
                 return '<b>' + this.series.name + '</b><br/>' +
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
                     Highcharts.numberFormat(this.y, 2);
             }
         },
@@ -95,12 +85,12 @@ function showCharts1() {
             enabled: false
         },
         series: [{
-            name: '随机数据',
+            name: '当前占用',
             data: (function () {
                 var pots;
                 var data = [];
                 var time = (new Date()).getTime();
-                for (pots = -15; pots <= 0; pots += 1) {
+                for (pots = -10; pots <= 0; pots += 1) {
                     data.push({
                         x: time + pots * 1000,
                         y: 0
@@ -109,12 +99,12 @@ function showCharts1() {
                 return data;
             }())
         }, {
-            name: '随机数据',
+            name: '最高占用',
             data: (function () {
                 var pots;
                 var data = [];
                 var time = (new Date()).getTime();
-                for (pots = -15; pots <= 0; pots += 1) {
+                for (pots = -10; pots <= 0; pots += 1) {
                     data.push({
                         x: time + pots * 1000,
                         y: 0
@@ -126,22 +116,25 @@ function showCharts1() {
     });
 }
 
-
+//CPU信息监控
 function showCharts2() {
-    var chart2 = Highcharts.chart('container2', {
+    Highcharts.chart('container2', {
         chart: {
             type: 'spline',
             marginRight: 10,
             events: {
                 load: function () {
-                    var series = this.series[0],
-                        chart = this;
-                    activeLastPointToolip(chart);
+                    var chart = this;
+                    var series01 = this.series[0];
+                    var series02 = this.series[1];
+                    activeLastPointToolip(chart, 1);
                     setInterval(function () {
-                        var x = (new Date()).getTime(), // 当前时间
-                            y = Math.random();          // 随机值
-                        series.addPoint([x, y], true, true);
-                        activeLastPointToolip(chart);
+                        var json = infoRouter.getCpuInfo();
+                        var data = JSON.parse(json);
+                        var x = (new Date()).getTime();
+                        series01.addPoint([x, data.val01], true, true);
+                        series02.addPoint([x, data.val02], true, true);
+                        activeLastPointToolip(chart, 1);
                     }, 1000);
                 }
             }
@@ -150,7 +143,7 @@ function showCharts2() {
             enabled: false
         },
         title: {
-            text: '主进程核心态累计CPU耗时（S）'
+            text: '主进程累计CPU耗时监控'
         },
         xAxis: {
             type: 'datetime',
@@ -158,13 +151,21 @@ function showCharts2() {
         },
         yAxis: {
             title: {
-                text: null
+                text: "单位：S"
+            }
+        },
+        plotOptions: {
+            spline: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
             }
         },
         tooltip: {
             formatter: function () {
                 return '<b>' + this.series.name + '</b><br/>' +
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
                     Highcharts.numberFormat(this.y, 2);
             }
         },
@@ -172,16 +173,29 @@ function showCharts2() {
             enabled: false
         },
         series: [{
-            name: '随机数据',
+            name: '核心态',
             data: (function () {
-                // 生成随机值
-                var data = [],
-                    time = (new Date()).getTime(),
-                    i;
-                for (i = -19; i <= 0; i += 1) {
+                var pots;
+                var data = [];
+                var time = (new Date()).getTime();
+                for (pots = -10; pots <= 0; pots += 1) {
                     data.push({
-                        x: time + i * 1000,
-                        y: Math.random()
+                        x: time + pots * 1000,
+                        y: 0
+                    });
+                }
+                return data;
+            }())
+        }, {
+            name: '用户态',
+            data: (function () {
+                var pots;
+                var data = [];
+                var time = (new Date()).getTime();
+                for (pots = -10; pots <= 0; pots += 1) {
+                    data.push({
+                        x: time + pots * 1000,
+                        y: 0
                     });
                 }
                 return data;
@@ -190,22 +204,19 @@ function showCharts2() {
     });
 }
 
-
+//各数据库KEY数监控
 function showCharts3() {
-    var chart = Highcharts.chart('container3', {
+    Highcharts.chart('container3', {
         chart: {
-            type: 'spline',
+            type: 'column',
             marginRight: 10,
             events: {
                 load: function () {
-                    var series = this.series[0],
-                        chart = this;
-                    activeLastPointToolip(chart);
+                    var chart = this;
                     setInterval(function () {
-                        var x = (new Date()).getTime(), // 当前时间
-                            y = Math.random();          // 随机值
-                        series.addPoint([x, y], true, true);
-                        activeLastPointToolip(chart);
+                        var json = infoRouter.getKeyInfo();
+                        var data = JSON.parse(json);
+                        chart.series[0].setData(data);
                     }, 1000);
                 }
             }
@@ -214,62 +225,56 @@ function showCharts3() {
             enabled: false
         },
         title: {
-            text: '当前各数据库实时键个数（个）'
+            text: '各数据库键数实时监控'
         },
         xAxis: {
-            type: 'datetime',
-            tickPixelInterval: 150
+            categories: ['DB0', 'DB1', 'DB2', 'DB3', 'DB4', 'DB5',
+                'DB6', 'DB7', 'DB8', 'DB9', 'DB10', 'DB11',
+                'DB12', 'DB13', 'DB14', 'DB15']
         },
         yAxis: {
+            labels: {
+                x: -15
+            },
             title: {
-                text: null
+                text: '单位：个'
             }
         },
-        tooltip: {
-            formatter: function () {
-                return '<b>' + this.series.name + '</b><br/>' +
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-                    Highcharts.numberFormat(this.y, 2);
+        plotOptions: {
+            column: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
             }
         },
         legend: {
             enabled: false
         },
         series: [{
-            name: '随机数据',
-            data: (function () {
-                // 生成随机值
-                var data = [],
-                    time = (new Date()).getTime(),
-                    i;
-                for (i = -19; i <= 0; i += 1) {
-                    data.push({
-                        x: time + i * 1000,
-                        y: Math.random()
-                    });
-                }
-                return data;
-            }())
+            name: '键',
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         }]
     });
 }
 
-
+//网络流速监控
 function showCharts4() {
-    var chart = Highcharts.chart('container4', {
+    Highcharts.chart('container4', {
         chart: {
-            type: 'spline',
+            type: 'areaspline',
             marginRight: 10,
             events: {
                 load: function () {
-                    var series = this.series[0],
-                        chart = this;
-                    activeLastPointToolip(chart);
+                    var chart = this;
+                    var series01 = this.series[0];
+                    var series02 = this.series[1];
                     setInterval(function () {
-                        var x = (new Date()).getTime(), // 当前时间
-                            y = Math.random();          // 随机值
-                        series.addPoint([x, y], true, true);
-                        activeLastPointToolip(chart);
+                        var json = infoRouter.getCpuInfo();
+                        var data = JSON.parse(json);
+                        var x = (new Date()).getTime();
+                        series01.addPoint([x, data.val01], true, true);
+                        series02.addPoint([x, data.val02], true, true);
                     }, 1000);
                 }
             }
@@ -278,69 +283,63 @@ function showCharts4() {
             enabled: false
         },
         title: {
-            text: '动态模拟实时数据'
+            text: '网络出入口流速实时监控'
+        },
+        plotOptions: {
+            areaspline: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
+            }
+        },
+        legend: {
+            enabled: false
         },
         xAxis: {
             type: 'datetime',
             tickPixelInterval: 150
         },
         yAxis: {
+            labels: {
+                x: -15
+            },
             title: {
-                text: null
+                text: "单位：Kbps"
             }
         },
         tooltip: {
-            formatter: function () {
-                return '<b>' + this.series.name + '</b><br/>' +
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-                    Highcharts.numberFormat(this.y, 2);
-            }
-        },
-        legend: {
-            enabled: false
+            shared: true,
+            valueSuffix: ' 单位'
         },
         series: [{
-            name: '随机数据',
+            name: '入口流量',
             data: (function () {
-                // 生成随机值
-                var data = [],
-                    time = (new Date()).getTime(),
-                    i;
-                for (i = -19; i <= 0; i += 1) {
+                var pots;
+                var data = [];
+                var time = (new Date()).getTime();
+                for (pots = -10; pots <= 0; pots += 1) {
                     data.push({
-                        x: time + i * 1000,
-                        y: Math.random()
+                        x: time + pots * 1000,
+                        y: 0
+                    });
+                }
+                return data;
+            }())
+        }, {
+            name: '出口流量',
+            data: (function () {
+                var pots;
+                var data = [];
+                var time = (new Date()).getTime();
+                for (pots = -10; pots <= 0; pots += 1) {
+                    data.push({
+                        x: time + pots * 1000,
+                        y: 0
                     });
                 }
                 return data;
             }())
         }]
     });
-}
-
-function moveData(type, data, key, val) {
-    var dataTemp = [
-        {name: '0', value: 0},
-        {name: '0', value: 0},
-        {name: '0', value: 0},
-        {name: '0', value: 0},
-        {name: '0', value: 0}
-    ];
-    for (var i = 0; i < 5; i++) {
-        if (i == 4) {
-            dataTemp[i].name = key;
-            dataTemp[i].value = val;
-        } else {
-            dataTemp[i].name = data[i + 1].name;
-            dataTemp[i].value = data[i + 1].value;
-        }
-    }
-    switch (type) {
-        case 1:
-            data01 = dataTemp;
-            break;
-        case 2:
-            data02 = dataTemp;
-            break;
-    }
 }
