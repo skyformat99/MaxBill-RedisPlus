@@ -5,12 +5,6 @@ var table;
 layui.use(['jquery', 'layer'], function () {
     $ = layui.jquery;
     layer = layui.layer;
-    window.onresize = function () {
-        $('#container1').highcharts().reflow();
-        $('#container2').highcharts().reflow();
-        $('#container3').highcharts().reflow();
-        $('#container4').highcharts().reflow();
-    }
     showCharts1();
     showCharts2();
     showCharts3();
@@ -75,17 +69,16 @@ function showCharts1() {
             }
         },
         tooltip: {
-            formatter: function () {
-                return '<b>' + this.series.name + '</b><br/>' +
-                    Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
-                    Highcharts.numberFormat(this.y, 2);
-            }
+            valueSuffix: ' MB',
+            crosshairs: true,
+            xDateFormat: '%Y-%m-%d %H:%M:%S'
         },
         legend: {
             enabled: false
         },
         series: [{
             name: '当前占用',
+            color: "green",
             data: (function () {
                 var pots;
                 var data = [];
@@ -100,6 +93,7 @@ function showCharts1() {
             }())
         }, {
             name: '最高占用',
+            color: "#7CB5EC",
             data: (function () {
                 var pots;
                 var data = [];
@@ -163,17 +157,16 @@ function showCharts2() {
             }
         },
         tooltip: {
-            formatter: function () {
-                return '<b>' + this.series.name + '</b><br/>' +
-                    Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
-                    Highcharts.numberFormat(this.y, 2);
-            }
+            valueSuffix: ' S',
+            crosshairs: true,
+            xDateFormat: '%Y-%m-%d %H:%M:%S'
         },
         legend: {
             enabled: false
         },
         series: [{
             name: '核心态',
+            color: "#464646",
             data: (function () {
                 var pots;
                 var data = [];
@@ -188,6 +181,7 @@ function showCharts2() {
             }())
         }, {
             name: '用户态',
+            color: "#7CB5EC",
             data: (function () {
                 var pots;
                 var data = [];
@@ -240,6 +234,11 @@ function showCharts3() {
                 text: '单位：个'
             }
         },
+        tooltip: {
+            shared: true,
+            crosshairs: true,
+            valueSuffix: ' 个'
+        },
         plotOptions: {
             column: {
                 dataLabels: {
@@ -266,11 +265,10 @@ function showCharts4() {
             marginRight: 10,
             events: {
                 load: function () {
-                    var chart = this;
                     var series01 = this.series[0];
                     var series02 = this.series[1];
                     setInterval(function () {
-                        var json = infoRouter.getCpuInfo();
+                        var json = infoRouter.getNetInfo();
                         var data = JSON.parse(json);
                         var x = (new Date()).getTime();
                         series01.addPoint([x, data.val01], true, true);
@@ -310,7 +308,9 @@ function showCharts4() {
         },
         tooltip: {
             shared: true,
-            valueSuffix: ' 单位'
+            crosshairs: true,
+            valueSuffix: ' Kbps',
+            xDateFormat: '%Y-%m-%d %H:%M:%S'
         },
         series: [{
             name: '入口流量',

@@ -132,7 +132,6 @@ public class InfoController {
             if (null != jedis) {
                 RedisInfo redisInfo = getRedisInfo(jedis);
                 String[] stats = redisInfo.getStats().split("\n");
-                System.out.println(redisInfo.getStats());
                 String val01 = StringUtil.getValueString(":", stats[6]).replace("\r", "");
                 String val02 = StringUtil.getValueString(":", stats[7]).replace("\r", "");
                 resultMap.put("val01", Float.valueOf(val01));
