@@ -12,9 +12,7 @@ RedisPlus是为Redis可视化管理开发的一款开源免费的桌面客户端
 
 #### 下载地址
 
-1.微云下载：https://share.weiyun.com/5UIOsxY
-
-2.百度下载：https://pan.baidu.com/s/1ETwWnEj4rbsE1S3GlYHlWg
+百度下载：https://pan.baidu.com/s/1ETwWnEj4rbsE1S3GlYHlWg
 
 
 #### 版本说明
