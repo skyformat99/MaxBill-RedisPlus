@@ -33,6 +33,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import netscape.javascript.JSObject;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.File;
 import java.sql.SQLOutput;
@@ -59,6 +61,9 @@ public class Desktop extends Application {
     private static WebEngine webEngine;
     private static BorderPane mainView;
 
+    //上下文对象
+    public static ConfigurableApplicationContext context = null;
+
     //注入的JS对象
     private static ConnectController connectController = null;
     private static DataSinglesController dataSinglesController = null;
@@ -69,21 +74,26 @@ public class Desktop extends Application {
 
     @Override
     public void init() {
-        connectController = MainApplication.context.getBean(ConnectController.class);
-        dataSinglesController = MainApplication.context.getBean(DataSinglesController.class);
-        dataClusterController = MainApplication.context.getBean(DataClusterController.class);
-        infoController = MainApplication.context.getBean(InfoController.class);
-        confController = MainApplication.context.getBean(ConfController.class);
-    }
 
+    }
 
     @Override
     public void start(Stage winStage) {
         winStage.setTitle("RedisPlus");
         winStage.initStyle(StageStyle.TRANSPARENT);
+        winStage.getIcons().add(new Image(ItemUtil.DESKTOP_TASK_LOGO));
+        winStage.setScene(new Scene(getRunView(), minWidth, minHeight));
+        winStage.setOnShown(e -> {
+            context = SpringApplication.run(MainApplication.class);
+            connectController = context.getBean(ConnectController.class);
+            dataSinglesController = context.getBean(DataSinglesController.class);
+            dataClusterController = context.getBean(DataClusterController.class);
+            infoController = context.getBean(InfoController.class);
+            confController = context.getBean(ConfController.class);
+        });
+        winStage.show();
         mainView = getMainView(winStage);
         winStage.setScene(new Scene(mainView, minWidth, minHeight));
-        winStage.getIcons().add(new Image(ItemUtil.DESKTOP_TASK_LOGO));
         doWinStage(winStage);
         doWinRaise(winStage);
         doWinState(winStage, mainView);
@@ -153,17 +163,26 @@ public class Desktop extends Application {
         return topsView;
     }
 
-
     /**
-     * 内容窗体
+     * 开始窗体
      */
-    public VBox getBodyView() {
+    public WebView getRunView() {
         webView = new WebView();
         webView.setCache(true);
         webView.setContextMenuEnabled(false);
         webView.setFontSmoothingType(FontSmoothingType.GRAY);
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
+        String utl = Desktop.class.getResource("/page/start.html").toExternalForm();
+        webEngine.load(utl);
+        return webView;
+    }
+
+
+    /**
+     * 内容窗体
+     */
+    public WebView getBodyView() {
         String utl = Desktop.class.getResource(ItemUtil.PAGE_CONNECT).toExternalForm();
         webEngine.load(utl);
         webEngine.setOnResized((WebEvent<Rectangle2D> ev) -> {
@@ -192,7 +211,7 @@ public class Desktop extends Application {
         WebConsoleListener.setDefaultListener((WebView webView, String message, int lineNumber, String sourceId) -> {
             System.out.println("Console: [" + sourceId + ":" + lineNumber + "] " + message);
         });
-        return new VBox(webView);
+        return webView;
     }
 
     private static void setJsMember() {
