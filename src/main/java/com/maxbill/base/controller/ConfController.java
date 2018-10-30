@@ -16,7 +16,7 @@ import java.util.Map;
 public class ConfController {
 
     public String getConfInfo() {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
@@ -36,11 +36,11 @@ public class ConfController {
 
 
     public String setConfInfo(String conf) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
-                Map confMap = new HashMap();
+                Map<String, String> confMap = new HashMap<>();
                 String[] confArray = conf.split("&");
                 for (String str : confArray) {
                     confMap.put(StringUtil.getKeyString(str, "="), StringUtil.getValueString(str, "="));

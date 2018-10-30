@@ -2,14 +2,16 @@ var $;
 var layer;
 var table;
 
-layui.use(['jquery', 'layer'], function () {
-    $ = layui.jquery;
-    layer = layui.layer;
-    showCharts1();
-    showCharts2();
-    showCharts3();
-    showCharts4();
-});
+window.onload = function () {
+    layui.use(['jquery', 'layer'], function () {
+        $ = layui.jquery;
+        layer = layui.layer;
+        showCharts1();
+        showCharts2();
+        showCharts3();
+        showCharts4();
+    });
+}
 
 Highcharts.setOptions({
     global: {

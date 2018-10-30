@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.service.DataService;
-import com.maxbill.core.desktop.Desktop;
 import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,7 +34,7 @@ public class ConnectController {
      * 新增连接数据
      */
     public String insertConnect(String json) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             JSONObject data = JSON.parseObject(json);
             Connect connect = new Connect();
@@ -63,7 +62,7 @@ public class ConnectController {
      * 更新连接数据
      */
     public String updateConnect(String json) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             JSONObject data = JSON.parseObject(json);
             Connect connect = new Connect();
@@ -92,7 +91,7 @@ public class ConnectController {
      * 删除连接数据
      */
     public String deleteConnect(String id) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             this.dataService.deleteConnectById(id);
             resultMap.put("code", 200);
@@ -116,7 +115,7 @@ public class ConnectController {
      * 打开连接数据
      */
     public String createConnect(String id) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Connect connect = this.dataService.selectConnectById(id);
             if ("1".equals(connect.getType())) {
@@ -156,7 +155,7 @@ public class ConnectController {
      * 断开连接数据
      */
     public String disconConnect(String id) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Connect connect = (Connect) DataUtil.getConfig("currentOpenConnect");
             if (connect.getIsha().equals("0")) {
@@ -205,32 +204,6 @@ public class ConnectController {
             }
         } else {
             return 0;
-        }
-    }
-
-    public void changeWebview(int pageNo) {
-        switch (pageNo) {
-            case 1:
-                Desktop.setWebViewPage(ItemUtil.PAGE_CONNECT);
-                break;
-            case 2:
-                Connect connect = (Connect) DataUtil.getConfig("currentOpenConnect");
-                if (connect.getIsha().equals("0")) {
-                    Desktop.setWebViewPage(ItemUtil.PAGE_DATA_SINGLES);
-                }
-                if (connect.getIsha().equals("1")) {
-                    Desktop.setWebViewPage(ItemUtil.PAGE_DATA_CLUSTER);
-                }
-                break;
-            case 3:
-                Desktop.setWebViewPage(ItemUtil.PAGE_INFO);
-                break;
-            case 4:
-                Desktop.setWebViewPage(ItemUtil.PAGE_CONF);
-                break;
-            case 5:
-                Desktop.setWebViewPage(ItemUtil.PAGE_MONITOR);
-                break;
         }
     }
 

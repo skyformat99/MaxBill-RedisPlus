@@ -7,10 +7,11 @@ function toPage(flag, page) {
         });
         return false;
     }
-    connectRouter.changeWebview(page);
+    otherRouter.changeWebview(page);
 }
 
 function outJsObj() {
+    console.log(otherRouter);
     console.log(connectRouter);
     console.log(dataSinglesRouter);
     console.log(dataClusterRouter);

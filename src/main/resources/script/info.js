@@ -1,13 +1,14 @@
 var $;
 var layer;
 
-layui.use(['jquery', 'layer', 'element'], function () {
-    outJsObj();
-    $ = layui.jquery;
-    layer = layui.layer;
-    initBaseInfo();
-    initLogsInfo();
-});
+window.onload = function () {
+    layui.use(['jquery', 'layer', 'element'], function () {
+        $ = layui.jquery;
+        layer = layui.layer;
+        initBaseInfo();
+        initLogsInfo();
+    });
+}
 
 /**初始化信息*/
 function initBaseInfo() {

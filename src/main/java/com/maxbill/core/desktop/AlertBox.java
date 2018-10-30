@@ -2,7 +2,6 @@ package com.maxbill.core.desktop;
 
 import com.maxbill.MainApplication;
 import com.maxbill.base.controller.OtherController;
-import com.maxbill.tool.ItemUtil;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.concurrent.Worker;
 import javafx.geometry.Insets;
@@ -23,6 +22,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import netscape.javascript.JSObject;
 
+import static com.maxbill.tool.ItemUtil.*;
+
 public class AlertBox {
 
     public void display(String title) {
@@ -31,7 +32,7 @@ public class AlertBox {
         window.initStyle(StageStyle.TRANSPARENT);
         window.initModality(Modality.APPLICATION_MODAL);
         window.setScene(new Scene(getMainBox(window, title), 600, 600));
-        window.getIcons().add(new Image(ItemUtil.DESKTOP_TASK_LOGO));
+        window.getIcons().add(new Image(DESKTOP_APP_LOGO));
         window.setResizable(false);
         window.setFullScreen(false);
         window.setAlwaysOnTop(false);
@@ -45,7 +46,7 @@ public class AlertBox {
     public BorderPane getMainBox(Stage winStage, String title) {
         BorderPane mainBox = new BorderPane();
         mainBox.setId("main-box");
-        mainBox.getStylesheets().add(ItemUtil.ALERTBOX_STYLE);
+        mainBox.getStylesheets().add(ALERTBOX_STYLE);
         mainBox.setTop(getTopsView(winStage, title));
         mainBox.setCenter(getBodyView(title));
         return mainBox;
@@ -110,19 +111,19 @@ public class AlertBox {
         String htmlSrc = "";
         switch (title) {
             case "设置":
-                htmlSrc = ItemUtil.ALERT_BOX_SETTING;
+                htmlSrc = ALERT_BOX_SETTING;
                 break;
             case "反馈":
-                htmlSrc = ItemUtil.ALERT_BOX_ADVICE;
+                htmlSrc = ALERT_BOX_ADVICE;
                 break;
             case "帮助":
-                htmlSrc = ItemUtil.ALERT_BOX_HELP;
+                htmlSrc = ALERT_BOX_HELP;
                 break;
             case "版本":
-                htmlSrc = ItemUtil.ALERT_BOX_VERSION;
+                htmlSrc = ALERT_BOX_VERSION;
                 break;
             case "关于":
-                htmlSrc = ItemUtil.ALERT_BOX_ABOUT;
+                htmlSrc = ALERT_BOX_ABOUT;
                 break;
         }
         String url = Desktop.class.getResource(htmlSrc).toExternalForm();

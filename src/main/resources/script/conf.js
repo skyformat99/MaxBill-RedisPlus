@@ -2,18 +2,19 @@ var $;
 var form;
 var layer;
 
-layui.use(['form', 'jquery', 'layer'], function () {
-    outJsObj();
-    $ = layui.jquery;
-    form = layui.form;
-    layer = layui.layer;
-    //监听提交
-    form.on('submit(editBtn)', function () {
-        setRedisInfo();
-        return false;
+window.onload = function () {
+    layui.use(['form', 'jquery', 'layer'], function () {
+        $ = layui.jquery;
+        form = layui.form;
+        layer = layui.layer;
+        //监听提交
+        form.on('submit(editBtn)', function () {
+            setRedisInfo();
+            return false;
+        });
+        getRedisInfo();
     });
-    getRedisInfo();
-});
+}
 
 /**获取配置信息*/
 function getRedisInfo() {

@@ -2,15 +2,11 @@ package com.maxbill.core.desktop;
 
 import com.maxbill.MainApplication;
 import com.maxbill.base.controller.*;
-import com.maxbill.tool.ItemUtil;
 import com.sun.javafx.webkit.WebConsoleListener;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -19,15 +15,17 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebErrorEvent;
-import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -36,27 +34,32 @@ import netscape.javascript.JSObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.io.File;
-import java.sql.SQLOutput;
+import static com.maxbill.tool.ItemUtil.*;
 
 public class Desktop extends Application {
 
     private double x = 0.00;
     private double y = 0.00;
+
     private double xOffset = 0;
     private double yOffset = 0;
+
     private double width = 0.00;
     private double height = 0.00;
+
     private double resizeWidth = 5.00;
     private double minWidth = 1000.00;
     private double minHeight = 600.00;
-    private boolean isMax = false;
+
     //是否处于右边界调整窗口状态
     private boolean isRight;
     //是否处于下边界调整窗口状态
     private boolean isBottom;
     //是否处于右下角调整窗口状态
     private boolean isBottomRight;
+    //是否处于最大化调整窗口状态
+    private boolean isMax = false;
+
     private static WebView webView;
     private static WebEngine webEngine;
     private static BorderPane mainView;
@@ -65,6 +68,7 @@ public class Desktop extends Application {
     public static ConfigurableApplicationContext context = null;
 
     //注入的JS对象
+    private static OtherController otherController = null;
     private static ConnectController connectController = null;
     private static DataSinglesController dataSinglesController = null;
     private static DataClusterController dataClusterController = null;
@@ -73,33 +77,29 @@ public class Desktop extends Application {
 
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void start(Stage winStage) {
-        winStage.setTitle("RedisPlus");
+
+        //设置窗口信息
+        winStage.centerOnScreen();
+        winStage.setTitle(DESKTOP_APP_NAME);
+        winStage.setAlwaysOnTop(false);
         winStage.initStyle(StageStyle.TRANSPARENT);
-        winStage.getIcons().add(new Image(ItemUtil.DESKTOP_TASK_LOGO));
-        winStage.setScene(new Scene(getRunView(), minWidth, minHeight));
-        winStage.setOnShown(e -> {
-            context = SpringApplication.run(MainApplication.class);
-            connectController = context.getBean(ConnectController.class);
-            dataSinglesController = context.getBean(DataSinglesController.class);
-            dataClusterController = context.getBean(DataClusterController.class);
-            infoController = context.getBean(InfoController.class);
-            confController = context.getBean(ConfController.class);
-        });
-        winStage.show();
+        winStage.getIcons().add(new Image(DESKTOP_APP_LOGO));
+
+        //启动扫描服务
+        context = SpringApplication.run(MainApplication.class);
+        initWebObject();
+
+        //加载数据窗口
         mainView = getMainView(winStage);
         winStage.setScene(new Scene(mainView, minWidth, minHeight));
+        winStage.show();
+
+        //监听窗口事件
         doWinStage(winStage);
         doWinRaise(winStage);
         doWinState(winStage, mainView);
-        winStage.setAlwaysOnTop(false);
-        winStage.centerOnScreen();
-        winStage.show();
+
     }
 
 
@@ -109,7 +109,7 @@ public class Desktop extends Application {
     public BorderPane getMainView(Stage winStage) {
         BorderPane mainView = new BorderPane();
         mainView.setId("main-view");
-        mainView.getStylesheets().add(ItemUtil.DESKTOP_STYLE);
+        mainView.getStylesheets().add(DESKTOP_STYLE);
         mainView.setTop(getTopsView(winStage));
         mainView.setCenter(getBodyView());
         mainView.setBottom(getEndsView());
@@ -163,19 +163,27 @@ public class Desktop extends Application {
         return topsView;
     }
 
+    final Float[] values = new Float[]{-1.0f, 0f, 0.6f, 1.0f};
+
     /**
      * 开始窗体
      */
-    public WebView getRunView() {
-        webView = new WebView();
-        webView.setCache(true);
-        webView.setContextMenuEnabled(false);
-        webView.setFontSmoothingType(FontSmoothingType.GRAY);
-        webEngine = webView.getEngine();
-        webEngine.setJavaScriptEnabled(true);
-        String utl = Desktop.class.getResource("/page/start.html").toExternalForm();
-        webEngine.load(utl);
-        return webView;
+    public VBox getRunView() {
+        VBox runBox = new VBox();
+        //启动图片
+        Label imageLable = new Label();
+        imageLable.setPrefSize(1000, 550);
+        Image image = new Image("/image/app03.jpg", 1000, 550, false, false);
+        imageLable.setGraphic(new ImageView(image));
+        //加载提醒
+        //ProgressBar progressBar = new ProgressBar();
+        //progressBar.setProgress(-1.0f);
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setProgress(-1.0f);
+
+        runBox.getChildren().addAll(imageLable);
+        runBox.getChildren().addAll(progressIndicator);
+        return runBox;
     }
 
 
@@ -183,39 +191,45 @@ public class Desktop extends Application {
      * 内容窗体
      */
     public WebView getBodyView() {
-        String utl = Desktop.class.getResource(ItemUtil.PAGE_CONNECT).toExternalForm();
-        webEngine.load(utl);
-        webEngine.setOnResized((WebEvent<Rectangle2D> ev) -> {
-            Rectangle2D r = ev.getData();
-            System.out.println(r.getWidth());
-            System.out.println(r.getHeight());
-        });
-        System.out.println("userPath:" + webEngine.getUserDataDirectory());
+        webView = new WebView();
+        webView.setCache(false);
+        webEngine = webView.getEngine();
+        webEngine.setJavaScriptEnabled(true);
+        webView.setContextMenuEnabled(false);
+        webView.setFontSmoothingType(FontSmoothingType.GRAY);
+        webEngine.load(Desktop.class.getResource(PAGE_CONNECT).toExternalForm());
+
+        //设置数据目录
         //String baseUrl = System.getProperty("user.home");
         //webEngine.setUserDataDirectory(new File(baseUrl + "/.redis_plus/temp"));
+
+        //监听事件
         Worker<Void> woker = webEngine.getLoadWorker();
         woker.stateProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
                 setJsMember();
                 System.out.println("Current Page Load Path : " + webEngine.getLocation());
             }
-            if (newValue == Worker.State.FAILED) {
-                webEngine.load(webEngine.getLocation());
-            }
             if (webEngine.getLoadWorker().getException() != null && newValue == Worker.State.FAILED) {
+                webEngine.reload();
                 System.out.println("Current Page Exextion Info : " + webEngine.getLoadWorker().getException().toString());
             }
-            System.out.println("WebEngine Current State: [" + newValue.toString() + "] ");
-            setJsMember();
         });
+
+        //控制台监听事件
         WebConsoleListener.setDefaultListener((WebView webView, String message, int lineNumber, String sourceId) -> {
+            if (message.contains("ReferenceError: Can't find variable")) {
+                webEngine.reload();
+            }
             System.out.println("Console: [" + sourceId + ":" + lineNumber + "] " + message);
         });
+
         return webView;
     }
 
     private static void setJsMember() {
         JSObject jsObject = (JSObject) webEngine.executeScript("window");
+        jsObject.setMember("otherRouter", otherController);
         jsObject.setMember("connectRouter", connectController);
         jsObject.setMember("dataSinglesRouter", dataSinglesController);
         jsObject.setMember("dataClusterRouter", dataClusterController);
@@ -236,8 +250,8 @@ public class Desktop extends Application {
         Label endOrder = new Label();
         endTitle.setMinWidth(200.00);
         endOrder.setMinWidth(80.00);
-        endTitle.setText(ItemUtil.DESKTOP_STATUS_NO);
-        endOrder.setText(ItemUtil.DESKTOP_VERSION);
+        endTitle.setText(DESKTOP_STATUS_NO);
+        endOrder.setText(DESKTOP_VERSION);
         endImage.setId("ends-view-image");
         endTitle.setId("ends-view-title");
         endOther.setId("ends-view-other");
@@ -254,7 +268,7 @@ public class Desktop extends Application {
         endsView.setAlignment(Pos.BASELINE_RIGHT);
         endTitle.setTextFill(Paint.valueOf("red"));
         endOrder.setTextFill(Paint.valueOf("#1766A2"));
-        endImage.setGraphic(new ImageView(new Image(ItemUtil.DESKTOP_STATUS_IMAGE_NO)));
+        endImage.setGraphic(new ImageView(new Image(DESKTOP_STATUS_IMAGE_NO)));
         GridPane.setHgrow(endTitle, Priority.ALWAYS);
         return endsView;
     }
@@ -473,6 +487,16 @@ public class Desktop extends Application {
                 System.out.println("Current Page Load Path : " + webEngine.getLocation());
             }
         });
+    }
+
+
+    public void initWebObject() {
+        otherController = context.getBean(OtherController.class);
+        connectController = context.getBean(ConnectController.class);
+        dataSinglesController = context.getBean(DataSinglesController.class);
+        dataClusterController = context.getBean(DataClusterController.class);
+        infoController = context.getBean(InfoController.class);
+        confController = context.getBean(ConfController.class);
     }
 
 }

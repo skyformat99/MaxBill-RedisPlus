@@ -1,13 +1,9 @@
 package com.maxbill.core.desktop;
 
-import com.maxbill.tool.DesktopUtil;
-import com.maxbill.tool.ItemUtil;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import java.net.URI;
 
 public class TopsMenu extends ContextMenu {
 

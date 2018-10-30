@@ -4,22 +4,26 @@ var layer;
 var currNode0;
 var currNode1;
 
-layui.use(['form', 'layer', 'jquery'], function () {
-    outJsObj();
-    $ = layui.jquery;
-    layer = layui.layer;
-    form = layui.form;
-    form.render();
-    form.on('radio(vals)', function (data) {
-        var thisObj = $("#vals" + data.value);
-        var elseObj = $(".vals").not(thisObj);
-        $(".vals").removeClass("key-vals-hide");
-        $(".vals").removeClass("key-vals-show");
-        thisObj.addClass("key-vals-show");
-        elseObj.addClass("key-vals-hide");
+
+window.onload = function () {
+    layui.use(['form', 'layer', 'jquery'], function () {
+        $ = layui.jquery;
+        layer = layui.layer;
+        form = layui.form;
+
+        form.render();
+        form.on('radio(vals)', function (data) {
+            var thisObj = $("#vals" + data.value);
+            var elseObj = $(".vals").not(thisObj);
+            $(".vals").removeClass("key-vals-hide");
+            $(".vals").removeClass("key-vals-show");
+            thisObj.addClass("key-vals-show");
+            elseObj.addClass("key-vals-hide");
+        });
+        initDbTree();
     });
-    initDbTree();
-});
+}
+
 
 //树配置
 var zTreeSetting = {

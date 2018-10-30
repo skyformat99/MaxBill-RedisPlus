@@ -4,17 +4,16 @@ var table;
 var rowDataId;
 var data = null;
 
-layui.use(['jquery', 'table', 'layer'], function () {
-    outJsObj();
-    $ = layui.jquery;
-    layer = layui.layer;
-    table = layui.table;
-    data = connectRouter.selectConnect();
-    if (data == null) {
-        connectRouter.changeWebview(1);
-    }
-    initConnectData();
-});
+
+window.onload = function () {
+    layui.use(['jquery', 'table', 'layer'], function () {
+        $ = layui.jquery;
+        layer = layui.layer;
+        table = layui.table;
+        data = connectRouter.selectConnect();
+        initConnectData();
+    });
+}
 
 /*初始化连接数据*/
 function initConnectData() {
