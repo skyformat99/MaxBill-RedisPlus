@@ -59,13 +59,13 @@
 * {
     margin: 0;
     padding: 0;
-    /*color: #0C0C0C;*/
     font-family: 'redisplus';
 }
 
 .root {
     height: 100%;
     width: 100%;
+
     overflow: hidden;
 }
 
@@ -74,8 +74,9 @@
     left: 0;
     height: 70px;
     width: 100%;
-    position: fixed;
     z-index: 1000;
+    color: #0C0C0C;
+    position: fixed;
     background-color: #CFE6F3;
 }
 
@@ -104,6 +105,7 @@
 
 .topbar-menu-item span {
     height: 20px;
+    color: #0C0C0C;
     display: block;
     font-size: 12px;
     line-height: 22px;

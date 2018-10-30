@@ -33,6 +33,7 @@
 }
 
 .handle-left-item cite {
+    color: #0C0C0C;
     margin-left: 5px;
 }
 
@@ -66,7 +67,12 @@
     background-color: #CFE6F3;
 }
 
+.layui-table {
+    color: #0C0C0C;
+}
+
 .layui-table tbody tr:hover, .layui-table-hover {
+    color: dodgerblue;
     background-color: #CFE6F3;
 }
 

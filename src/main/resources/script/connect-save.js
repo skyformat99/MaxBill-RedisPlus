@@ -18,7 +18,7 @@ layui.use(['jquery', 'form', 'layer'], function () {
     });
     form.on('checkbox(isha)', function (data) {
         if (!data.elem.checked) {
-            $('.div-input05 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E3DFDD');
+            $('.div-input05 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E0E0E2');
         } else {
             $('.div-input05 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#5FB878');
         }
@@ -44,8 +44,8 @@ function showConView() {
     $(".ssh-input").attr("disabled", "disabled");
     $(".ssh-input").val('');
     $(".ssh-input").attr('lay-verify', '');
-    $(".ssh-input").css('background', '#EEEAE6');
-    $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E3DFDD');
+    $(".ssh-input").css('background', '#E0E0E2');
+    $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E0E0E2');
 }
 
 
@@ -53,7 +53,7 @@ function showConView() {
 function showSshView() {
     $("#rhost").val('');
     $("#rhost").attr("disabled", "disabled");
-    $("#rhost").css('background', '#EEEAE6');
+    $("#rhost").css('background', '#E0E0E2');
     $("#rhost").attr('lay-verify', '');
     $(".ssh-input").removeAttr("disabled");
     $(".ssh-input").attr('lay-verify', 'required');
