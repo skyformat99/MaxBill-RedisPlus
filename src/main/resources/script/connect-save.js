@@ -38,26 +38,30 @@ layui.use(['jquery', 'form', 'layer'], function () {
 
 //显示连接视图
 function showConView() {
-    $("#rhost").removeAttr("disabled");
-    $("#rhost").attr('lay-verify', 'required');
-    $("#rhost").css('background', 'transparent');
-    $(".ssh-input").attr("disabled", "disabled");
-    $(".ssh-input").val('');
-    $(".ssh-input").attr('lay-verify', '');
-    $(".ssh-input").css('background', '#E0E0E2');
+    var rhost = $("#rhost");
+    rhost.removeAttr("disabled");
+    rhost.attr('lay-verify', 'required');
+    rhost.css('background', 'transparent');
+    var sshInput = $(".ssh-input");
+    sshInput.attr("disabled", "disabled");
+    sshInput.val('');
+    sshInput.attr('lay-verify', '');
+    sshInput.css('background', '#E0E0E2');
     $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E0E0E2');
 }
 
 
 //显示SSH视图
 function showSshView() {
-    $("#rhost").val('');
-    $("#rhost").attr("disabled", "disabled");
-    $("#rhost").css('background', '#E0E0E2');
-    $("#rhost").attr('lay-verify', '');
-    $(".ssh-input").removeAttr("disabled");
-    $(".ssh-input").attr('lay-verify', 'required');
-    $(".ssh-input").css('background', 'transparent');
+    var rhost = $("#rhost");
+    rhost.val('');
+    rhost.attr("disabled", "disabled");
+    rhost.css('background', '#E0E0E2');
+    rhost.attr('lay-verify', '');
+    var sshInput = $(".ssh-input");
+    sshInput.removeAttr("disabled");
+    sshInput.attr('lay-verify', 'required');
+    sshInput.css('background', 'transparent');
     $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#5FB878');
 }
 
@@ -81,7 +85,7 @@ function saveConnect() {
     }
     var resultJson = parent.connectRouter.insertConnect(JSON.stringify(data));
     var result = JSON.parse(resultJson);
-    if (result.code == 200) {
+    if (result.code === 200) {
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
         parent.getConnectData();

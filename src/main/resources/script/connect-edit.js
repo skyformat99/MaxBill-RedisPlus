@@ -45,7 +45,7 @@ function loadPageData() {
     $("#rhost").val(connect.rhost);
     $("#rport").val(connect.rport);
     $("#rpass").val(connect.rpass);
-    if (connect.type == '1') {
+    if (connect.type === '1') {
         $("#sname").val(connect.sname);
         $("#shost").val(connect.shost);
         $("#sport").val(connect.sport);
@@ -55,28 +55,30 @@ function loadPageData() {
 
 /**显示数据视图*/
 function showDataView() {
-    if (connect.isha == '0') {
+    if (connect.isha === '0') {
         $('.div-input05 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E0E0E2');
     } else {
         $('.div-input05 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#5FB878');
     }
-    if (connect.type == '0') {
-        $("#rhost").removeAttr("disabled");
-        $("#rhost").attr('lay-verify', 'required');
-        $("#rhost").css('background', 'transparent');
-        $(".ssh-input").val('');
-        $(".ssh-input").attr("disabled", "disabled");
-        $(".ssh-input").attr('lay-verify', '');
-        $(".ssh-input").css('background', '#E0E0E2');
+    var rhost = $("#rhost");
+    var sshInput = $(".ssh-input");
+    if (connect.type === '0') {
+        rhost.removeAttr("disabled");
+        rhost.attr('lay-verify', 'required');
+        rhost.css('background', 'transparent');
+        sshInput.val('');
+        sshInput.attr("disabled", "disabled");
+        sshInput.attr('lay-verify', '');
+        sshInput.css('background', '#E0E0E2');
         $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E0E0E2');
     } else {
-        $("#rhost").val('');
-        $("#rhost").attr("disabled", "disabled");
-        $("#rhost").css('background', '#E0E0E2');
-        $("#rhost").attr('lay-verify', '');
-        $(".ssh-input").removeAttr("disabled");
-        $(".ssh-input").attr('lay-verify', 'required');
-        $(".ssh-input").css('background', 'transparent');
+        rhost.val('');
+        rhost.attr("disabled", "disabled");
+        rhost.css('background', '#E0E0E2');
+        rhost.attr('lay-verify', '');
+        sshInput.removeAttr("disabled");
+        sshInput.attr('lay-verify', 'required');
+        sshInput.css('background', 'transparent');
         $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#5FB878');
     }
 }
@@ -84,26 +86,30 @@ function showDataView() {
 
 /**显示连接视图*/
 function showConView() {
-    $("#rhost").removeAttr("disabled");
-    $("#rhost").attr('lay-verify', 'required');
-    $("#rhost").css('background', 'transparent');
-    $(".ssh-input").attr("disabled", "disabled");
-    $(".ssh-input").val('');
-    $(".ssh-input").attr('lay-verify', '');
-    $(".ssh-input").css('background', '#E0E0E2');
+    var rhost = $("#rhost");
+    var sshInput = $(".ssh-input");
+    rhost.removeAttr("disabled");
+    rhost.attr('lay-verify', 'required');
+    rhost.css('background', 'transparent');
+    sshInput.attr("disabled", "disabled");
+    sshInput.val('');
+    sshInput.attr('lay-verify', '');
+    sshInput.css('background', '#E0E0E2');
     $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#E0E0E2');
 }
 
 
 /**显示SSH视图*/
 function showSshView() {
-    $("#rhost").val('');
-    $("#rhost").attr("disabled", "disabled");
-    $("#rhost").css('background', '#E0E0E2');
-    $("#rhost").attr('lay-verify', '');
-    $(".ssh-input").removeAttr("disabled");
-    $(".ssh-input").attr('lay-verify', 'required');
-    $(".ssh-input").css('background', 'transparent');
+    var rhost = $("#rhost");
+    var sshInput = $(".ssh-input");
+    rhost.val('');
+    rhost.attr("disabled", "disabled");
+    rhost.css('background', '#E0E0E2');
+    rhost.attr('lay-verify', '');
+    sshInput.removeAttr("disabled");
+    sshInput.attr('lay-verify', 'required');
+    sshInput.css('background', 'transparent');
     $('.div-input04 .layui-form-checkbox[lay-skin="primary"] i').css('background', '#5FB878');
 }
 
@@ -127,7 +133,7 @@ function saveConnect() {
     }
     var resultJson = parent.connectRouter.updateConnect(JSON.stringify(data));
     var result = JSON.parse(resultJson);
-    if (result.code == 200) {
+    if (result.code === 200) {
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
         parent.getConnectData();
