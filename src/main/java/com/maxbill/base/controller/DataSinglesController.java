@@ -17,10 +17,6 @@ import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 @Component
 public class DataSinglesController {
 
-    public Integer sayHello() {
-        System.out.println("1111111111");
-        return 1;
-    }
 
     public String treeInit() {
         List<ZTreeBean> treeList = new ArrayList<>();
@@ -30,10 +26,10 @@ public class DataSinglesController {
                 String role = jedis.info("server");
                 for (int i = 0; i < 16; i++) {
                     long dbSize = 0l;
-                    if (i > 0 && role.indexOf("redis_mode:cluster") > -1) {
+                    if (i > 0 && role.contains("redis_mode:cluster")) {
                         break;
                     }
-                    if (role.indexOf("redis_mode:cluster") > -1) {
+                    if (role.contains("redis_mode:cluster")) {
                         dbSize = RedisUtil.dbSize(jedis, null);
                     } else {
                         dbSize = RedisUtil.dbSize(jedis, i);
@@ -57,7 +53,7 @@ public class DataSinglesController {
     }
 
     public String likeInit(int index, String pattern) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -107,7 +103,7 @@ public class DataSinglesController {
     }
 
     public String keysData(int index, String keys) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -132,7 +128,7 @@ public class DataSinglesController {
     }
 
     public String renameKey(int index, String oldKey, String newKey) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -162,7 +158,7 @@ public class DataSinglesController {
     }
 
     public String retimeKey(int index, String key, int time) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -187,7 +183,7 @@ public class DataSinglesController {
 
 
     public String deleteKey(int index, String key) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -211,7 +207,7 @@ public class DataSinglesController {
     }
 
     public String updateStr(int index, String key, String val) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -235,7 +231,7 @@ public class DataSinglesController {
     }
 
     public String insertVal(int type, int index, String key, String val) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -277,7 +273,7 @@ public class DataSinglesController {
 
 
     public String deleteVal(int type, int index, String key, String val) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {

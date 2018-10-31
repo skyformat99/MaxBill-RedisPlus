@@ -12,12 +12,15 @@ window.onload = function () {
 }
 
 
+//切换数据视图
 function changeDataView(flag) {
     //数据按钮
-    $(".layui-btn-fluid").removeClass("key-tool-abtn");
-    $(".layui-btn-fluid").addClass("key-tool-dbtn");
-    $("#btn" + flag).removeClass("key-tool-dbtn");
-    $("#btn" + flag).addClass("key-tool-abtn");
+    var thisBtn = $("#btn" + flag);
+    var elseBtn = $(".layui-btn-fluid");
+    elseBtn.removeClass("key-tool-abtn");
+    elseBtn.addClass("key-tool-dbtn");
+    thisBtn.removeClass("key-tool-dbtn");
+    thisBtn.addClass("key-tool-abtn");
     //数据视图
     var thisObj = $("#vals" + flag);
     var valsObj = $(".vals");
@@ -646,7 +649,7 @@ function insertHash() {
             }
             layer.load(2);
             var mapVal = mapKey + ":" + mapVal;
-            var json = dataSinglesRouter.insertVal(2, currNode0.index, currNode1.name, mapVal);
+            var json = dataSinglesRouter.insertVal(4, currNode0.index, currNode1.name, mapVal);
             var data = JSON.parse(json);
             layer.closeAll('loading');
             layer.close(index);
@@ -674,7 +677,7 @@ function deleteHash(mapKey) {
         return false;
     }
     layer.load(2);
-    var json = dataSinglesRouter.deleteVal(2, currNode0.index, currNode1.name, mapKey);
+    var json = dataSinglesRouter.deleteVal(4, currNode0.index, currNode1.name, mapKey);
     var data = JSON.parse(json);
     layer.closeAll('loading');
     if (data.code === 200) {

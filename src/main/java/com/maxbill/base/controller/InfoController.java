@@ -21,7 +21,7 @@ import static com.maxbill.tool.RedisUtil.getRedisInfo;
 public class InfoController {
 
     public String getBaseInfo() {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -40,7 +40,7 @@ public class InfoController {
     }
 
     public String getLogsInfo() {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -61,7 +61,7 @@ public class InfoController {
 
 
     public String getMemInfo() {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
@@ -83,7 +83,7 @@ public class InfoController {
     }
 
     public String getCpuInfo() {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
@@ -126,7 +126,7 @@ public class InfoController {
     }
 
     public String getNetInfo() {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = DataUtil.getCurrentJedisObject();
             if (null != jedis) {
