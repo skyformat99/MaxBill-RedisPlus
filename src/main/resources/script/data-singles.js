@@ -1,27 +1,31 @@
 var $;
-var form;
 var layer;
 var currNode0;
 var currNode1;
 
-
 window.onload = function () {
-    layui.use(['form', 'layer', 'jquery'], function () {
+    layui.use(['layer', 'jquery'], function () {
         $ = layui.jquery;
         layer = layui.layer;
-        form = layui.form;
-
-        form.render();
-        form.on('radio(vals)', function (data) {
-            var thisObj = $("#vals" + data.value);
-            var elseObj = $(".vals").not(thisObj);
-            $(".vals").removeClass("key-vals-hide");
-            $(".vals").removeClass("key-vals-show");
-            thisObj.addClass("key-vals-show");
-            elseObj.addClass("key-vals-hide");
-        });
         initDbTree();
     });
+}
+
+
+function changeDataView(flag) {
+    //数据按钮
+    $(".layui-btn-fluid").removeClass("key-tool-abtn");
+    $(".layui-btn-fluid").addClass("key-tool-dbtn");
+    $("#btn" + flag).removeClass("key-tool-dbtn");
+    $("#btn" + flag).addClass("key-tool-abtn");
+    //数据视图
+    var thisObj = $("#vals" + flag);
+    var valsObj = $(".vals");
+    var elseObj = valsObj.not(thisObj);
+    valsObj.removeClass("key-vals-hide");
+    valsObj.removeClass("key-vals-show");
+    thisObj.addClass("key-vals-show");
+    elseObj.addClass("key-vals-hide");
 }
 
 

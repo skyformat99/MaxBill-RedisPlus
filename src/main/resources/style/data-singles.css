@@ -95,6 +95,14 @@
     background-color: #CFE6F3;
 }
 
+.key-tool-abtn{
+    background-color: #638CB7;
+}
+
+.key-tool-dbtn{
+    background-color: #4777A7;
+}
+
 .key-vals-view {
     top: 10px;
     left: 10px;
@@ -161,14 +169,13 @@
 }
 
 .layui-layer-dialog .layui-layer-content {
-    position: relative;
     padding: 20px;
-    line-height: 24px;
-    word-break: break-all;
-    overflow: hidden;
     font-size: 14px;
-    overflow-x: hidden;
     overflow-y: auto;
+    line-height: 24px;
+    position: relative;
+    overflow-x: hidden;
+    word-break: break-all;
 }
 
 .layui-layer-content .layui-layer-input {

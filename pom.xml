@@ -41,28 +41,30 @@
     </properties>
 
     <dependencies>
-        <!--
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>11</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>11</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
             <version>11</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>11</version>
         </dependency>
-        -->
 
         <!--boot依赖-->
         <dependency>
@@ -128,32 +130,7 @@
     </dependencies>
 
     <build>
-        <!--编译插件配置-->
         <plugins>
-            <!--
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            -->
-
-            <!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>com.maxbill.MainApplication</mainClass>
-                </configuration>
-            </plugin>
-            -->
 
             <!--javafx application package-->
             <plugin>
@@ -173,9 +150,9 @@
                     <needShortcut>true</needShortcut>
                     <!--JVM参数-->
                     <jvmArgs>
-                        <jvmArg>-Xms256M</jvmArg>
-                        <jvmArg>-Xmx512M</jvmArg>
-                        <jvmArg>-XX:MaxPermSize=512M</jvmArg>
+                        <jvmArg>-Xms50M</jvmArg>
+                        <jvmArg>-Xmx100M</jvmArg>
+                        <jvmArg>-XX:MaxPermSize=150M</jvmArg>
                         <jvmArg>-XX:-UseGCOverheadLimit</jvmArg>
                         <jvmArg>-Dvisualvm.display.name=RedisPlus</jvmArg>
                     </jvmArgs>
@@ -188,13 +165,10 @@
                     <!--允许所有权限-->
                     <allPermissions>true</allPermissions>
                     <!--版本信息-->
-                    <nativeReleaseVersion>v2.0.0</nativeReleaseVersion>
+                    <nativeReleaseVersion>v2.1.0</nativeReleaseVersion>
                     <!--说明信息-->
                     <description>
-                        RedisPlus是为Redis可视化管理开发的一款开源免费的桌面客户端软件，支持Windows 、Linux
-                        、Mac三大系统平台，RedisPlus提供更加高效、方便、快捷的使用体验，有着更加现代化的用户界面风格。
-                        该软件支持单机、集群模式连接，同时还支持SSH（单机、集群）通道连接。RedisPlus遵循GPL-3.0开源协议，禁止二次开发打包发布盈利，违反必究！
-                        RedisPlus致力于为大家提供一个高效的Redis可视化管理软件。
+                        RedisPlus是为Redis可视化管理开发的一款开源免费的桌面客户端软件
                     </description>
                 </configuration>
             </plugin>

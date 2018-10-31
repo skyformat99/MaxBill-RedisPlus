@@ -204,7 +204,7 @@ public class Desktop extends Application {
     public WebView getBodyView() {
 
         webView = new WebView();
-        webView.setCache(true);
+        webView.setCache(false);
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
         webView.setContextMenuEnabled(false);
