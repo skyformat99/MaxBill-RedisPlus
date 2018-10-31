@@ -88,7 +88,11 @@ public class Desktop extends Application {
 
         //启动扫描服务
         context = SpringApplication.run(MainApplication.class);
-        initWebObject();
+        if (null != context) {
+            initWebObject();
+        } else {
+            return;
+        }
 
         //加载数据窗口
         mainView = getMainView(winStage);
@@ -121,15 +125,18 @@ public class Desktop extends Application {
      * 顶部标题栏
      */
     public GridPane getTopsView(Stage winStage) {
+
         GridPane topsView = new GridPane();
         topsView.setId("tops-view");
         topsView.setHgap(10);
+
         Label topImage = new Label();
         Label topTitle = new Label();
         Label topItems = new Label();
         Label topAbate = new Label();
         Label topRaise = new Label();
         Label topClose = new Label();
+
         topTitle.setText("RedisPlus");
         topImage.setId("tops-view-image");
         topTitle.setId("tops-view-title");
@@ -137,20 +144,24 @@ public class Desktop extends Application {
         topAbate.setId("tops-view-abate");
         topRaise.setId("tops-view-raise");
         topClose.setId("tops-view-close");
+
         topImage.setPrefSize(27, 23);
         topItems.setPrefSize(27, 23);
         topAbate.setPrefSize(27, 23);
         topRaise.setPrefSize(27, 23);
         topClose.setPrefSize(27, 23);
+
         topsView.add(topImage, 0, 0);
         topsView.add(topTitle, 1, 0);
         topsView.add(topItems, 2, 0);
         topsView.add(topAbate, 3, 0);
         topsView.add(topRaise, 4, 0);
         topsView.add(topClose, 5, 0);
+
         topsView.setPadding(new Insets(5));
         topsView.setAlignment(Pos.CENTER_LEFT);
         GridPane.setHgrow(topTitle, Priority.ALWAYS);
+
         //事件监听
         //1.监听操作选项事件
         topItems.setOnMouseClicked(event -> doWinItems(topItems));
@@ -160,10 +171,10 @@ public class Desktop extends Application {
         topRaise.setOnMouseClicked(event -> doWinRaise(winStage));
         //4.监听窗口关闭事件
         topClose.setOnMouseClicked(event -> doWinClose(winStage));
+
         return topsView;
     }
 
-    final Float[] values = new Float[]{-1.0f, 0f, 0.6f, 1.0f};
 
     /**
      * 开始窗体
@@ -191,8 +202,9 @@ public class Desktop extends Application {
      * 内容窗体
      */
     public WebView getBodyView() {
+
         webView = new WebView();
-        webView.setCache(false);
+        webView.setCache(true);
         webEngine = webView.getEngine();
         webEngine.setJavaScriptEnabled(true);
         webView.setContextMenuEnabled(false);
@@ -207,13 +219,19 @@ public class Desktop extends Application {
         Worker<Void> woker = webEngine.getLoadWorker();
         woker.stateProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue == Worker.State.SUCCEEDED) {
-                setJsMember();
-                System.out.println("Current Page Load Path : " + webEngine.getLocation());
+                JSObject jsObject = (JSObject) webEngine.executeScript("window");
+                jsObject.setMember("otherRouter", otherController);
+                jsObject.setMember("connectRouter", connectController);
+                jsObject.setMember("dataSinglesRouter", dataSinglesController);
+                jsObject.setMember("dataClusterRouter", dataClusterController);
+                jsObject.setMember("infoRouter", infoController);
+                jsObject.setMember("confRouter", confController);
             }
-            if (webEngine.getLoadWorker().getException() != null && newValue == Worker.State.FAILED) {
-                webEngine.reload();
-                System.out.println("Current Page Exextion Info : " + webEngine.getLoadWorker().getException().toString());
-            }
+        });
+
+        //页面异常事件
+        woker.exceptionProperty().addListener((ObservableValue<? extends Throwable> ov, Throwable t0, Throwable t1) -> {
+            System.out.println("Received Exception: " + t1.getMessage());
         });
 
         //控制台监听事件
@@ -227,15 +245,6 @@ public class Desktop extends Application {
         return webView;
     }
 
-    private static void setJsMember() {
-        JSObject jsObject = (JSObject) webEngine.executeScript("window");
-        jsObject.setMember("otherRouter", otherController);
-        jsObject.setMember("connectRouter", connectController);
-        jsObject.setMember("dataSinglesRouter", dataSinglesController);
-        jsObject.setMember("dataClusterRouter", dataClusterController);
-        jsObject.setMember("infoRouter", infoController);
-        jsObject.setMember("confRouter", confController);
-    }
 
     /**
      * 底部窗体
@@ -244,26 +253,32 @@ public class Desktop extends Application {
         GridPane endsView = new GridPane();
         endsView.setId("ends-view");
         endsView.setHgap(10);
+
         Label endImage = new Label();
         Label endTitle = new Label();
         Label endOther = new Label();
         Label endOrder = new Label();
+
         endTitle.setMinWidth(200.00);
         endOrder.setMinWidth(80.00);
         endTitle.setText(DESKTOP_STATUS_NO);
         endOrder.setText(DESKTOP_VERSION);
+
         endImage.setId("ends-view-image");
         endTitle.setId("ends-view-title");
         endOther.setId("ends-view-other");
         endOrder.setId("ends-view-order");
+
         endImage.setPrefSize(27, 23);
         endTitle.setPrefSize(27, 23);
         endOther.setPrefSize(27, 23);
         endOrder.setPrefSize(27, 23);
+
         endsView.add(endImage, 0, 0);
         endsView.add(endTitle, 1, 0);
         endsView.add(endOther, 2, 0);
         endsView.add(endOrder, 3, 0);
+
         endsView.setPadding(new Insets(3));
         endsView.setAlignment(Pos.BASELINE_RIGHT);
         endTitle.setTextFill(Paint.valueOf("red"));
@@ -395,7 +410,7 @@ public class Desktop extends Application {
     /**
      * 监听窗口选项事件
      */
-    public void doWinItems(Label winItems) {
+    private void doWinItems(Label winItems) {
         TopsMenu.getInstance().show(winItems, Side.BOTTOM, 5, 6);
     }
 
@@ -403,7 +418,7 @@ public class Desktop extends Application {
     /**
      * 监听窗口最小事件
      */
-    public void doWinAbate(Stage winStage) {
+    private void doWinAbate(Stage winStage) {
         winStage.setIconified(true);
     }
 
@@ -411,7 +426,7 @@ public class Desktop extends Application {
     /**
      * 监听窗口最大事件
      */
-    public void doWinRaise(Stage winStage) {
+    private void doWinRaise(Stage winStage) {
         Rectangle2D rectangle2d = Screen.getPrimary().getVisualBounds();
         isMax = !isMax;
         if (isMax) {
@@ -442,25 +457,15 @@ public class Desktop extends Application {
     /**
      * 监听窗口关闭事件
      */
-    public void doWinClose(Stage winStage) {
+    private void doWinClose(Stage winStage) {
         winStage.close();
         Platform.exit();
         System.exit(0);
     }
 
-    public static Node getTopsBar(String id) {
-        Node node = mainView.getCenter();
-        return node.lookup("#" + id);
-    }
-
-    public static Node getEndsBar(String id) {
-        Node node = mainView.getBottom();
-        return node.lookup("#" + id);
-    }
-
-
     public static void setEndsViewTitle(String msg, String type) {
-        Label label = (Label) getEndsBar("ends-view-title");
+        Node node = mainView.getBottom();
+        Label label = (Label) node.lookup("#ends-view-title");
         label.setText(msg);
         switch (type) {
             case "no":
@@ -473,24 +478,18 @@ public class Desktop extends Application {
     }
 
     public static void setEndsViewImage(String src) {
-        Label label = (Label) getEndsBar("ends-view-image");
+        Node node = mainView.getBottom();
+        Label label = (Label) node.lookup("#ends-view-image");
         label.setGraphic(new ImageView(new Image(src)));
     }
 
     public static void setWebViewPage(String url) {
         String utl = Desktop.class.getResource(url).toExternalForm();
         webEngine.load(utl);
-        Worker<Void> woker = webEngine.getLoadWorker();
-        woker.stateProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue == Worker.State.SUCCEEDED) {
-                setJsMember();
-                System.out.println("Current Page Load Path : " + webEngine.getLocation());
-            }
-        });
     }
 
 
-    public void initWebObject() {
+    private void initWebObject() {
         otherController = context.getBean(OtherController.class);
         connectController = context.getBean(ConnectController.class);
         dataSinglesController = context.getBean(DataSinglesController.class);

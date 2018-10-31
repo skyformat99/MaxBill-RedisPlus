@@ -4,7 +4,6 @@ var table;
 var rowDataId;
 var data = null;
 
-
 window.onload = function () {
     layui.use(['jquery', 'table', 'layer'], function () {
         $ = layui.jquery;
@@ -14,6 +13,7 @@ window.onload = function () {
         initConnectData();
     });
 }
+
 
 /*初始化连接数据*/
 function initConnectData() {
@@ -48,7 +48,7 @@ function initConnectData() {
             {
                 title: 'SSH', event: 'setSign',
                 templet: function (data) {
-                    if (data.type == '0') {
+                    if (data.type === '0') {
                         return "关闭";
                     } else {
                         return "启用";
@@ -96,7 +96,7 @@ function addConnectData() {
 function getConnectData() {
     layer.load(2);
     var data = connectRouter.selectConnect();
-    table.reload({
+    table.reload('dataList', {
         height: 'full-70',
         data: JSON.parse(data),
         page: {curr: 1},
@@ -122,7 +122,7 @@ function getConnectData() {
 
 /**编辑连接数据*/
 function updConnectData() {
-    if (rowDataId == "" || rowDataId == null) {
+    if (rowDataId === "" || rowDataId == null) {
         layer.msg('请选择要操作的数据行！');
         return false;
     }
@@ -140,7 +140,7 @@ function updConnectData() {
 
 /**删除连接数据*/
 function delConnectData() {
-    if (rowDataId == "" || rowDataId == null) {
+    if (rowDataId === "" || rowDataId == null) {
         layer.msg('请选择要操作的数据行！');
         return false;
     }
@@ -149,13 +149,13 @@ function delConnectData() {
         skin: 'layui-layer-lan',
         closeBtn: 0
     }, function () {
-        var resultJson = parent.connectRouter.deleteConnect(rowDataId)
-        var result = JSON.parse(resultJson);
+        var json = parent.connectRouter.deleteConnect(rowDataId)
+        var data = JSON.parse(json);
         layer.close(index);
-        if (result.code == 200) {
+        if (data.code === 200) {
             getConnectData();
         } else {
-            layer.alert(result.msgs, {
+            layer.alert(data.msgs, {
                 skin: 'layui-layer-lan',
                 closeBtn: 0
             });
@@ -166,7 +166,7 @@ function delConnectData() {
 
 /**操作连接数据*/
 function setConnectData() {
-    if (rowDataId == "" || rowDataId == null) {
+    if (rowDataId === "" || rowDataId == null) {
         layer.msg('请选择要操作的数据行！');
         return false;
     }
@@ -185,12 +185,12 @@ function setConnectData() {
 function openConnect(id) {
     var result = 0;
     layer.load(2);
-    var resultJson = connectRouter.createConnect(id);
-    var result = JSON.parse(resultJson);
-    if (result.code == 200) {
+    var json = connectRouter.createConnect(id);
+    var data = JSON.parse(json);
+    if (data.code === 200) {
         result = 1;
     } else {
-        layer.alert(result.msgs, {
+        layer.alert(data.msgs, {
             skin: 'layui-layer-lan',
             closeBtn: 0
         });
@@ -203,9 +203,9 @@ function openConnect(id) {
 function closeConnect(id) {
     var result = 0;
     layer.load(2);
-    var resultJson = connectRouter.disconConnect(id);
-    var result = JSON.parse(resultJson);
-    if (result.code == 200) {
+    var json = connectRouter.disconConnect(id);
+    var data = JSON.parse(json);
+    if (data.code === 200) {
         result = 1;
     }
     layer.closeAll('loading');
