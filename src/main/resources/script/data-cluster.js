@@ -340,7 +340,16 @@ function reloadKey() {
 
 //添加新KEY
 function insertKey() {
-    layer.msg("开发中...");
+    layer.open({
+        title: '新增连接',
+        type: 2,
+        area: ['455px', '445px'],
+        fixed: true,
+        maxmin: false,
+        resize: false,
+        skin: 'layui-layer-lan',
+        content: '../page/data-save.html'
+    });
 }
 
 //数据编辑视图
@@ -482,7 +491,7 @@ function insertList() {
         closeBtn: 0,
     }, function (text, index) {
         layer.load(2);
-        var json = dataClusterRouter.insertVal(3, currNode0.index, currNode1.name, text);
+        var json = dataClusterRouter.insertVal(3, currNode1.name, text);
         var data = JSON.parse(json);
         layer.closeAll('loading');
         layer.close(index);
@@ -505,7 +514,7 @@ function deleteList(keyIndex) {
         return false;
     }
     layer.load(2);
-    var json = dataClusterRouter.deleteVal(3, currNode0.index, currNode1.name, keyIndex);
+    var json = dataClusterRouter.deleteVal(3, currNode1.name, keyIndex);
     var data = JSON.parse(json);
     layer.closeAll('loading');
     if (data.code === 200) {

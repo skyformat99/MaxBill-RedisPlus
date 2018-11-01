@@ -172,8 +172,37 @@ public class ClusterUtil {
     /**
      * 重命名key
      */
-    public static String renameKey(JedisCluster jedisCluster, String oldKey, String newKey) {
-        return jedisCluster.rename(oldKey, newKey);
+    public static void renameKey(JedisCluster jedisCluster, String oldKey, String newKey) {
+        String type = jedisCluster.type(oldKey);
+        switch (type) {
+            case "set":
+                Set<String> set = jedisCluster.smembers(oldKey);
+                for (String temp : set) {
+                    jedisCluster.sadd(newKey, temp);
+                }
+                break;
+            case "none":
+                break;
+            case "list":
+                List<String> list = jedisCluster.lrange(oldKey, 0, -1);
+                for (String temp : list) {
+                    jedisCluster.lpush(newKey, temp);
+                }
+                break;
+            case "zset":
+                List<String> zset = new ArrayList<>(jedisCluster.zrange(oldKey, 0, -1));
+                for (String temp : zset) {
+                    jedisCluster.zadd(newKey, zset.indexOf(temp) + 1, temp);
+                }
+                break;
+            case "hash":
+                jedisCluster.hmset(newKey, jedisCluster.hgetAll(oldKey));
+                break;
+            case "string":
+                String strs = jedisCluster.get(oldKey);
+                jedisCluster.set(newKey, strs);
+                break;
+        }
     }
 
     /**
@@ -327,6 +356,39 @@ public class ClusterUtil {
         return keyBean;
     }
 
+    public static void testClusterData() {
+        /*-------------------String Test------------------------*/
+        cluster.set("testString1", "testString1");
+        cluster.set("testString2", "testString2");
+        /*-------------------List Test--------------------------*/
+        cluster.del("testList");
+        cluster.lpush("testList", "list01");
+        cluster.lpush("testList", "list02");
+        cluster.lpush("testList", "list03");
+        cluster.lpush("testList", "list04");
+        cluster.lpush("testList", "list05");
+        /*-------------------Map Test---------------------------*/
+        Map map = new HashMap();
+        map.put("map01", "map01-value");
+        map.put("map02", "map02-value");
+        map.put("map03", "map03-value");
+        map.put("map04", "map04-value");
+        map.put("map05", "map05-value");
+        cluster.hmset("testMap", map);
+        /*-------------------Set Test---------------------------*/
+        cluster.sadd("testSet", "set-value01");
+        cluster.sadd("testSet", "set-value02");
+        cluster.sadd("testSet", "set-value03");
+        cluster.sadd("testSet", "set-value04");
+        cluster.sadd("testSet", "set-value05");
+        /*-------------------Zset Test--------------------------*/
+        cluster.zadd("testZset", 1, "set-value01");
+        cluster.zadd("testZset", 2, "set-value02");
+        cluster.zadd("testZset", 3, "set-value03");
+        cluster.zadd("testZset", 4, "set-value04");
+        cluster.zadd("testZset", 5, "set-value05");
+    }
+
 
     public static void main(String[] args) throws Exception {
         Connect connect = new Connect();
@@ -334,8 +396,6 @@ public class ClusterUtil {
         connect.setRhost("127.0.0.1");
         connect.setType("0");
         openCulter(connect);
-        for (int i = 1; i <= 100; i++) {
-            cluster.set(i + "", i + "");
-        }
+        testClusterData();
     }
 }

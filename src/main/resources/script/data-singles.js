@@ -346,7 +346,16 @@ function reloadKey() {
 
 //添加新KEY
 function insertKey() {
-    layer.msg("开发中...");
+    layer.open({
+        title: '新增数据',
+        type: 2,
+        area: ['460px', '410px'],
+        fixed: true,
+        maxmin: false,
+        resize: false,
+        skin: 'layui-layer-lan',
+        content: '../page/data-increase.html'
+    });
 }
 
 //数据编辑视图

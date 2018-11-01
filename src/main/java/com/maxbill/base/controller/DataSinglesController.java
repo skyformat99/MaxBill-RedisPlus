@@ -313,4 +313,43 @@ public class DataSinglesController {
         return JSON.toJSONString(resultMap);
     }
 
+
+    public String insertKey(int type, int index, String key, String val, int time) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            Jedis jedis = getCurrentJedisObject();
+            if (null != jedis) {
+                //1:set,2:zset,3:list,4:hash
+                switch (type) {
+                    case 1:
+                        RedisUtil.insertSet(jedis, index, key, val);
+                        break;
+                    case 2:
+                        RedisUtil.insertZset(jedis, index, key, val);
+                        break;
+                    case 3:
+                        RedisUtil.insertList(jedis, index, key, val);
+                        break;
+                    case 4:
+                        String[] valArray = val.split(":");
+                        String mapKey = valArray[0];
+                        String mapVal = valArray[1];
+                        RedisUtil.insertHash(jedis, index, key, mapKey, mapVal);
+                        break;
+                    case 5:
+                        break;
+                }
+                resultMap.put("code", 200);
+                resultMap.put("msgs", "新增数据成功");
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "添加数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
 }
