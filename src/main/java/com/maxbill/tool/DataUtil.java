@@ -29,23 +29,23 @@ public class DataUtil {
         confMap.clear();
     }
 
-    public static Object getConfig(String key) {
+    private static Object getConfig(String key) {
         return confMap.get(key);
     }
+
+    public static Connect getCurrentOpenConnect() {
+        return (Connect) DataUtil.getConfig("currentOpenConnect");
+    }
+
 
     public static Jedis getCurrentJedisObject() {
         return (Jedis) DataUtil.getConfig("currentJedisObject");
     }
 
-//
-//    public static JedisCluster getJedisClusterObject() throws Exception {
-//        Connect connect = getCurrentOpenConnect();
-//        if (null != connect) {
-//            return ClusterUtil.getCluster(connect);
-//        } else {
-//            return null;
-//        }
-//    }
+
+    public static JedisCluster getJedisClusterObject() {
+        return (JedisCluster) DataUtil.getConfig("jedisClusterObject");
+    }
 
 
 }

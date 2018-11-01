@@ -57,7 +57,9 @@ function initConnectData() {
             },
             {field: 'time', title: '时间', event: 'setSign'},
         ]],
-        page: true,
+        page: {
+            layout: ['prev', 'page', 'next', 'count', 'skip']
+        },
         done: function (res) {
             layer.msg('双击行连接服务!');
             var tbody = $('#tableDiv').find('.layui-table-body').find("table").find("tbody");

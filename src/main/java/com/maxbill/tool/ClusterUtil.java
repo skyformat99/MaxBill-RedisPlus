@@ -331,10 +331,10 @@ public class ClusterUtil {
     public static void main(String[] args) throws Exception {
         Connect connect = new Connect();
         connect.setRport("7001");
-        connect.setRhost("192.168.77.141");
+        connect.setRhost("127.0.0.1");
         connect.setType("0");
         openCulter(connect);
-        for (int i = 1; i <= 10000; i++) {
+        for (int i = 1; i <= 100; i++) {
             cluster.set(i + "", i + "");
         }
     }

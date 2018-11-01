@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.maxbill.tool.DataUtil.getCurrentOpenConnect;
+
 @Component
 public class OtherController {
 
@@ -21,7 +23,7 @@ public class OtherController {
                 Desktop.setWebViewPage(ItemUtil.PAGE_CONNECT);
                 break;
             case 2:
-                Connect connect = (Connect) DataUtil.getConfig("currentOpenConnect");
+                Connect connect = getCurrentOpenConnect();
                 if (connect.getIsha().equals("0")) {
                     Desktop.setWebViewPage(ItemUtil.PAGE_DATA_SINGLES);
                 }
@@ -42,9 +44,9 @@ public class OtherController {
     }
 
     public String sendMail(String mailAddr, String mailText) {
-        Map resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
-            boolean sendFlag = new MailUtil().sendMail(mailAddr, mailText);
+            boolean sendFlag = MailUtil.sendMail(mailAddr, mailText);
             if (sendFlag) {
                 resultMap.put("code", 200);
                 resultMap.put("msgs", "发送邮件成功");

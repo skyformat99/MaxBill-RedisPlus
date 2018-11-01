@@ -13,8 +13,9 @@ import redis.clients.jedis.JedisCluster;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.maxbill.core.desktop.Desktop.setEndsViewImage;
-import static com.maxbill.core.desktop.Desktop.setEndsViewTitle;
+import static com.maxbill.core.desktop.Desktop.*;
+import static com.maxbill.tool.DataUtil.*;
+
 
 @Component
 public class ConnectController {
@@ -157,7 +158,7 @@ public class ConnectController {
     public String disconConnect(String id) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Connect connect = (Connect) DataUtil.getConfig("currentOpenConnect");
+            Connect connect = getCurrentOpenConnect();
             if (connect.getIsha().equals("0")) {
                 Jedis jedis = RedisUtil.openJedis(connect);
                 if (null != jedis) {
@@ -185,17 +186,17 @@ public class ConnectController {
      * 检测连接状态
      */
     public Integer isopenConnect() {
-        Connect connect = (Connect) DataUtil.getConfig("currentOpenConnect");
+        Connect connect = getCurrentOpenConnect();
         if (null != connect) {
             if (connect.getIsha().equals("0")) {
-                Object jedis = DataUtil.getConfig("currentJedisObject");
+                Jedis jedis = getCurrentJedisObject();
                 if (null != jedis) {
                     return 1;
                 } else {
                     return 0;
                 }
             } else {
-                Object jedisCluster = DataUtil.getConfig("jedisClusterObject");
+                Object jedisCluster = getJedisClusterObject();
                 if (null != jedisCluster) {
                     return 1;
                 } else {

@@ -26,7 +26,6 @@
         </license>
     </licenses>
 
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -152,7 +151,7 @@
                     <jvmArgs>
                         <jvmArg>-Xms50M</jvmArg>
                         <jvmArg>-Xmx100M</jvmArg>
-                        <jvmArg>-XX:MaxPermSize=150M</jvmArg>
+                        <jvmArg>-XX:MaxPermSize=100M</jvmArg>
                         <jvmArg>-XX:-UseGCOverheadLimit</jvmArg>
                         <jvmArg>-Dvisualvm.display.name=RedisPlus</jvmArg>
                     </jvmArgs>
