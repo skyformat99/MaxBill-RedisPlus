@@ -337,7 +337,11 @@ public class DataSinglesController {
                         RedisUtil.insertHash(jedis, index, key, mapKey, mapVal);
                         break;
                     case 5:
+                        jedis.set(key, val);
                         break;
+                }
+                if (time != -1) {
+                    RedisUtil.retimeKey(jedis, index, key, time);
                 }
                 resultMap.put("code", 200);
                 resultMap.put("msgs", "新增数据成功");

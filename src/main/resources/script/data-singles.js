@@ -274,7 +274,7 @@ function retimeKey() {
         skin: 'layui-layer-lan',
         closeBtn: 0,
     }, function (text, index) {
-        if (text == -1) {
+        if (text === -1) {
             layer.close(index);
             return;
         }

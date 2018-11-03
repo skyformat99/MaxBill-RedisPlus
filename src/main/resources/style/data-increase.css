@@ -32,4 +32,8 @@
     margin-right: 10px;
 }
 
+.layui-input, .layui-select, .layui-textarea {
+    border: 1px solid grey;
+}
+
 

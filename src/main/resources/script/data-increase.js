@@ -35,7 +35,7 @@ layui.use(['jquery', 'form', 'layer'], function () {
         var type = $("#type").val();
         var time = $("#time").val();
         var checkFlag = /^(0|[1-9][0-9]*)$/.test(time);
-        if (!checkFlag) {
+        if (!checkFlag && time != -1) {
             layer.msg('只能输入整数值');
             return;
         }
@@ -53,10 +53,11 @@ layui.use(['jquery', 'form', 'layer'], function () {
         } else {
             db = parent.currNode0.index;
         }
-        var json = dataSinglesRouter.insertKey(type, db, keys, vals, time);
+        var json = parent.dataSinglesRouter.insertKey(type, db, keys, vals, time);
         var data = JSON.parse(json);
         layer.closeAll('loading');
-        layer.close(index);
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
         if (data.code === 200) {
             layer.msg(data.msgs);
         } else {
