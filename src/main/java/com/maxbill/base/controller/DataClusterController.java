@@ -263,9 +263,6 @@ public class DataClusterController {
                             String mapVal = valArray[1];
                             ClusterUtil.insertHash(cluster, key, mapKey, mapVal);
                             break;
-                        case 5:
-                            cluster.set(key, val);
-                            break;
                     }
                     return getOkByJson("添加数据成功");
                 } else {
@@ -315,36 +312,35 @@ public class DataClusterController {
     }
 
 
-    public String insertkey(int type, String key, String val,int time) {
+    public String insertkey(int type, String key, String val, int time) {
         try {
             JedisCluster cluster = DataUtil.getJedisClusterObject();
             if (null != cluster) {
-                if (ClusterUtil.existsKey(cluster, key)) {
-                    //1:set,2:zset,3:list,4:hash
-                    switch (type) {
-                        case 1:
-                            ClusterUtil.insertSet(cluster, key, val);
-                            break;
-                        case 2:
-                            ClusterUtil.insertZset(cluster, key, val);
-                            break;
-                        case 3:
-                            ClusterUtil.insertList(cluster, key, val);
-                            break;
-                        case 4:
-                            String[] valArray = val.split(":");
-                            String mapKey = valArray[0];
-                            String mapVal = valArray[1];
-                            ClusterUtil.insertHash(cluster, key, mapKey, mapVal);
-                            break;
-                        case 5:
-                            cluster.set(key, val);
-                            break;
-                    }
-                    return getOkByJson("添加数据成功");
-                } else {
-                    return getNoByJson("该KEY不存在");
+                //1:set,2:zset,3:list,4:hash,5:string
+                switch (type) {
+                    case 1:
+                        ClusterUtil.insertSet(cluster, key, val);
+                        break;
+                    case 2:
+                        ClusterUtil.insertZset(cluster, key, val);
+                        break;
+                    case 3:
+                        ClusterUtil.insertList(cluster, key, val);
+                        break;
+                    case 4:
+                        String[] valArray = val.split(":");
+                        String mapKey = valArray[0];
+                        String mapVal = valArray[1];
+                        ClusterUtil.insertHash(cluster, key, mapKey, mapVal);
+                        break;
+                    case 5:
+                        cluster.set(key, val);
+                        break;
                 }
+                if (time != -1) {
+                    ClusterUtil.retimeKey(cluster, key, time);
+                }
+                return getOkByJson("新增数据成功");
             } else {
                 return disconnect();
             }
@@ -352,7 +348,6 @@ public class DataClusterController {
             return exception(e);
         }
     }
-
 
 
 }

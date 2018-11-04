@@ -46,14 +46,7 @@ layui.use(['jquery', 'form', 'layer'], function () {
             vals = $("#vals").val();
         }
         layer.load(2);
-        //判断是集群还是单机
-        var db;
-        if (parent.currNode0 == null) {
-            db = 0;
-        } else {
-            db = parent.currNode0.index;
-        }
-        var json = parent.dataSinglesRouter.insertKey(type, db, keys, vals, time);
+        var json = parent.dataClusterRouter.insertkey(type, keys, vals, time);
         var data = JSON.parse(json);
         layer.closeAll('loading');
         var index = parent.layer.getFrameIndex(window.name);
