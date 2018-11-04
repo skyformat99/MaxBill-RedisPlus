@@ -18,12 +18,12 @@ public class OtherController {
 
 
     public void changeWebview(int pageNo) {
+        Connect connect = getCurrentOpenConnect();
         switch (pageNo) {
             case 1:
                 Desktop.setWebViewPage(ItemUtil.PAGE_CONNECT);
                 break;
             case 2:
-                Connect connect = getCurrentOpenConnect();
                 if (connect.getIsha().equals("0")) {
                     Desktop.setWebViewPage(ItemUtil.PAGE_DATA_SINGLES);
                 }
@@ -32,13 +32,28 @@ public class OtherController {
                 }
                 break;
             case 3:
-                Desktop.setWebViewPage(ItemUtil.PAGE_INFO);
+                if (connect.getIsha().equals("0")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_INFO_SINGLES);
+                }
+                if (connect.getIsha().equals("1")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_INFO_CLUSTER);
+                }
                 break;
             case 4:
-                Desktop.setWebViewPage(ItemUtil.PAGE_CONF);
+                if (connect.getIsha().equals("0")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_CONF_SINGLES);
+                }
+                if (connect.getIsha().equals("1")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_CONF_CLUSTER);
+                }
                 break;
             case 5:
-                Desktop.setWebViewPage(ItemUtil.PAGE_MONITOR);
+                if (connect.getIsha().equals("0")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_MONITOR_SINGLES);
+                }
+                if (connect.getIsha().equals("1")) {
+                    Desktop.setWebViewPage(ItemUtil.PAGE_MONITOR_CLUSTER);
+                }
                 break;
         }
     }

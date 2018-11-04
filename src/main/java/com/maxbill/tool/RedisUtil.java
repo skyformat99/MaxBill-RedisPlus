@@ -154,6 +154,15 @@ public class RedisUtil {
     }
 
     /**
+     * 添加String
+     */
+    public static String insertStr(Jedis jedis, int index, String key, String val) {
+        jedis.select(index);
+        return jedis.set(key, val);
+    }
+
+
+    /**
      * 添加Set的item
      */
     public static long insertSet(Jedis jedis, int index, String key, String val) {

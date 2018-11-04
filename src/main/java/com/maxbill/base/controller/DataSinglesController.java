@@ -337,7 +337,7 @@ public class DataSinglesController {
                         RedisUtil.insertHash(jedis, index, key, mapKey, mapVal);
                         break;
                     case 5:
-                        jedis.set(key, val);
+                        RedisUtil.insertStr(jedis, index, key, val);
                         break;
                 }
                 if (time != -1) {

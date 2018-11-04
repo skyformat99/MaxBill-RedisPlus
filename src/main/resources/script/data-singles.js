@@ -11,7 +11,6 @@ window.onload = function () {
     });
 }
 
-
 //切换数据视图
 function changeDataView(flag) {
     //数据按钮
@@ -31,11 +30,10 @@ function changeDataView(flag) {
     elseObj.addClass("key-vals-hide");
 }
 
-
 //树配置
 var zTreeSetting = {
     check: {
-        enable: false,
+        enable: false
     },
     data: {
         keep: {
@@ -52,9 +50,23 @@ var zTreeSetting = {
     },
     callback: {
         onClick: ztreeOnClick,
-        onExpand: ztreeOnExpand
+        onExpand: ztreeOnExpand,
+        beforeRightClick: zTreeBeforeRightClick,
+        onRightClick: zTreeOnRightClick
     }
 };
+
+function zTreeBeforeRightClick(event, treeId, treeNode) {
+    layer.msg("13123");
+    console.log(1111111111);
+    return false;
+}
+
+
+function zTreeOnRightClick(event, treeId, treeNode) {
+    console.log(1111111111);
+    layer.msg(treeNode ? treeNode.tId + ", " + treeNode.name : "isRoot");
+}
 
 //点击分页
 function goPage(treeNode, page) {
@@ -85,7 +97,7 @@ function showPageView(treeId, treeNode) {
     if (treeNode.count <= pageSize) {
         return;
     }
-    var pageBox = ""
+    var pageBox = "";
     pageBox += "<span class='button lastPage' id='lastBtn_" + treeNode.id + "' title='尾页' onfocus='this.blur();'></span>";
     pageBox += "<span class='button nextPage' id='nextBtn_" + treeNode.id + "' title='下一页' onfocus='this.blur();'></span>";
     pageBox += "<span class='button prevPage' id='prevBtn_" + treeNode.id + "' title='上一页' onfocus='this.blur();'></span>";
@@ -95,7 +107,7 @@ function showPageView(treeId, treeNode) {
     var prev = $("#prevBtn_" + treeNode.id);
     var next = $("#nextBtn_" + treeNode.id);
     var last = $("#lastBtn_" + treeNode.id);
-    treeNode.maxPage = Math.round(treeNode.count / pageSize - .5) + (treeNode.count % pageSize == 0 ? 0 : 1);
+    treeNode.maxPage = Math.round(treeNode.count / pageSize - .5) + (treeNode.count % pageSize === 0 ? 0 : 1);
     first.bind("click", function () {
         goPage(treeNode, 1);
     });
@@ -117,12 +129,7 @@ function ztreeOnClick(event, treeId, treeNode) {
         getKeysInfo();
     } else {
         currNode0 = treeNode;
-        //取消其他根节点点击样式
-        for (var i = 0; i < 15; i++) {
-            if (i != currNode0.index) {
-                $("#keyTree" + i + "_1_a").removeClass("curSelectedNode");
-            }
-        }
+        checkedOnTree(currNode0.index);
     }
 }
 
@@ -132,6 +139,19 @@ function ztreeOnExpand(event, treeId, treeNode) {
         currNode0 = treeNode;
         loadDbData(treeNode, treeNode.pattern);
     }
+}
+
+//树右击事件
+function OnRightClick(event, treeId, treeNode) {
+    console.log(11111111111);
+    layer.msg(1);
+    showRMenu("root", event.clientX, event.clientY);
+}
+
+//高亮显示当前选中树
+function checkedOnTree(index) {
+    $(".ztree li a").removeClass("curSelectedNode");
+    $("#keyTree" + index + "_1_a").addClass("curSelectedNode");
 }
 
 //初始化库
@@ -144,6 +164,7 @@ function initDbTree() {
         $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
     }
     layer.closeAll('loading');
+    checkedOnTree(0);
 }
 
 
@@ -179,7 +200,7 @@ function getKeysInfo() {
         $("#vals1").html(keyInfo.text);
         $("#vals2").html(getFormatJson(keyInfo.json));
         $("#vals3").html(keyInfo.raws);
-        if (keyInfo.type == 'string') {
+        if (keyInfo.type === 'string') {
             $("#vals4").html(getEditView(keyInfo.type, keyInfo.text));
         } else {
             $("#vals4").html(getEditView(keyInfo.type, keyInfo.json));
@@ -354,7 +375,7 @@ function insertKey() {
         maxmin: false,
         resize: false,
         skin: 'layui-layer-lan',
-        content: '../page/data-increase.html'
+        content: '../page/data-singles-increase.html'
     });
 }
 

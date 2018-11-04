@@ -341,16 +341,17 @@ function reloadKey() {
 //添加新KEY
 function insertKey() {
     layer.open({
-        title: '新增连接',
+        title: '新增数据',
         type: 2,
-        area: ['455px', '445px'],
+        area: ['460px', '410px'],
         fixed: true,
         maxmin: false,
         resize: false,
         skin: 'layui-layer-lan',
-        content: '../page/data-save.html'
+        content: '../page/data-cluster-increase.html'
     });
 }
+
 
 //数据编辑视图
 function getEditView(type, data) {

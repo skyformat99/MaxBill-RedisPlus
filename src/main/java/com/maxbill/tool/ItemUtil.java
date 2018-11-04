@@ -21,9 +21,12 @@ public class ItemUtil {
     public static final String PAGE_CONNECT = "/page/connect.html";
     public static final String PAGE_DATA_SINGLES = "/page/data-singles.html";
     public static final String PAGE_DATA_CLUSTER = "/page/data-cluster.html";
-    public static final String PAGE_INFO = "/page/info.html";
-    public static final String PAGE_CONF = "/page/conf.html";
-    public static final String PAGE_MONITOR = "/page/monitor.html";
+    public static final String PAGE_INFO_SINGLES = "/page/info-singles.html";
+    public static final String PAGE_INFO_CLUSTER = "/page/info-cluster.html";
+    public static final String PAGE_CONF_SINGLES = "/page/conf-singles.html";
+    public static final String PAGE_CONF_CLUSTER = "/page/conf-cluster.html";
+    public static final String PAGE_MONITOR_SINGLES = "/page/monitor-singles.html";
+    public static final String PAGE_MONITOR_CLUSTER = "/page/monitor-cluster.html";
 
 
 }
