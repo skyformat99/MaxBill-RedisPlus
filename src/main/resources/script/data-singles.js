@@ -2,6 +2,7 @@ var $;
 var layer;
 var currNode0;
 var currNode1;
+var currNode2;
 
 window.onload = function () {
     layui.use(['layer', 'jquery'], function () {
@@ -51,22 +52,9 @@ var zTreeSetting = {
     callback: {
         onClick: ztreeOnClick,
         onExpand: ztreeOnExpand,
-        beforeRightClick: zTreeBeforeRightClick,
-        onRightClick: zTreeOnRightClick
+        onRightClick: ztreeOnRightClick
     }
 };
-
-function zTreeBeforeRightClick(event, treeId, treeNode) {
-    layer.msg("13123");
-    console.log(1111111111);
-    return false;
-}
-
-
-function zTreeOnRightClick(event, treeId, treeNode) {
-    console.log(1111111111);
-    layer.msg(treeNode ? treeNode.tId + ", " + treeNode.name : "isRoot");
-}
 
 //点击分页
 function goPage(treeNode, page) {
@@ -142,11 +130,67 @@ function ztreeOnExpand(event, treeId, treeNode) {
 }
 
 //树右击事件
-function OnRightClick(event, treeId, treeNode) {
-    console.log(11111111111);
-    layer.msg(1);
-    showRMenu("root", event.clientX, event.clientY);
+function ztreeOnRightClick(event, treeId, treeNode) {
+    if (treeNode.isParent) {
+        currNode2=treeNode;
+        showZtreeMenu(event.clientX, event.clientY);
+    }
+    $("body").bind("mousedown", onBodyMouseDown);
 }
+
+//隐藏菜单鼠标监听事件
+function onBodyMouseDown(event) {
+    if (!(event.target.id === "ztree-menu" || $(event.target).parents("#ztree-menu").length > 0)) {
+        hideZtreeMenu();
+    }
+}
+
+
+//显示菜单
+function showZtreeMenu(x, y) {
+    $("#ztree-menu ul").show();
+    y += document.body.scrollTop;
+    x += document.body.scrollLeft;
+    $("#ztree-menu").css({"top": y + "px", "left": x + "px", "visibility": "visible"});
+}
+
+//隐藏菜单
+function hideZtreeMenu() {
+    $("#ztree-menu").css({"visibility": "hidden"});
+}
+
+
+//清空数据
+function removesData() {
+    if (currNode2 ==null) {
+        layer.msg("请选择一个要操作的库！");
+        return false;
+    }
+    layer.load(2);
+    var json = dataSinglesRouter.delallKey(currNode2.index);
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
+    hideZtreeMenu();
+}
+
+//备份数据
+function backupsData() {
+    hideZtreeMenu();
+}
+
+//还原数据
+function restoreData() {
+    hideZtreeMenu();
+}
+
 
 //高亮显示当前选中树
 function checkedOnTree(index) {

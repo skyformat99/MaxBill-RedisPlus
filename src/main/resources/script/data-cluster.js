@@ -56,6 +56,7 @@ var zTreeSetting = {
     }
 };
 
+
 //点击分页
 function goPage(treeNode, page) {
     treeNode.page = page;
@@ -91,7 +92,7 @@ function showPageView(treeId, treeNode) {
     var prev = $("#prevBtn_" + treeNode.id);
     var next = $("#nextBtn_" + treeNode.id);
     var last = $("#lastBtn_" + treeNode.id);
-    treeNode.maxPage = Math.round(treeNode.count / pageSize - .5) + (treeNode.count % pageSize == 0 ? 0 : 1);
+    treeNode.maxPage = Math.round(treeNode.count / pageSize - .5) + (treeNode.count % pageSize === 0 ? 0 : 1);
     first.bind("click", function () {
         goPage(treeNode, 1);
     });
@@ -113,12 +114,6 @@ function ztreeOnClick(event, treeId, treeNode) {
         getKeysInfo();
     } else {
         currNode0 = treeNode;
-        //取消其他根节点点击样式
-        for (var i = 0; i < 15; i++) {
-            if (i != currNode0.index) {
-                $("#keyTree" + i + "_1_a").removeClass("curSelectedNode");
-            }
-        }
     }
 }
 

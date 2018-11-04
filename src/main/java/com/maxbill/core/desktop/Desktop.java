@@ -206,8 +206,8 @@ public class Desktop extends Application {
         webView = new WebView();
         webView.setCache(false);
         webEngine = webView.getEngine();
+        webView.setContextMenuEnabled(true);
         webEngine.setJavaScriptEnabled(true);
-        webView.setContextMenuEnabled(false);
         webView.setFontSmoothingType(FontSmoothingType.GRAY);
         webEngine.load(Desktop.class.getResource(PAGE_CONNECT).toExternalForm());
 

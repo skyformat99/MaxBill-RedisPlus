@@ -356,4 +356,24 @@ public class DataSinglesController {
         return JSON.toJSONString(resultMap);
     }
 
+    public String delallKey(int index) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            Jedis jedis = getCurrentJedisObject();
+            if (null != jedis) {
+                jedis.select(index);
+                jedis.flushDB();
+                resultMap.put("code", 200);
+                resultMap.put("msgs", "清空数据成功");
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "操作数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
 }
