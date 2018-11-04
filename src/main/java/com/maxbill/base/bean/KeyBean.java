@@ -20,4 +20,6 @@ public class KeyBean {
     private String raws;
 
     private String hexs;
+
+    private Object data;
 }

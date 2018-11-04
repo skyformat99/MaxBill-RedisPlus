@@ -15,6 +15,8 @@ public class DateUtil {
     public static final String TIME_STR = "HH:mm:ss";
     public static final String DATE_STR = "yyyy-MM-dd";
     public static final String DATE_STR_FULL = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_STR_FILE = "yyyy-MM-dd-HH:mm:ss";
+
 
 
     /**

@@ -231,6 +231,51 @@ public class RedisUtil {
         return jedis.hdel(key, mapKey);
     }
 
+    public static String exportKey(Jedis jedis, int index, String pattern) {
+        StringBuffer dataBuffer = new StringBuffer("");
+        long startTime = System.currentTimeMillis();
+        jedis.select(index);
+        if (StringUtils.isEmpty(pattern)) {
+            pattern = "*";
+        }
+        Set<String> keySet = jedis.keys(pattern);
+        long endTime = System.currentTimeMillis();
+        log.info("getKeyTree查询耗时：" + (endTime - startTime));
+        if (null != keySet) {
+            for (String key : keySet) {
+                KeyBean keyBean = new KeyBean();
+                keyBean.setKey(key);
+                keyBean.setType(jedis.type(key));
+                keyBean.setTtl(jedis.ttl(key));
+                switch (keyBean.getType()) {
+                    //set (集合)
+                    case "set":
+                        keyBean.setData(jedis.smembers(key));
+                        break;
+                    //list (列表)
+                    case "list":
+                        keyBean.setData(jedis.lrange(key, 0, -1));
+                        break;
+                    //zset (有序集)
+                    case "zset":
+                        keyBean.setData(jedis.zrange(key, 0, -1));
+                        break;
+                    //hash (哈希表)
+                    case "hash":
+                        keyBean.setData(jedis.hgetAll(key));
+                        break;
+                    //string (字符串)
+                    case "string":
+                        keyBean.setData(jedis.get(key));
+                        break;
+                }
+                dataBuffer.append(JSON.toJSONString(keyBean));
+                dataBuffer.append("\r\n");
+            }
+        }
+        return dataBuffer.toString();
+    }
+
 
     /**
      * 获取库的key值

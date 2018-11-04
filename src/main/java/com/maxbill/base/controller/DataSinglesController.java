@@ -2,15 +2,14 @@ package com.maxbill.base.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.ZTreeBean;
+import com.maxbill.tool.DateUtil;
+import com.maxbill.tool.FileUtil;
 import com.maxbill.tool.KeyUtil;
 import com.maxbill.tool.RedisUtil;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 
@@ -365,6 +364,32 @@ public class DataSinglesController {
                 jedis.flushDB();
                 resultMap.put("code", 200);
                 resultMap.put("msgs", "清空数据成功");
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "操作数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
+    public String exportKey(int index, String pattern) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            Jedis jedis = getCurrentJedisObject();
+            if (null != jedis) {
+                String baseUrl = System.getProperty("user.home");
+                String filePath = baseUrl + "/" + "RedisPlus-" + DateUtil.formatDate(new Date(), DateUtil.DATE_STR_FILE) + ".bak";
+                boolean flag = FileUtil.writeStringToFile(filePath, RedisUtil.exportKey(jedis, index, pattern));
+                if (flag) {
+                    resultMap.put("code", 200);
+                    resultMap.put("msgs", "数据成功导出至当前用户目录中");
+                } else {
+                    resultMap.put("code", 500);
+                    resultMap.put("msgs", "导出数据失败");
+                }
             } else {
                 resultMap.put("code", 500);
                 resultMap.put("msgs", "连接已断开");

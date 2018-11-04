@@ -105,7 +105,7 @@ function showPageView(treeId, treeNode) {
     last.bind("click", function () {
         goPage(treeNode, treeNode.maxPage);
     });
-};
+}
 
 //树节点点击事件
 function ztreeOnClick(event, treeId, treeNode) {

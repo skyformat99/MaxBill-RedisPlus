@@ -132,7 +132,7 @@ function ztreeOnExpand(event, treeId, treeNode) {
 //树右击事件
 function ztreeOnRightClick(event, treeId, treeNode) {
     if (treeNode.isParent) {
-        currNode2=treeNode;
+        currNode2 = treeNode;
         showZtreeMenu(event.clientX, event.clientY);
     }
     $("body").bind("mousedown", onBodyMouseDown);
@@ -162,7 +162,7 @@ function hideZtreeMenu() {
 
 //清空数据
 function removesData() {
-    if (currNode2 ==null) {
+    if (currNode2 == null) {
         layer.msg("请选择一个要操作的库！");
         return false;
     }
@@ -183,6 +183,22 @@ function removesData() {
 
 //备份数据
 function backupsData() {
+    if (currNode2 == null) {
+        layer.msg("请选择一个要操作的库！");
+        return false;
+    }
+    layer.load(2);
+    var json = dataSinglesRouter.exportKey(currNode2.index, currNode2.pattern);
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
     hideZtreeMenu();
 }
 
