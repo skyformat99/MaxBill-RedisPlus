@@ -9,6 +9,24 @@ window.onload = function () {
         $ = layui.jquery;
         layer = layui.layer;
         initDbTree();
+        initDataView();
+    });
+};
+
+//初始化视图
+function initDataView() {
+    $("#keys").on({
+        mouseover: function () {
+            layer.tips('双击复制KEY', this, {
+                tips: [1, '#3595CC']
+            });
+        },
+        dblclick: function () {
+            var text = $("#keys").html() + '';
+            if (text !== '--') {
+                copyToClipboard(text);
+            }
+        }
     });
 }
 

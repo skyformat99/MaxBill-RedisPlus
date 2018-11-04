@@ -9,6 +9,7 @@ layui.use(['jquery', 'form', 'layer'], function () {
     //渲染表单
     form.render();
     showConView();
+    initConView();
     form.on('checkbox(type)', function (data) {
         if (!data.elem.checked) {
             showConView();
@@ -36,9 +37,17 @@ layui.use(['jquery', 'form', 'layer'], function () {
     });
 });
 
+//初始化连接视图
+function initConView() {
+    $("#text").val("新建连接1");
+    $("#rhost").val("127.0.0.1");
+    $("#rport").val(6379);
+}
+
 //显示连接视图
 function showConView() {
     var rhost = $("#rhost");
+    rhost.val("127.0.0.1");
     rhost.removeAttr("disabled");
     rhost.attr('lay-verify', 'required');
     rhost.css('background', 'transparent');
@@ -58,6 +67,7 @@ function showSshView() {
     rhost.attr("disabled", "disabled");
     rhost.css('background', '#E0E0E2');
     rhost.attr('lay-verify', '');
+    $("#sport").val(22);
     var sshInput = $(".ssh-input");
     sshInput.removeAttr("disabled");
     sshInput.attr('lay-verify', 'required');
