@@ -175,7 +175,7 @@ function setConnectData() {
     layer.open({
         title: '操作连接',
         type: 2,
-        area: ['455px', '500px'],
+        area: ['455px', '480px'],
         fixed: true,
         maxmin: false,
         skin: 'layui-layer-lan',

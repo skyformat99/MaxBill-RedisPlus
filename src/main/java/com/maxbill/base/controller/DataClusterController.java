@@ -19,10 +19,29 @@ import java.util.List;
 import java.util.Map;
 
 import static com.maxbill.base.bean.ResultInfo.*;
-import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 
 @Component
 public class DataClusterController {
+
+
+    public String nodeInfo() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+            if (null != nodeList) {
+                resultMap.put("code", 200);
+                resultMap.put("data", nodeList);
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "获取数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
 
     public String treeInit() {
         Map<String, Object> resultMap = new HashMap<>();
