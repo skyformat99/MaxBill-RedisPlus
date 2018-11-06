@@ -8,8 +8,10 @@ window.onload = function () {
     layui.use(['layer', 'jquery'], function () {
         $ = layui.jquery;
         layer = layui.layer;
+        layer.load(2);
         initDbTree();
         initDataView();
+        layer.closeAll('loading');
     });
 };
 

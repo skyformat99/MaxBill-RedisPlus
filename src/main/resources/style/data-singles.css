@@ -20,8 +20,8 @@
     float: left;
     width: 400px;
     bottom: 0px;
+    overflow: auto;
     position: absolute;
-    overflow-y: auto;
     border-right: 1px solid silver;
 }
 
@@ -86,6 +86,16 @@
     margin: 0 auto;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.text-ignore-box {
+    width: auto;
+    display: block;
+    overflow: hidden;
+    max-width: 310px;
+    min-width: 310px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .key-tool-view {

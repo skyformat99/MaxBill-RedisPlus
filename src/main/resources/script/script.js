@@ -7,7 +7,9 @@ function toPage(flag, page) {
         });
         return false;
     }
+    layer.load(2);
     otherRouter.changeWebview(page);
+    layer.closeAll('loading');
 }
 
 function outJsObj() {
