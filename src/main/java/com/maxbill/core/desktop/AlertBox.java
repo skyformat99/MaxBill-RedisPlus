@@ -63,6 +63,7 @@ public class AlertBox {
         Label boxImage = new Label();
         Label boxClose = new Label();
         boxTitle.setText(title);
+        boxTitle.setTranslateX(-15);
         boxImage.setId("tops-box-image");
         boxTitle.setId("tops-box-title");
         boxClose.setId("tops-box-close");
