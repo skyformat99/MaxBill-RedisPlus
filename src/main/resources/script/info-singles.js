@@ -12,7 +12,7 @@ window.onload = function () {
 
 /**初始化信息*/
 function initBaseInfo() {
-    var json = infoRouter.getBaseInfo();
+    var json = infoSinglesRouter.getBaseInfo();
     var data = JSON.parse(json);
     if (data.code === 200) {
         var redisData = data.data;
@@ -41,7 +41,7 @@ function initBaseInfo() {
 
 /**初始化信息*/
 function initUserInfo(data) {
-    var json = infoRouter.getUserInfo();
+    var json = infoSinglesRouter.getUserInfo();
     var data = JSON.parse(json);
     if (data.code === 200) {
         var html = '';
@@ -63,7 +63,7 @@ function initUserInfo(data) {
 
 /**初始化信息*/
 function initLogsInfo() {
-    var json = infoRouter.getLogsInfo();
+    var json = infoSinglesRouter.getLogsInfo();
     var data = JSON.parse(json);
     if (data.code === 200) {
         var html = '';

@@ -95,11 +95,11 @@
     background-color: #CFE6F3;
 }
 
-.key-tool-abtn{
+.key-tool-abtn {
     background-color: #638CB7;
 }
 
-.key-tool-dbtn{
+.key-tool-dbtn {
     background-color: #4777A7;
 }
 
@@ -233,5 +233,33 @@
 
 .ztree li a:hover {
     color: #009E94;
+}
+
+#ztree-menu {
+    top: 0;
+    text-align: left;
+    position: absolute;
+    visibility: hidden;
+    background-color: #4777A7;
+}
+
+#ztree-menu ul li {
+    width: 60px;
+    height: 25px;
+    margin: 1px 0;
+    display: block;
+    padding: 0 10px;
+    font-size: 11px;
+    cursor: pointer;
+    line-height: 25px;
+    text-align: center;
+    background-color: white;
+    list-style: none outside none;
+    border-left: 1px solid #4777A7;
+    border-right: 1px solid #4777A7;
+}
+
+#ztree-menu ul li:hover {
+    background-color: #93D1FF;
 }
 

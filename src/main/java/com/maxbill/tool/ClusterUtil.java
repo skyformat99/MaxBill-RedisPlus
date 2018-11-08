@@ -284,6 +284,51 @@ public class ClusterUtil {
         return jedisCluster.hdel(key, mapKey);
     }
 
+    //导出数据
+    public static String exportKey(Jedis jedis, String pattern) {
+        StringBuffer dataBuffer = new StringBuffer("");
+        if (StringUtils.isEmpty(pattern)) {
+            pattern = "*";
+        }
+        Object dataObj = null;
+        Set<String> keySet = jedis.keys(pattern);
+        if (null != keySet) {
+            for (String key : keySet) {
+                KeyBean keyBean = new KeyBean();
+                keyBean.setKey(key);
+                keyBean.setType(jedis.type(key));
+                keyBean.setTtl(jedis.ttl(key));
+                switch (keyBean.getType()) {
+                    //set (集合)
+                    case "set":
+                        dataObj = jedis.smembers(key);
+                        break;
+                    //list (列表)
+                    case "list":
+                        dataObj = jedis.lrange(key, 0, -1);
+
+                        break;
+                    //zset (有序集)
+                    case "zset":
+                        dataObj = jedis.zrange(key, 0, -1);
+                        break;
+                    //hash (哈希表)
+                    case "hash":
+                        dataObj = jedis.hgetAll(key);
+                        break;
+                    //string (字符串)
+                    case "string":
+                        dataObj = jedis.get(key);
+                        break;
+                }
+                keyBean.setData(dataObj);
+                dataBuffer.append(JSON.toJSONString(keyBean));
+                dataBuffer.append("\r\n");
+            }
+        }
+        return dataBuffer.toString();
+    }
+
     /**
      * 获取Redis Key信息
      */

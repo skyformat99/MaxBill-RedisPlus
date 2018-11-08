@@ -18,7 +18,7 @@ import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 import static com.maxbill.tool.RedisUtil.getRedisInfo;
 
 @Component
-public class InfoController {
+public class InfoSinglesController {
 
     public String getBaseInfo() {
         Map<String, Object> resultMap = new HashMap<>();

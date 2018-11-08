@@ -3,22 +3,17 @@ package com.maxbill.base.controller;
 import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.RedisNode;
 import com.maxbill.base.bean.ZTreeBean;
-import com.maxbill.tool.ClusterUtil;
-import com.maxbill.tool.DataUtil;
-import com.maxbill.tool.KeyUtil;
-import com.maxbill.tool.RedisUtil;
+import com.maxbill.tool.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.maxbill.base.bean.ResultInfo.*;
+import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 
 @Component
 public class DataClusterController {
@@ -368,5 +363,71 @@ public class DataClusterController {
         }
     }
 
+
+    public String delallKey() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            JedisCluster cluster = DataUtil.getJedisClusterObject();
+            if (null != cluster) {
+                List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+                Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
+                Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
+                for (String nk : clusterNodes.keySet()) {
+                    if (masterNode.keySet().contains(nk)) {
+                        Jedis jedis = clusterNodes.get(nk).getResource();
+                        jedis.flushDB();
+                        jedis.close();
+                    }
+                }
+                resultMap.put("code", 200);
+                resultMap.put("msgs", "清空数据成功");
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "操作数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
+    public String exportKey(String pattern) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            JedisCluster cluster = DataUtil.getJedisClusterObject();
+            if (null != cluster) {
+                List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+                Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
+                Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
+                StringBuffer dataBuffer = new StringBuffer("");
+                String baseUrl = System.getProperty("user.home");
+                String filePath = baseUrl + "/" + "RedisPlus-" + DateUtil.formatDate(new Date(), DateUtil.DATE_STR_FILE) + ".bak";
+                for (String nk : clusterNodes.keySet()) {
+                    if (masterNode.keySet().contains(nk)) {
+                        Jedis jedis = clusterNodes.get(nk).getResource();
+                        dataBuffer.append(ClusterUtil.exportKey(jedis, pattern));
+                        jedis.close();
+                    }
+                }
+                boolean expFlag = FileUtil.writeStringToFile(filePath, dataBuffer.toString());
+                if (expFlag) {
+                    resultMap.put("code", 200);
+                    resultMap.put("msgs", "各个节点数据成功导出至当前用户目录中");
+                } else {
+                    resultMap.put("code", 500);
+                    resultMap.put("msgs", "导出数据失败");
+                }
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "操作数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
 
 }

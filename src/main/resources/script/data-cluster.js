@@ -52,7 +52,9 @@ var zTreeSetting = {
     },
     callback: {
         onClick: ztreeOnClick,
-        onExpand: ztreeOnExpand
+        onExpand: ztreeOnExpand,
+        onDblClick: ztreeOnDblClick,
+        onRightClick: ztreeOnRightClick
     }
 };
 
@@ -125,6 +127,88 @@ function ztreeOnExpand(event, treeId, treeNode) {
     }
 }
 
+//树节点双击事件
+function ztreeOnDblClick(event, treeId, treeNode) {
+    if (!treeNode.isParent) {
+        copyToClipboard(treeNode.name);
+    }
+}
+
+
+//树右击事件
+function ztreeOnRightClick(event, treeId, treeNode) {
+    if (treeNode.isParent) {
+        currNode2 = treeNode;
+        showZtreeMenu(event.clientX, event.clientY);
+    }
+    $("body").bind("mousedown", onBodyMouseDown);
+}
+
+//隐藏菜单鼠标监听事件
+function onBodyMouseDown(event) {
+    if (!(event.target.id === "ztree-menu" || $(event.target).parents("#ztree-menu").length > 0)) {
+        hideZtreeMenu();
+    }
+}
+
+
+//显示菜单
+function showZtreeMenu(x, y) {
+    $("#ztree-menu ul").show();
+    y += document.body.scrollTop;
+    x += document.body.scrollLeft;
+    $("#ztree-menu").css({"top": y + "px", "left": x + "px", "visibility": "visible"});
+}
+
+//隐藏菜单
+function hideZtreeMenu() {
+    $("#ztree-menu").css({"visibility": "hidden"});
+}
+
+
+//清空数据
+function removesData() {
+    layer.load(2);
+    var json = dataClusterRouter.delallKey();
+    var data = JSON.parse(json);
+    layer.closeAll('loading');
+    if (data.code === 200) {
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
+    hideZtreeMenu();
+}
+
+//备份数据
+function backupsData() {
+    hideZtreeMenu();
+    layer.msg("数据备份任务正在后台执行...");
+    //layer.load(2);
+    var json = dataClusterRouter.exportKey(currNode0.pattern);
+    var data = JSON.parse(json);
+    //layer.closeAll('loading');
+    if (data.code === 200) {
+        layer.msg(data.msgs);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
+    // hideZtreeMenu();
+}
+
+//还原数据
+function restoreData() {
+    layer.msg("暂未开发...");
+    hideZtreeMenu();
+}
+
+
 //初始化库
 function initDbTree() {
     layer.load(2);
@@ -133,6 +217,10 @@ function initDbTree() {
     $.fn.zTree.init($("#keyTree"), zTreeSetting, data.data);
     $.fn.zTree.getZTreeObj("keyTree").expandAll(false);
     layer.closeAll('loading');
+    var zTreeObj = $.fn.zTree.getZTreeObj("keyTree");
+    currNode0 = zTreeObj.getNodesByFilter(function (node) {
+        return node.level === 0
+    }, true);
 }
 
 

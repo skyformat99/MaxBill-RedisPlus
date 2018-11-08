@@ -72,7 +72,8 @@ public class Desktop extends Application {
     private static ConnectController connectController = null;
     private static DataSinglesController dataSinglesController = null;
     private static DataClusterController dataClusterController = null;
-    private static InfoController infoController = null;
+    private static InfoSinglesController infoSinglesController = null;
+    private static InfoClusterController infoClusterController = null;
     private static ConfController confController = null;
 
 
@@ -224,7 +225,8 @@ public class Desktop extends Application {
                 jsObject.setMember("connectRouter", connectController);
                 jsObject.setMember("dataSinglesRouter", dataSinglesController);
                 jsObject.setMember("dataClusterRouter", dataClusterController);
-                jsObject.setMember("infoRouter", infoController);
+                jsObject.setMember("infoSinglesRouter", infoSinglesController);
+                jsObject.setMember("infoClusterRouter", infoClusterController);
                 jsObject.setMember("confRouter", confController);
             }
         });
@@ -494,7 +496,8 @@ public class Desktop extends Application {
         connectController = context.getBean(ConnectController.class);
         dataSinglesController = context.getBean(DataSinglesController.class);
         dataClusterController = context.getBean(DataClusterController.class);
-        infoController = context.getBean(InfoController.class);
+        infoSinglesController = context.getBean(InfoSinglesController.class);
+        infoClusterController = context.getBean(InfoClusterController.class);
         confController = context.getBean(ConfController.class);
     }
 

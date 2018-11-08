@@ -17,11 +17,12 @@ window.onload = function () {
 
 //初始化视图
 function initDataView() {
+    layer.msg("双击KEY名称可复制！");
     $("#keys").on({
         mouseover: function () {
-            layer.tips('双击复制KEY', this, {
-                tips: [1, '#3595CC']
-            });
+            // layer.tips('双击复制KEY', this, {
+            //     tips: [1, '#3595CC']
+            // });
         },
         dblclick: function () {
             var text = $("#keys").html() + '';
@@ -72,6 +73,7 @@ var zTreeSetting = {
     callback: {
         onClick: ztreeOnClick,
         onExpand: ztreeOnExpand,
+        onDblClick: ztreeOnDblClick,
         onRightClick: ztreeOnRightClick
     }
 };
@@ -149,6 +151,13 @@ function ztreeOnExpand(event, treeId, treeNode) {
     }
 }
 
+//树节点双击事件
+function ztreeOnDblClick(event, treeId, treeNode) {
+    if (!treeNode.isParent) {
+        copyToClipboard(treeNode.name);
+    }
+}
+
 //树右击事件
 function ztreeOnRightClick(event, treeId, treeNode) {
     if (treeNode.isParent) {
@@ -207,10 +216,12 @@ function backupsData() {
         layer.msg("请选择一个要操作的库！");
         return false;
     }
-    layer.load(2);
+    hideZtreeMenu();
+    layer.msg("数据备份任务正在后台执行...");
+    //layer.load(2);
     var json = dataSinglesRouter.exportKey(currNode2.index, currNode2.pattern);
     var data = JSON.parse(json);
-    layer.closeAll('loading');
+    //layer.closeAll('loading');
     if (data.code === 200) {
         layer.msg(data.msgs);
     } else {
@@ -219,12 +230,23 @@ function backupsData() {
             closeBtn: 0
         });
     }
-    hideZtreeMenu();
+    // hideZtreeMenu();
 }
 
 //还原数据
 function restoreData() {
-    hideZtreeMenu();
+    //layer.msg("暂未开发...");
+    layer.open({
+        title: '还原数据',
+        type: 2,
+        area: ['460px', '410px'],
+        fixed: true,
+        maxmin: false,
+        resize: false,
+        skin: 'layui-layer-lan',
+        content: '../page/data-singles-restore.html'
+    });
+    //hideZtreeMenu();
 }
 
 
