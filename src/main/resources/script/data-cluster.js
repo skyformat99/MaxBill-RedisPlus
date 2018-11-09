@@ -137,11 +137,11 @@ function ztreeOnDblClick(event, treeId, treeNode) {
 
 //树右击事件
 function ztreeOnRightClick(event, treeId, treeNode) {
-    if (treeNode.isParent) {
+    if (null != treeNode && treeNode.isParent) {
         currNode2 = treeNode;
         showZtreeMenu(event.clientX, event.clientY);
+        $("body").bind("mousedown", onBodyMouseDown);
     }
-    $("body").bind("mousedown", onBodyMouseDown);
 }
 
 //隐藏菜单鼠标监听事件

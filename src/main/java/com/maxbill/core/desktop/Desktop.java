@@ -60,6 +60,7 @@ public class Desktop extends Application {
     //是否处于最大化调整窗口状态
     private boolean isMax = false;
 
+    public  static Stage stage;
     private static WebView webView;
     private static WebEngine webEngine;
     private static BorderPane mainView;
@@ -105,6 +106,7 @@ public class Desktop extends Application {
         doWinRaise(winStage);
         doWinState(winStage, mainView);
 
+        stage=winStage;
     }
 
 
@@ -488,6 +490,11 @@ public class Desktop extends Application {
     public static void setWebViewPage(String url) {
         String utl = Desktop.class.getResource(url).toExternalForm();
         webEngine.load(utl);
+    }
+
+
+    public static Stage getRootStage(){
+        return stage;
     }
 
 

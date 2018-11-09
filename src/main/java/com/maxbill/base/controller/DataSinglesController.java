@@ -2,13 +2,17 @@ package com.maxbill.base.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.ZTreeBean;
+import com.maxbill.core.desktop.Desktop;
 import com.maxbill.tool.DateUtil;
 import com.maxbill.tool.FileUtil;
 import com.maxbill.tool.KeyUtil;
 import com.maxbill.tool.RedisUtil;
+import com.sun.glass.ui.Window;
+import javafx.stage.FileChooser;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
+import java.io.File;
 import java.util.*;
 
 import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
@@ -355,7 +359,7 @@ public class DataSinglesController {
         return JSON.toJSONString(resultMap);
     }
 
-    public String delallKey(int index) {
+    public String removeKey(int index) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
@@ -375,7 +379,7 @@ public class DataSinglesController {
         return JSON.toJSONString(resultMap);
     }
 
-    public String exportKey(int index, String pattern) {
+    public String backupKey(int index, String pattern) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
@@ -400,5 +404,28 @@ public class DataSinglesController {
         }
         return JSON.toJSONString(resultMap);
     }
+
+
+    public String recoveKey() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(Desktop.getRootStage());
+            System.out.println(file.toString());
+            FileUtil.readFileToString(file.toString());
+            Jedis jedis = getCurrentJedisObject();
+            if (null != jedis) {
+
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "操作数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
 
 }

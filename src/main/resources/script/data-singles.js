@@ -160,11 +160,11 @@ function ztreeOnDblClick(event, treeId, treeNode) {
 
 //树右击事件
 function ztreeOnRightClick(event, treeId, treeNode) {
-    if (treeNode.isParent) {
+    if (null != treeNode && treeNode.isParent) {
         currNode2 = treeNode;
         showZtreeMenu(event.clientX, event.clientY);
+        $("body").bind("mousedown", onBodyMouseDown);
     }
-    $("body").bind("mousedown", onBodyMouseDown);
 }
 
 //隐藏菜单鼠标监听事件
@@ -190,13 +190,13 @@ function hideZtreeMenu() {
 
 
 //清空数据
-function removesData() {
+function removeData() {
     if (currNode2 == null) {
         layer.msg("请选择一个要操作的库！");
         return false;
     }
     layer.load(2);
-    var json = dataSinglesRouter.delallKey(currNode2.index);
+    var json = dataSinglesRouter.removeKey(currNode2.index);
     var data = JSON.parse(json);
     layer.closeAll('loading');
     if (data.code === 200) {
@@ -211,7 +211,7 @@ function removesData() {
 }
 
 //备份数据
-function backupsData() {
+function backupData() {
     if (currNode2 == null) {
         layer.msg("请选择一个要操作的库！");
         return false;
@@ -219,7 +219,7 @@ function backupsData() {
     hideZtreeMenu();
     layer.msg("数据备份任务正在后台执行...");
     //layer.load(2);
-    var json = dataSinglesRouter.exportKey(currNode2.index, currNode2.pattern);
+    var json = dataSinglesRouter.backupsKey(currNode2.index, currNode2.pattern);
     var data = JSON.parse(json);
     //layer.closeAll('loading');
     if (data.code === 200) {
@@ -234,18 +234,19 @@ function backupsData() {
 }
 
 //还原数据
-function restoreData() {
+function recoveData() {
+    dataSinglesRouter.recoveKey();
     //layer.msg("暂未开发...");
-    layer.open({
-        title: '还原数据',
-        type: 2,
-        area: ['460px', '410px'],
-        fixed: true,
-        maxmin: false,
-        resize: false,
-        skin: 'layui-layer-lan',
-        content: '../page/data-singles-restore.html'
-    });
+    // layer.open({
+    //     title: '还原数据',
+    //     type: 2,
+    //     area: ['460px', '410px'],
+    //     fixed: true,
+    //     maxmin: false,
+    //     resize: false,
+    //     skin: 'layui-layer-lan',
+    //     content: '../page/data-singles-restore.html'
+    // });
     //hideZtreeMenu();
 }
 
