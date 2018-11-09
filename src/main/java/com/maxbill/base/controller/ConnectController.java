@@ -23,6 +23,21 @@ public class ConnectController {
     @Autowired
     private DataService dataService;
 
+
+    /**
+     * 配置连接信息
+     */
+    public void configConnect() {
+        try {
+            int tableCount = this.dataService.isExistsTable("T_CONNECT");
+            if (tableCount == 0) {
+                this.dataService.createConnectTable();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 查询连接列表
      */

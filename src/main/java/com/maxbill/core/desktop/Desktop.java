@@ -31,11 +31,14 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import netscape.javascript.JSObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import static com.maxbill.tool.ItemUtil.*;
 
+@Component
 public class Desktop extends Application {
 
     private double x = 0.00;
@@ -60,7 +63,7 @@ public class Desktop extends Application {
     //是否处于最大化调整窗口状态
     private boolean isMax = false;
 
-    public  static Stage stage;
+    public static Stage stage;
     private static WebView webView;
     private static WebEngine webEngine;
     private static BorderPane mainView;
@@ -92,6 +95,7 @@ public class Desktop extends Application {
         context = SpringApplication.run(MainApplication.class);
         if (null != context) {
             initWebObject();
+            connectController.configConnect();
         } else {
             return;
         }
@@ -106,7 +110,7 @@ public class Desktop extends Application {
         doWinRaise(winStage);
         doWinState(winStage, mainView);
 
-        stage=winStage;
+        stage = winStage;
     }
 
 
@@ -493,7 +497,7 @@ public class Desktop extends Application {
     }
 
 
-    public static Stage getRootStage(){
+    public static Stage getRootStage() {
         return stage;
     }
 
