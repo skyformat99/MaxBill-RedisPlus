@@ -284,8 +284,56 @@ public class ClusterUtil {
         return jedisCluster.hdel(key, mapKey);
     }
 
+    /**
+     * 还原数据
+     */
+    public static void recoveKey(JedisCluster jedisCluster, String jsonStr) {
+        String[] jsons = jsonStr.split("\r\n", -1);
+        for (String json : jsons) {
+            KeyBean keyBean = JsonUtil.parseKeyBeanObject(json);
+            if (null != keyBean) {
+                String key = keyBean.getKey();
+                String type = keyBean.getType();
+                Object data = keyBean.getData();
+                String temp = JSON.toJSONString(data);
+                switch (type) {
+                    //set (集合)
+                    case "set":
+                        List sets = JSON.parseObject(temp, List.class);
+                        for (Object setTemp : sets) {
+                            jedisCluster.sadd(key, setTemp.toString());
+                        }
+                        break;
+                    //list (列表)
+                    case "list":
+                        List lists = JSON.parseObject(temp, List.class);
+                        for (Object listTemp : lists) {
+                            jedisCluster.lpush(key, listTemp.toString());
+                        }
+                        break;
+                    //zset (有序集)
+                    case "zset":
+                        List zsets = JSON.parseObject(temp, List.class);
+                        for (Object zsetTemp : zsets) {
+                            jedisCluster.zadd(key, zsets.indexOf(zsetTemp) + 1, zsetTemp.toString());
+                        }
+                        break;
+                    //hash (哈希表)
+                    case "hash":
+                        Map map = JSON.parseObject(temp, Map.class);
+                        jedisCluster.hmset(key, map);
+                        break;
+                    //string (字符串)
+                    case "string":
+                        jedisCluster.set(key, data.toString());
+                        break;
+                }
+            }
+        }
+    }
+
     //导出数据
-    public static String exportKey(Jedis jedis, String pattern) {
+    public static String backupKey(Jedis jedis, String pattern) {
         StringBuffer dataBuffer = new StringBuffer("");
         if (StringUtils.isEmpty(pattern)) {
             pattern = "*";

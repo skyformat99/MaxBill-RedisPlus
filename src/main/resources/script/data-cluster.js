@@ -167,12 +167,13 @@ function hideZtreeMenu() {
 
 
 //清空数据
-function removesData() {
+function removeData() {
     layer.load(2);
-    var json = dataClusterRouter.delallKey();
+    var json = dataClusterRouter.removeKey();
     var data = JSON.parse(json);
     layer.closeAll('loading');
     if (data.code === 200) {
+        initDbTree();
         layer.msg(data.msgs);
     } else {
         layer.alert(data.msgs, {
@@ -184,13 +185,10 @@ function removesData() {
 }
 
 //备份数据
-function backupsData() {
-    hideZtreeMenu();
+function backupData() {
     layer.msg("数据备份任务正在后台执行...");
-    //layer.load(2);
-    var json = dataClusterRouter.exportKey(currNode0.pattern);
+    var json = dataClusterRouter.backupKey(currNode0.pattern);
     var data = JSON.parse(json);
-    //layer.closeAll('loading');
     if (data.code === 200) {
         layer.msg(data.msgs);
     } else {
@@ -199,13 +197,16 @@ function backupsData() {
             closeBtn: 0
         });
     }
-    // hideZtreeMenu();
 }
 
 //还原数据
-function restoreData() {
-    layer.msg("暂未开发...");
+function recoveData() {
     hideZtreeMenu();
+    layer.msg("数据还原任务正在后台执行...");
+    var json = dataClusterRouter.recoveKey();
+    var data = JSON.parse(json);
+    layer.msg(data.msgs);
+    initDbTree();
 }
 
 

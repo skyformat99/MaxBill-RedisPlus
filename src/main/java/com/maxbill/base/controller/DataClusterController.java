@@ -3,13 +3,16 @@ package com.maxbill.base.controller;
 import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.RedisNode;
 import com.maxbill.base.bean.ZTreeBean;
+import com.maxbill.core.desktop.Desktop;
 import com.maxbill.tool.*;
+import javafx.stage.FileChooser;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
+import java.io.File;
 import java.util.*;
 
 import static com.maxbill.base.bean.ResultInfo.*;
@@ -364,7 +367,7 @@ public class DataClusterController {
     }
 
 
-    public String delallKey() {
+    public String removeKey() {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             JedisCluster cluster = DataUtil.getJedisClusterObject();
@@ -393,7 +396,7 @@ public class DataClusterController {
         return JSON.toJSONString(resultMap);
     }
 
-    public String exportKey(String pattern) {
+    public String backupKey(String pattern) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             JedisCluster cluster = DataUtil.getJedisClusterObject();
@@ -407,7 +410,7 @@ public class DataClusterController {
                 for (String nk : clusterNodes.keySet()) {
                     if (masterNode.keySet().contains(nk)) {
                         Jedis jedis = clusterNodes.get(nk).getResource();
-                        dataBuffer.append(ClusterUtil.exportKey(jedis, pattern));
+                        dataBuffer.append(ClusterUtil.backupKey(jedis, pattern));
                         jedis.close();
                     }
                 }
@@ -429,5 +432,29 @@ public class DataClusterController {
         }
         return JSON.toJSONString(resultMap);
     }
+
+
+    public String recoveKey() {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            JedisCluster cluster = DataUtil.getJedisClusterObject();
+            if (null != cluster) {
+                FileChooser fileChooser = new FileChooser();
+                File file = fileChooser.showOpenDialog(Desktop.getRootStage());
+                ClusterUtil.recoveKey(cluster, FileUtil.readFileToString(file.toString()));
+                resultMap.put("code", 200);
+                resultMap.put("msgs", "还原数据成功");
+            } else {
+                resultMap.put("code", 500);
+                resultMap.put("msgs", "连接已断开");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("code", 500);
+            resultMap.put("msgs", "操作数据异常");
+        }
+        return JSON.toJSONString(resultMap);
+    }
+
 
 }
