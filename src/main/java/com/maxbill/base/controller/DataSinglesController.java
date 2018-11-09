@@ -386,7 +386,7 @@ public class DataSinglesController {
             if (null != jedis) {
                 String baseUrl = System.getProperty("user.home");
                 String filePath = baseUrl + "/" + "RedisPlus-" + DateUtil.formatDate(new Date(), DateUtil.DATE_STR_FILE) + ".bak";
-                boolean flag = FileUtil.writeStringToFile(filePath, RedisUtil.exportKey(jedis, index, pattern));
+                boolean flag = FileUtil.writeStringToFile(filePath, RedisUtil.backupKey(jedis, index, pattern));
                 if (flag) {
                     resultMap.put("code", 200);
                     resultMap.put("msgs", "数据成功导出至当前用户目录中");
@@ -406,21 +406,22 @@ public class DataSinglesController {
     }
 
 
-    public String recoveKey() {
+    public String recoveKey(int index) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            FileChooser fileChooser = new FileChooser();
-            File file = fileChooser.showOpenDialog(Desktop.getRootStage());
-            System.out.println(file.toString());
-            FileUtil.readFileToString(file.toString());
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
-
+                FileChooser fileChooser = new FileChooser();
+                File file = fileChooser.showOpenDialog(Desktop.getRootStage());
+                RedisUtil.recoveKey(jedis, index, FileUtil.readFileToString(file.toString()));
+                resultMap.put("code", 200);
+                resultMap.put("msgs", "还原数据成功");
             } else {
                 resultMap.put("code", 500);
                 resultMap.put("msgs", "连接已断开");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             resultMap.put("code", 500);
             resultMap.put("msgs", "操作数据异常");
         }

@@ -5,10 +5,7 @@ import com.maxbill.base.bean.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import redis.clients.jedis.Client;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
 import redis.clients.util.Slowlog;
 
 import java.util.*;
@@ -231,7 +228,63 @@ public class RedisUtil {
         return jedis.hdel(key, mapKey);
     }
 
-    public static String exportKey(Jedis jedis, int index, String pattern) {
+
+    /**
+     * 还原数据
+     */
+    public static void recoveKey(Jedis jedis, int index, String jsonStr) {
+        //Pipeline pipeline = jedis.pipelined();
+        // pipeline.select(index);
+        jedis.select(index);
+        String[] jsons = jsonStr.split("\r\n", -1);
+        for (String json : jsons) {
+            KeyBean keyBean = JsonUtil.parseKeyBeanObject(json);
+            if (null != keyBean) {
+                String key = keyBean.getKey();
+                String type = keyBean.getType();
+                Object data = keyBean.getData();
+                String temp = JSON.toJSONString(data);
+                switch (type) {
+                    //set (集合)
+                    case "set":
+                        List sets = JSON.parseObject(temp, List.class);
+                        for (Object setTemp : sets) {
+                            jedis.sadd(key, setTemp.toString());
+                        }
+                        break;
+                    //list (列表)
+                    case "list":
+                        List lists = JSON.parseObject(temp, List.class);
+                        for (Object listTemp : lists) {
+                            jedis.lpush(key, listTemp.toString());
+                        }
+                        break;
+                    //zset (有序集)
+                    case "zset":
+                        List zsets = JSON.parseObject(temp, List.class);
+                        for (Object zsetTemp : zsets) {
+                            jedis.zadd(key, zsets.indexOf(zsetTemp) + 1, zsetTemp.toString());
+                        }
+                        break;
+                    //hash (哈希表)
+                    case "hash":
+                        Map map = JSON.parseObject(temp, Map.class);
+                        jedis.hmset(key, map);
+                        break;
+                    //string (字符串)
+                    case "string":
+                        jedis.set(key, data.toString());
+                        break;
+                }
+            }
+        }
+        //pipeline.sync();
+    }
+
+    /**
+     * 备份数据
+     */
+    public static String backupKey(Jedis jedis, int index, String pattern) {
         StringBuffer dataBuffer = new StringBuffer("");
         long startTime = System.currentTimeMillis();
         jedis.select(index);

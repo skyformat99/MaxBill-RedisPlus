@@ -201,6 +201,7 @@ function removeData() {
     layer.closeAll('loading');
     if (data.code === 200) {
         layer.msg(data.msgs);
+        initDbTree();
     } else {
         layer.alert(data.msgs, {
             skin: 'layui-layer-lan',
@@ -218,10 +219,8 @@ function backupData() {
     }
     hideZtreeMenu();
     layer.msg("数据备份任务正在后台执行...");
-    //layer.load(2);
     var json = dataSinglesRouter.backupsKey(currNode2.index, currNode2.pattern);
     var data = JSON.parse(json);
-    //layer.closeAll('loading');
     if (data.code === 200) {
         layer.msg(data.msgs);
     } else {
@@ -230,24 +229,20 @@ function backupData() {
             closeBtn: 0
         });
     }
-    // hideZtreeMenu();
 }
 
 //还原数据
 function recoveData() {
-    dataSinglesRouter.recoveKey();
-    //layer.msg("暂未开发...");
-    // layer.open({
-    //     title: '还原数据',
-    //     type: 2,
-    //     area: ['460px', '410px'],
-    //     fixed: true,
-    //     maxmin: false,
-    //     resize: false,
-    //     skin: 'layui-layer-lan',
-    //     content: '../page/data-singles-restore.html'
-    // });
-    //hideZtreeMenu();
+    if (currNode2 == null) {
+        layer.msg("请选择一个要操作的库！");
+        return false;
+    }
+    hideZtreeMenu();
+    layer.msg("数据还原任务正在后台执行...");
+    var json = dataSinglesRouter.recoveKey(currNode2.index);
+    var data = JSON.parse(json);
+    layer.msg(data.msgs);
+    initDbTree();
 }
 
 

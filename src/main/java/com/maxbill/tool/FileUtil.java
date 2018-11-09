@@ -19,21 +19,16 @@ public class FileUtil {
     }
 
 
-    public static boolean readFileToString(String filePath) {
-        try {
-            StringBuffer sb = new StringBuffer("");
-            FileReader reader = new FileReader(filePath);
-            BufferedReader br = new BufferedReader(reader);
-            String str = null;
-            while ((str = br.readLine()) != null) {
-                sb.append(str + "\r\n");
-                System.out.println(str);
-            }
-            br.close();
-            reader.close();
-            return true;
-        } catch (Exception e) {
-            return false;
+    public static String readFileToString(String filePath) throws Exception {
+        StringBuffer sb = new StringBuffer("");
+        FileReader reader = new FileReader(filePath);
+        BufferedReader br = new BufferedReader(reader);
+        String str = null;
+        while ((str = br.readLine()) != null) {
+            sb.append(str + "\r\n");
         }
+        br.close();
+        reader.close();
+        return sb.toString();
     }
 }
