@@ -36,36 +36,23 @@
     </div>
     <div class="handle">
         <div class="handle-left">
-            <div class="handle-left-main">
-                <table class="layui-table">
-                    <colgroup>
-                        <col>
-                        <col>
-                        <col>
-                        <col>
-                    </colgroup>
-                    <thead>
-                    <tr style="height: 42px">
-                        <th>ID</th>
-                        <th>主机</th>
-                        <th>连接时长</th>
-                        <th>连接数据库</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody01"></tbody>
-                </table>
-            </div>
-            <div class="handle-left-full">
-                <table class="layui-table" lay-skin="nob" lay-size="sm">
-                    <colgroup>
-                        <col>
-                        <col>
-                        <col>
-                        <col>
-                    </colgroup>
-                    <tbody id="tbody02"></tbody>
-                </table>
-            </div>
+            <table class="layui-table">
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                <tr style="height: 42px">
+                    <th>主机</th>
+                    <th>角色</th>
+                    <th>状态</th>
+                    <th>位置</th>
+                </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
         </div>
         <div class="handle-right">
             <div class="layui-collapse" lay-accordion="">

@@ -71,7 +71,7 @@ function showCharts1() {
             }
         },
         tooltip: {
-            valueSuffix: ' MB',
+            valueSuffix: ' KB',
             crosshairs: true,
             xDateFormat: '%Y-%m-%d %H:%M:%S'
         },

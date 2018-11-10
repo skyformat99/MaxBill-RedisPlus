@@ -5,14 +5,14 @@ window.onload = function () {
     layui.use(['jquery', 'layer', 'element'], function () {
         $ = layui.jquery;
         layer = layui.layer;
+        initNodeInfo();
         initBaseInfo();
-        initLogsInfo();
     });
 }
 
 /**初始化信息*/
 function initBaseInfo() {
-    var json = infoRouter.getBaseInfo();
+    var json = infoClusterRouter.getBaseInfo();
     var data = JSON.parse(json);
     if (data.code === 200) {
         var redisData = data.data;
@@ -22,17 +22,6 @@ function initBaseInfo() {
         //$("#persistence").html(redisData.persistence);
         $("#stats").html(redisData.stats);
         $("#cpu").html(redisData.cpu);
-        var html = '';
-        var users = redisData.users;
-        for (var i = 0; i < users.length; i++) {
-            html += '<tr>';
-            html += '<td>' + users[i].id + '</td>';
-            html += '<td>' + users[i].addr + '</td>';
-            html += '<td>' + users[i].age + '</td>';
-            html += '<td>' + users[i].db + '</td>';
-            html += '</tr>';
-        }
-        $("#tbody01").html(html);
     } else {
         layer.msg(data.msgs);
     }
@@ -40,18 +29,23 @@ function initBaseInfo() {
 
 
 /**初始化信息*/
-function initUserInfo(data) {
-    var json = infoRouter.getUserInfo();
+function initNodeInfo() {
+    var json = infoClusterRouter.getNodeInfo();
     var data = JSON.parse(json);
     if (data.code === 200) {
         var html = '';
-        var users = redisData.users;
-        for (var i = 0; i < users.length; i++) {
+        var info = data.data;
+        for (var i = 0; i < info.length; i++) {
             html += '<tr>';
-            html += '<td>' + users[i].id + '</td>';
-            html += '<td>' + users[i].addr + '</td>';
-            html += '<td>' + users[i].age + '</td>';
-            html += '<td>' + users[i].db + '</td>';
+            html += '<td>' + info[i].host + '</td>';
+            html += '<td>' + info[i].role + '</td>';
+            html += '<td>' + info[i].flag + '</td>';
+            // html += '<td>' + info[i].node + '</td>';
+            if (info[i].slot) {
+                html += '<td>' + info[i].slot + '</td>';
+            } else {
+                html += '<td>--</td>';
+            }
             html += '</tr>';
         }
         $("#tbody").html(html);
@@ -60,26 +54,5 @@ function initUserInfo(data) {
     }
 }
 
-
-/**初始化信息*/
-function initLogsInfo() {
-    var json = infoRouter.getLogsInfo();
-    var data = JSON.parse(json);
-    if (data.code === 200) {
-        var html = '';
-        var logs = data.data;
-        for (var i = 0; i < logs.length; i++) {
-            html += '<tr style="height: 32px">';
-            html += '<td>' + logs[i].id + '</td>';
-            html += '<td>' + formatTimestamp(logs[i].timeStamp) + '</td>';
-            html += '<td>' + logs[i].executionTime + '</td>';
-            html += '<td>' + logs[i].args + '</td>';
-            html += '</tr>';
-        }
-        $("#tbody02").html(html);
-    } else {
-        layer.msg(data.msgs);
-    }
-}
 
 

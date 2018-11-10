@@ -4,14 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.Connect;
 import com.maxbill.base.bean.KeyBean;
 import com.maxbill.base.bean.RedisNode;
+import com.maxbill.base.bean.Relation;
 import org.springframework.util.StringUtils;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
 
 import java.util.*;
 
+import static com.maxbill.tool.DataUtil.getCurrentOpenConnect;
 import static com.maxbill.tool.StringUtil.FLAG_COLON;
 
 public class ClusterUtil {
@@ -106,14 +105,12 @@ public class ClusterUtil {
             if (nodeFileds.length == 9) {
                 redisNode.setHash(nodeFileds[8]);
             }
-            if (redisNode.getAddr().indexOf("@") > -1) {
+            if (redisNode.getAddr().contains("@")) {
                 redisNode.setAddr(redisNode.getAddr().split("@")[0]);
             }
             nodeList.add(redisNode);
         }
-        if (null != jedis) {
-            jedis.close();
-        }
+        jedis.close();
         return nodeList;
     }
 
@@ -125,6 +122,24 @@ public class ClusterUtil {
             }
         }
         return nodeMap;
+    }
+
+
+    public static Jedis getMasterSelf() {
+        JedisCluster jedisCluster = DataUtil.getJedisClusterObject();
+        if (null != jedisCluster) {
+            Connect connect = getCurrentOpenConnect();
+            Map<String, JedisPool> clusterNodes = jedisCluster.getClusterNodes();
+            for (String nk : clusterNodes.keySet()) {
+                if (connect.getType().equals("0") && nk.contains(connect.getRhost())) {
+                    return clusterNodes.get(nk).getResource();
+                }
+                if (connect.getType().equals("1") && nk.contains(connect.getShost())) {
+                    return clusterNodes.get(nk).getResource();
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -447,6 +462,51 @@ public class ClusterUtil {
         }
         keyBean.setSize(keyBean.getText().getBytes().length);
         return keyBean;
+    }
+
+
+    public static List<Relation> getClusterRelation(String info) {
+        List<Relation> relations = new ArrayList<>();
+        List<String> masters = new ArrayList<>();
+        List<String> slaves = new ArrayList<>();
+        String[] nodes = info.split("\n");
+        for (String node : nodes) {
+            if (node.contains("master")) {
+                masters.add(node);
+            } else {
+                slaves.add(node);
+            }
+        }
+        for (String master : masters) {
+            String[] masterNode = master.split(" ");
+            Relation relationMaster = new Relation();
+            relationMaster.setNode(masterNode[0]);
+            relationMaster.setHost(masterNode[1]);
+            relationMaster.setRole("主节点");
+            if (masterNode[7].equals("connected")) {
+                relationMaster.setFlag("已连接");
+            } else {
+                relationMaster.setFlag("已断开");
+            }
+            relationMaster.setSlot(masterNode[8]);
+            relations.add(relationMaster);
+            for (String slave : slaves) {
+                String[] slaveNode = slave.split(" ");
+                if (slaveNode[3].equals(masterNode[0])) {
+                    Relation relationSlave = new Relation();
+                    relationSlave.setNode(slaveNode[0]);
+                    relationSlave.setHost(slaveNode[1]);
+                    relationSlave.setRole("从节点");
+                    if (slaveNode[7].equals("connected")) {
+                        relationSlave.setFlag("已连接");
+                    } else {
+                        relationSlave.setFlag("已断开");
+                    }
+                    relations.add(relationSlave);
+                }
+            }
+        }
+        return relations;
     }
 
     public static void testClusterData() {

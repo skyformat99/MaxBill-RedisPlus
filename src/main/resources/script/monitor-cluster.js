@@ -37,7 +37,7 @@ function showCharts1() {
                     var series02 = this.series[1];
                     activeLastPointToolip(chart, 0);
                     setInterval(function () {
-                        var json = infoRouter.getMemInfo();
+                        var json = infoClusterRouter.getMemInfo();
                         var data = JSON.parse(json);
                         var x = (new Date()).getTime();
                         series01.addPoint([x, data.val01], true, true);
@@ -125,7 +125,7 @@ function showCharts2() {
                     var series02 = this.series[1];
                     activeLastPointToolip(chart, 1);
                     setInterval(function () {
-                        var json = infoRouter.getCpuInfo();
+                        var json = infoClusterRouter.getCpuInfo();
                         var data = JSON.parse(json);
                         var x = (new Date()).getTime();
                         series01.addPoint([x, data.val01], true, true);
@@ -210,7 +210,7 @@ function showCharts3() {
                 load: function () {
                     var chart = this;
                     setInterval(function () {
-                        var json = infoRouter.getKeyInfo();
+                        var json = infoClusterRouter.getKeyInfo();
                         var data = JSON.parse(json);
                         chart.series[0].setData(data);
                     }, 1000);
@@ -270,7 +270,7 @@ function showCharts4() {
                     var series01 = this.series[0];
                     var series02 = this.series[1];
                     setInterval(function () {
-                        var json = infoRouter.getNetInfo();
+                        var json = infoClusterRouter.getNetInfo();
                         var data = JSON.parse(json);
                         var x = (new Date()).getTime();
                         series01.addPoint([x, data.val01], true, true);

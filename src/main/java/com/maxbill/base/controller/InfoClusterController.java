@@ -2,6 +2,8 @@ package com.maxbill.base.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.RedisInfo;
+import com.maxbill.base.bean.ResultInfo;
+import com.maxbill.tool.ClusterUtil;
 import com.maxbill.tool.DataUtil;
 import com.maxbill.tool.RedisUtil;
 import com.maxbill.tool.StringUtil;
@@ -21,22 +23,31 @@ import static com.maxbill.tool.RedisUtil.getRedisInfo;
 public class InfoClusterController {
 
     public String getBaseInfo() {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
-            Jedis jedis = getCurrentJedisObject();
+            Jedis jedis = ClusterUtil.getMasterSelf();
             if (null != jedis) {
                 RedisInfo redisInfo = RedisUtil.getRedisInfoList(jedis);
-                resultMap.put("code", 200);
-                resultMap.put("data", redisInfo);
+                return ResultInfo.getOkByJson(redisInfo);
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return ResultInfo.disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return ResultInfo.exception(e);
         }
-        return JSON.toJSONString(resultMap);
+    }
+
+
+    public String getNodeInfo() {
+        try {
+            Jedis jedis = ClusterUtil.getMasterSelf();
+            if (null != jedis) {
+                return ResultInfo.getOkByJson(ClusterUtil.getClusterRelation(jedis.clusterNodes()));
+            } else {
+                return ResultInfo.disconnect();
+            }
+        } catch (Exception e) {
+            return ResultInfo.exception(e);
+        }
     }
 
     public String getLogsInfo() {
@@ -63,7 +74,7 @@ public class InfoClusterController {
     public String getMemInfo() {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Jedis jedis = DataUtil.getCurrentJedisObject();
+            Jedis jedis = ClusterUtil.getMasterSelf();
             if (null != jedis) {
                 RedisInfo redisInfo = getRedisInfo(jedis);
                 String[] memory = redisInfo.getMemory().split("\n");
@@ -85,7 +96,7 @@ public class InfoClusterController {
     public String getCpuInfo() {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Jedis jedis = DataUtil.getCurrentJedisObject();
+            Jedis jedis = ClusterUtil.getMasterSelf();
             if (null != jedis) {
                 RedisInfo redisInfo = getRedisInfo(jedis);
                 String[] cpu = redisInfo.getCpu().split("\n");
@@ -107,7 +118,7 @@ public class InfoClusterController {
     public String getKeyInfo() {
         Long[] keys = new Long[16];
         try {
-            Jedis jedis = DataUtil.getCurrentJedisObject();
+            Jedis jedis = ClusterUtil.getMasterSelf();
             if (null != jedis) {
                 for (int i = 0; i < 16; i++) {
                     keys[i] = RedisUtil.dbSize(jedis, i);
@@ -128,7 +139,7 @@ public class InfoClusterController {
     public String getNetInfo() {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Jedis jedis = DataUtil.getCurrentJedisObject();
+            Jedis jedis = ClusterUtil.getMasterSelf();
             if (null != jedis) {
                 RedisInfo redisInfo = getRedisInfo(jedis);
                 String[] stats = redisInfo.getStats().split("\n");
