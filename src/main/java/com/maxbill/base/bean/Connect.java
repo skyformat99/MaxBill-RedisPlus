@@ -41,4 +41,10 @@ public class Connect {
     //ssh密码
     private String spass;
 
+    //ssh登录私钥
+    private String spkey;
+
+    //是否启用ssl
+    private String onssl;
+
 }

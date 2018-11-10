@@ -1,6 +1,5 @@
 package com.maxbill.tool;
 
-import jdk.nashorn.internal.ir.IdentNode;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;

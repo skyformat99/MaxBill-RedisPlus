@@ -41,24 +41,28 @@
 
     <dependencies>
 
+        <!--controls依赖-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>11</version>
         </dependency>
 
+        <!--graphics依赖-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>11</version>
         </dependency>
 
+        <!--graphics依赖-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
             <version>11</version>
         </dependency>
 
+        <!--jfxweb依赖-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
@@ -143,7 +147,7 @@
                     <appName>RedisPlus</appName>
                     <!--启用自定义打包配置-->
                     <verbose>true</verbose>
-                    <!--菜单-->
+                    <!--菜单图标-->
                     <needMenu>true</needMenu>
                     <!--桌面图标-->
                     <needShortcut>true</needShortcut>
@@ -164,7 +168,7 @@
                     <!--允许所有权限-->
                     <allPermissions>true</allPermissions>
                     <!--版本信息-->
-                    <nativeReleaseVersion>v2.1.0</nativeReleaseVersion>
+                    <nativeReleaseVersion>v3.0.0 Beta</nativeReleaseVersion>
                     <!--说明信息-->
                     <description>
                         RedisPlus是为Redis可视化管理开发的一款开源免费的桌面客户端软件

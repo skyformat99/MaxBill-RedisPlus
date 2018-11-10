@@ -5,7 +5,7 @@ import java.util.Date;
 
 
 /**
- * @功能 响应实体
+ * @功能 时间工具
  * @作者 MaxBill
  * @时间 2018年7月16日
  * @邮箱 maxbill1993@163.com
@@ -16,7 +16,6 @@ public class DateUtil {
     public static final String DATE_STR = "yyyy-MM-dd";
     public static final String DATE_STR_FULL = "yyyy-MM-dd HH:mm:ss";
     public static final String DATE_STR_FILE = "yyyy-MM-dd-HH:mm:ss";
-
 
 
     /**

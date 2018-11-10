@@ -1,6 +1,5 @@
 package com.maxbill.base.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.RedisNode;
 import com.maxbill.base.bean.ZTreeBean;
 import com.maxbill.core.desktop.Desktop;
@@ -13,105 +12,98 @@ import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import static com.maxbill.base.bean.ResultInfo.*;
-import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 
 @Component
 public class DataClusterController {
 
 
     public String nodeInfo() {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
             if (null != nodeList) {
-                resultMap.put("code", 200);
-                resultMap.put("data", nodeList);
+                return getOkByJson(nodeList);
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "获取数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String treeInit() {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
-            List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
-            Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
             JedisCluster cluster = ClusterUtil.openCulter(DataUtil.getCurrentOpenConnect());
-            Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
-            long total = 0l;
-            for (String nk : clusterNodes.keySet()) {
-                if (masterNode.keySet().contains(nk)) {
-                    Jedis jedis = clusterNodes.get(nk).getResource();
-                    total = total + jedis.dbSize();
+            if (null != cluster) {
+                List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+                Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
+                Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
+                long total = 0l;
+                for (String nk : clusterNodes.keySet()) {
+                    if (masterNode.keySet().contains(nk)) {
+                        Jedis jedis = clusterNodes.get(nk).getResource();
+                        total = total + jedis.dbSize();
+                    }
                 }
+                ZTreeBean ztreeBean = new ZTreeBean();
+                ztreeBean.setId(KeyUtil.getUUIDKey());
+                ztreeBean.setName("全部集群节点的KEY" + "(" + total + ")");
+                ztreeBean.setPattern("");
+                ztreeBean.setParent(true);
+                ztreeBean.setCount(total);
+                ztreeBean.setPage(1);
+                ztreeBean.setIndex(0);
+                return getOkByJson(ztreeBean);
+            } else {
+                return disconnect();
             }
-            ZTreeBean zTreeBean = new ZTreeBean();
-            zTreeBean.setId(KeyUtil.getUUIDKey());
-            zTreeBean.setName("全部集群节点的KEY" + "(" + total + ")");
-            zTreeBean.setPattern("");
-            zTreeBean.setParent(true);
-            zTreeBean.setCount(total);
-            zTreeBean.setPage(1);
-            zTreeBean.setIndex(0);
-            resultMap.put("code", 200);
-            resultMap.put("data", zTreeBean);
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "获取数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String likeInit(String pattern) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
-            if (StringUtils.isEmpty(pattern)) {
-                pattern = "*";
-            }
-            List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
-            Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
             JedisCluster cluster = ClusterUtil.openCulter(DataUtil.getCurrentOpenConnect());
-            Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
-            long total = 0l;
-            for (String nk : clusterNodes.keySet()) {
-                if (masterNode.keySet().contains(nk)) {
-                    Jedis jedis = clusterNodes.get(nk).getResource();
-                    total = total + jedis.keys(pattern).size();
+            if (null != cluster) {
+                if (StringUtils.isEmpty(pattern)) {
+                    pattern = "*";
                 }
+                List<RedisNode> nodeList = ClusterUtil.getClusterNode(DataUtil.getCurrentOpenConnect());
+                Map<String, RedisNode> masterNode = ClusterUtil.getMasterNode(nodeList);
+                Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
+                long total = 0l;
+                for (String nk : clusterNodes.keySet()) {
+                    if (masterNode.keySet().contains(nk)) {
+                        Jedis jedis = clusterNodes.get(nk).getResource();
+                        total = total + jedis.keys(pattern).size();
+                    }
+                }
+                ZTreeBean ztreeBean = new ZTreeBean();
+                ztreeBean.setId(KeyUtil.getUUIDKey());
+                ztreeBean.setName("全部集群节点的KEY" + "(" + total + ")");
+                ztreeBean.setPattern(pattern);
+                ztreeBean.setParent(true);
+                ztreeBean.setCount(total);
+                ztreeBean.setPage(1);
+                ztreeBean.setIndex(0);
+                return getOkByJson(ztreeBean);
+            } else {
+                return disconnect();
             }
-            ZTreeBean zTreeBean = new ZTreeBean();
-            zTreeBean.setId(KeyUtil.getUUIDKey());
-            zTreeBean.setName("全部集群节点的KEY" + "(" + total + ")");
-            zTreeBean.setPattern(pattern);
-            zTreeBean.setParent(true);
-            zTreeBean.setCount(total);
-            zTreeBean.setPage(1);
-            zTreeBean.setIndex(0);
-            resultMap.put("code", 200);
-            resultMap.put("data", zTreeBean);
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "获取数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String treeData(String id, int page, int count, String pattern) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             JedisCluster cluster = DataUtil.getJedisClusterObject();
             if (null != cluster) {
@@ -143,22 +135,17 @@ public class DataClusterController {
                         zTreeBean.setPId(id);
                         zTreeBean.setName(key);
                         zTreeBean.setParent(false);
-                        zTreeBean.setIcon("../image/data-key.png");
+                        zTreeBean.setIcon("../image/data-01.png");
                         treeList.add(zTreeBean);
                     }
                 }
-                resultMap.put("code", 200);
-                resultMap.put("data", treeList);
+                return getOkByJson(treeList);
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "获取数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
@@ -368,7 +355,6 @@ public class DataClusterController {
 
 
     public String removeKey() {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             JedisCluster cluster = DataUtil.getJedisClusterObject();
             if (null != cluster) {
@@ -382,22 +368,16 @@ public class DataClusterController {
                         jedis.close();
                     }
                 }
-                resultMap.put("code", 200);
-                resultMap.put("msgs", "清空数据成功");
+                return getOkByJson("清空数据成功");
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String backupKey(String pattern) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             JedisCluster cluster = DataUtil.getJedisClusterObject();
             if (null != cluster) {
@@ -406,7 +386,8 @@ public class DataClusterController {
                 Map<String, JedisPool> clusterNodes = cluster.getClusterNodes();
                 StringBuffer dataBuffer = new StringBuffer("");
                 String baseUrl = System.getProperty("user.home");
-                String filePath = baseUrl + "/" + "RedisPlus-" + DateUtil.formatDate(new Date(), DateUtil.DATE_STR_FILE) + ".bak";
+                String fileName = "RedisPlus-" + DateUtil.formatDate(new Date(), DateUtil.DATE_STR_FILE) + ".bak";
+                String filePath = baseUrl + "/" + fileName;
                 for (String nk : clusterNodes.keySet()) {
                     if (masterNode.keySet().contains(nk)) {
                         Jedis jedis = clusterNodes.get(nk).getResource();
@@ -416,44 +397,33 @@ public class DataClusterController {
                 }
                 boolean expFlag = FileUtil.writeStringToFile(filePath, dataBuffer.toString());
                 if (expFlag) {
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "各个节点数据成功导出至当前用户目录中");
+                    return getOkByJson("各个节点数据成功导出至当前用户目录中");
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "导出数据失败");
+                    return getNoByJson("导出数据失败");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String recoveKey() {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             JedisCluster cluster = DataUtil.getJedisClusterObject();
             if (null != cluster) {
                 FileChooser fileChooser = new FileChooser();
                 File file = fileChooser.showOpenDialog(Desktop.getRootStage());
                 ClusterUtil.recoveKey(cluster, FileUtil.readFileToString(file.toString()));
-                resultMap.put("code", 200);
-                resultMap.put("msgs", "还原数据成功");
+                return getOkByJson("还原数据成功");
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 

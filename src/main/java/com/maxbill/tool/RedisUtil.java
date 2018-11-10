@@ -373,7 +373,7 @@ public class RedisUtil {
                 zTreeBean.setName(key);
                 zTreeBean.setParent(false);
                 zTreeBean.setIndex(index);
-                zTreeBean.setIcon("../image/data-key.png");
+                zTreeBean.setIcon("../image/data-01.png");
                 treeList.add(zTreeBean);
             }
         }

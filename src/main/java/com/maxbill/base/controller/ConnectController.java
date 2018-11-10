@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.maxbill.core.desktop.Desktop.*;
+import static com.maxbill.base.bean.ResultInfo.*;
+import static com.maxbill.core.desktop.Desktop.setEndsViewImage;
+import static com.maxbill.core.desktop.Desktop.setEndsViewTitle;
+import static com.maxbill.tool.ClusterUtil.getMasterSelf;
 import static com.maxbill.tool.DataUtil.*;
 
 
@@ -50,7 +50,6 @@ public class ConnectController {
      * 新增连接数据
      */
     public String insertConnect(String json) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             JSONObject data = JSON.parseObject(json);
             Connect connect = new Connect();
@@ -64,21 +63,21 @@ public class ConnectController {
             connect.setSport(data.getString("sport"));
             connect.setSpass(data.getString("sname"));
             connect.setSpass(data.getString("spass"));
-            this.dataService.insertConnect(connect);
-            resultMap.put("code", 200);
-            resultMap.put("msgs", "新增连接成功");
+            int insFlag = this.dataService.insertConnect(connect);
+            if (insFlag == 1) {
+                return getOkByJson("新增连接成功");
+            } else {
+                return getNoByJson("新增连接失败");
+            }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "新增连接异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     /**
      * 更新连接数据
      */
     public String updateConnect(String json) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             JSONObject data = JSON.parseObject(json);
             Connect connect = new Connect();
@@ -93,30 +92,31 @@ public class ConnectController {
             connect.setSport(data.getString("sport"));
             connect.setSpass(data.getString("sname"));
             connect.setSpass(data.getString("spass"));
-            this.dataService.updateConnect(connect);
-            resultMap.put("code", 200);
-            resultMap.put("msgs", "修改连接成功");
+            int updFlag = this.dataService.updateConnect(connect);
+            if (updFlag == 1) {
+                return getOkByJson("修改连接成功");
+            } else {
+                return getNoByJson("修改连接失败");
+            }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "修改连接异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     /**
      * 删除连接数据
      */
     public String deleteConnect(String id) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
-            this.dataService.deleteConnectById(id);
-            resultMap.put("code", 200);
-            resultMap.put("msgs", "删除连接成功");
+            int delFlag = this.dataService.deleteConnectById(id);
+            if (delFlag == 1) {
+                return getOkByJson("删除连接成功");
+            } else {
+                return getNoByJson("删除连接失败");
+            }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "删除连接异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     /**
@@ -131,7 +131,6 @@ public class ConnectController {
      * 打开连接数据
      */
     public String createConnect(String id) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Connect connect = this.dataService.selectConnectById(id);
             if ("1".equals(connect.getType())) {
@@ -144,34 +143,32 @@ public class ConnectController {
                     DataUtil.setConfig("currentJedisObject", jedis);
                     setEndsViewTitle(ItemUtil.DESKTOP_STATUS_OK + connect.getText(), "ok");
                     setEndsViewImage(ItemUtil.DESKTOP_STATUS_IMAGE_OK);
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "打开连接成功");
+                    return getOkByJson("打开连接成功");
+                } else {
+                    return getNoByJson("打开连接失败");
                 }
             } else {
                 JedisCluster cluster = ClusterUtil.openCulter(connect);
                 if (null == cluster || cluster.getClusterNodes().size() == 0) {
+                    return getNoByJson("打开连接失败");
                 } else {
                     DataUtil.setConfig("currentOpenConnect", connect);
                     DataUtil.setConfig("jedisClusterObject", cluster);
+                    DataUtil.setConfig("currentJedisObject", getMasterSelf());
                     setEndsViewTitle(ItemUtil.DESKTOP_STATUS_OK + connect.getText(), "ok");
                     setEndsViewImage(ItemUtil.DESKTOP_STATUS_IMAGE_OK);
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "打开连接成功");
+                    return getOkByJson("打开连接成功");
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "打开连接异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     /**
      * 断开连接数据
      */
     public String disconConnect(String id) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Connect connect = getCurrentOpenConnect();
             if (connect.getIsha().equals("0")) {
@@ -186,14 +183,10 @@ public class ConnectController {
             }
             setEndsViewTitle(ItemUtil.DESKTOP_STATUS_NO, "no");
             setEndsViewImage(ItemUtil.DESKTOP_STATUS_IMAGE_NO);
-            resultMap.put("code", 200);
-            resultMap.put("msgs", "关闭连接成功");
+            return getOkByJson("关闭连接成功");
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "关闭连接异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 

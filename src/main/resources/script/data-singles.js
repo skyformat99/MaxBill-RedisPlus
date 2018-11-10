@@ -256,13 +256,20 @@ function checkedOnTree(index) {
 function initDbTree() {
     layer.load(2);
     var data = JSON.parse(dataSinglesRouter.treeInit());
-    for (var i = 0; i < data.length; i++) {
-        $("#db-tree").append('<ul id="keyTree' + i + '" name="keyTree' + i + '" class="ztree"></ul>');
-        $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data[i]);
-        $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
-    }
     layer.closeAll('loading');
-    checkedOnTree(0);
+    if (data.code === 200) {
+        for (var i = 0; i < data.data.length; i++) {
+            $("#db-tree").append('<ul id="keyTree' + i + '" name="keyTree' + i + '" class="ztree"></ul>');
+            $.fn.zTree.init($("#keyTree" + i), zTreeSetting, data.data[i]);
+            $.fn.zTree.getZTreeObj("keyTree" + i).expandAll(false);
+        }
+        checkedOnTree(0);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 
@@ -271,11 +278,18 @@ function loadDbData(node, pattern) {
     layer.load(2);
     var json = dataSinglesRouter.treeData(node.id, node.index, node.page, node.count, pattern);
     var data = JSON.parse(json);
-    var zTree = $.fn.zTree.getZTreeObj('keyTree' + node.index);
-    zTree.removeChildNodes(node);
-    zTree.addNodes(node, 0, data);
-    zTree.expandAll(true);
     layer.closeAll('loading');
+    if (data.code === 200) {
+        var zTree = $.fn.zTree.getZTreeObj('keyTree' + node.index);
+        zTree.removeChildNodes(node);
+        zTree.addNodes(node, 0, data.data);
+        zTree.expandAll(true);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.maxbill.base.bean.ResultInfo.*;
 import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 import static com.maxbill.tool.RedisUtil.getRedisInfo;
 
@@ -21,42 +22,31 @@ import static com.maxbill.tool.RedisUtil.getRedisInfo;
 public class InfoSinglesController {
 
     public String getBaseInfo() {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
-                RedisInfo redisInfo = RedisUtil.getRedisInfoList(jedis);
-                resultMap.put("code", 200);
-                resultMap.put("data", redisInfo);
+                return getOkByJson(RedisUtil.getRedisInfoList(jedis));
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String getLogsInfo() {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 List<Slowlog> logs = RedisUtil.getRedisLog(jedis);
                 Collections.reverse(logs);
-                resultMap.put("code", 200);
-                resultMap.put("data", logs);
+                return getOkByJson(logs);
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 

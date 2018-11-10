@@ -40,8 +40,8 @@ function showCharts1() {
                         var json = infoClusterRouter.getMemInfo();
                         var data = JSON.parse(json);
                         var x = (new Date()).getTime();
-                        series01.addPoint([x, data.val01], true, true);
-                        series02.addPoint([x, data.val02], true, true);
+                        series01.addPoint([x, data.value01], true, true);
+                        series02.addPoint([x, data.value02], true, true);
                         activeLastPointToolip(chart, 0);
                     }, 1000);
                 }
@@ -128,8 +128,8 @@ function showCharts2() {
                         var json = infoClusterRouter.getCpuInfo();
                         var data = JSON.parse(json);
                         var x = (new Date()).getTime();
-                        series01.addPoint([x, data.val01], true, true);
-                        series02.addPoint([x, data.val02], true, true);
+                        series01.addPoint([x, data.value01], true, true);
+                        series02.addPoint([x, data.value02], true, true);
                         activeLastPointToolip(chart, 1);
                     }, 1000);
                 }
@@ -212,7 +212,8 @@ function showCharts3() {
                     setInterval(function () {
                         var json = infoClusterRouter.getKeyInfo();
                         var data = JSON.parse(json);
-                        chart.series[0].setData(data);
+                        chart.xAxis[0].setCategories(data.xdata);
+                        chart.series[0].setData(data.ydata);
                     }, 1000);
                 }
             }
@@ -223,11 +224,11 @@ function showCharts3() {
         title: {
             text: '各数据库键数实时监控'
         },
-        xAxis: {
-            categories: ['DB0', 'DB1', 'DB2', 'DB3', 'DB4', 'DB5',
-                'DB6', 'DB7', 'DB8', 'DB9', 'DB10', 'DB11',
-                'DB12', 'DB13', 'DB14', 'DB15']
-        },
+        // xAxis: {
+        //     categories: ['DB0', 'DB1', 'DB2', 'DB3', 'DB4', 'DB5',
+        //         'DB6', 'DB7', 'DB8', 'DB9', 'DB10', 'DB11',
+        //         'DB12', 'DB13', 'DB14', 'DB15']
+        // },
         yAxis: {
             labels: {
                 x: -15
@@ -253,8 +254,7 @@ function showCharts3() {
             enabled: false
         },
         series: [{
-            name: '键',
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            name: '键'
         }]
     });
 }
@@ -273,8 +273,8 @@ function showCharts4() {
                         var json = infoClusterRouter.getNetInfo();
                         var data = JSON.parse(json);
                         var x = (new Date()).getTime();
-                        series01.addPoint([x, data.val01], true, true);
-                        series02.addPoint([x, data.val02], true, true);
+                        series01.addPoint([x, data.value01], true, true);
+                        series02.addPoint([x, data.value02], true, true);
                     }, 1000);
                 }
             }

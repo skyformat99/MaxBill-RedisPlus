@@ -214,14 +214,21 @@ function recoveData() {
 function initDbTree() {
     layer.load(2);
     var data = JSON.parse(dataClusterRouter.treeInit());
-    $("#db-tree").append('<ul id="keyTree" name="keyTree" class="ztree"></ul>');
-    $.fn.zTree.init($("#keyTree"), zTreeSetting, data.data);
-    $.fn.zTree.getZTreeObj("keyTree").expandAll(false);
     layer.closeAll('loading');
-    var zTreeObj = $.fn.zTree.getZTreeObj("keyTree");
-    currNode0 = zTreeObj.getNodesByFilter(function (node) {
-        return node.level === 0
-    }, true);
+    if (data.code === 200) {
+        $("#db-tree").append('<ul id="keyTree" name="keyTree" class="ztree"></ul>');
+        $.fn.zTree.init($("#keyTree"), zTreeSetting, data.data);
+        $.fn.zTree.getZTreeObj("keyTree").expandAll(false);
+        var zTreeObj = $.fn.zTree.getZTreeObj("keyTree");
+        currNode0 = zTreeObj.getNodesByFilter(function (node) {
+            return node.level === 0
+        }, true);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 
@@ -230,11 +237,18 @@ function loadDbData(node, pattern) {
     layer.load(2);
     var json = dataClusterRouter.treeData(node.id, node.page, node.count, pattern);
     var data = JSON.parse(json);
-    var zTree = $.fn.zTree.getZTreeObj('keyTree');
-    zTree.removeChildNodes(node);
-    zTree.addNodes(node, 0, data.data);
-    zTree.expandAll(true);
     layer.closeAll('loading');
+    if (data.code === 200) {
+        var zTree = $.fn.zTree.getZTreeObj('keyTree');
+        zTree.removeChildNodes(node);
+        zTree.addNodes(node, 0, data.data);
+        zTree.expandAll(true);
+    } else {
+        layer.alert(data.msgs, {
+            skin: 'layui-layer-lan',
+            closeBtn: 0
+        });
+    }
 }
 
 

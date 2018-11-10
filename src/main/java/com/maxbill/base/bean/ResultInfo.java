@@ -39,6 +39,10 @@ public class ResultInfo {
         return JSON.toJSONString(new ResultInfo(500, null, "发生异常：" + e.getMessage()));
     }
 
+    public static String exceptionByMsgs(String msgs) {
+        return JSON.toJSONString(new ResultInfo(500, null, msgs));
+    }
+
     public static String disconnect() {
         return JSON.toJSONString(new ResultInfo(500, null, "服务连接已断开"));
     }

@@ -1,14 +1,11 @@
 package com.maxbill.base.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.Connect;
 import com.maxbill.core.desktop.Desktop;
 import com.maxbill.tool.MailUtil;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static com.maxbill.base.bean.ResultInfo.*;
 import static com.maxbill.tool.DataUtil.getCurrentOpenConnect;
 import static com.maxbill.tool.ItemUtil.*;
 
@@ -61,21 +58,16 @@ public class OtherController {
     }
 
     public String sendMail(String mailAddr, String mailText) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             boolean sendFlag = MailUtil.sendMail(mailAddr, mailText);
             if (sendFlag) {
-                resultMap.put("code", 200);
-                resultMap.put("msgs", "发送邮件成功");
+                return getOkByJson("发送邮件成功");
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "发送邮件失败");
+                return getNoByJson("发送邮件失败");
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "发送邮件异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 }

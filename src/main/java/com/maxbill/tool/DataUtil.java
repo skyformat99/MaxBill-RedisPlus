@@ -14,7 +14,6 @@ public class DataUtil {
 
     private static Map<String, Object> confMap = new HashMap();
 
-
     public DataUtil() {
         confMap.put("currentOpenConnect", null);
         confMap.put("currentJedisObject", null);
@@ -37,15 +36,12 @@ public class DataUtil {
         return (Connect) DataUtil.getConfig("currentOpenConnect");
     }
 
-
     public static Jedis getCurrentJedisObject() {
         return (Jedis) DataUtil.getConfig("currentJedisObject");
     }
 
-
     public static JedisCluster getJedisClusterObject() {
         return (JedisCluster) DataUtil.getConfig("jedisClusterObject");
     }
-
 
 }

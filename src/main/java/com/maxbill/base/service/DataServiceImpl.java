@@ -16,7 +16,7 @@ public class DataServiceImpl implements DataService {
     @Autowired
     private DataMapper dataMapper;
 
-    public void createConnectTable()  {
+    public void createConnectTable() {
         this.dataMapper.createConnectTable();
     }
 
@@ -28,34 +28,36 @@ public class DataServiceImpl implements DataService {
         return this.dataMapper.selectConnectById(id);
     }
 
-    public List<Connect> selectConnect()  {
+    public List<Connect> selectConnect() {
         return this.dataMapper.selectConnect();
     }
 
-    public int insertConnect(Connect obj)  {
-        obj.setId(KeyUtil.getUUIDKey());
-        obj.setTime(DateUtil.formatDateTime(new Date()));
-        if ("0".equals(obj.getType())) {
-            obj.setSname("--");
+    public int insertConnect(Connect connect) {
+        connect.setId(KeyUtil.getUUIDKey());
+        connect.setOnssl("0");
+        connect.setSpkey("");
+        connect.setTime(DateUtil.formatDateTime(new Date()));
+        if ("0".equals(connect.getType())) {
+            connect.setSname("--");
         } else {
-            obj.setRhost("127.0.0.1");
+            connect.setRhost("127.0.0.1");
         }
-        //判断是否集群
-
-        return this.dataMapper.insertConnect(obj);
+        return this.dataMapper.insertConnect(connect);
     }
 
-    public int updateConnect(Connect obj)  {
-        obj.setTime(DateUtil.formatDateTime(new Date()));
-        if ("0".equals(obj.getType())) {
-            obj.setSname("--");
+    public int updateConnect(Connect connect) {
+        connect.setOnssl("0");
+        connect.setSpkey("");
+        connect.setTime(DateUtil.formatDateTime(new Date()));
+        if ("0".equals(connect.getType())) {
+            connect.setSname("--");
         } else {
-            obj.setRhost("127.0.0.1");
+            connect.setRhost("127.0.0.1");
         }
-        return this.dataMapper.updateConnect(obj);
+        return this.dataMapper.updateConnect(connect);
     }
 
-    public int deleteConnectById(String id)  {
+    public int deleteConnectById(String id) {
         return this.dataMapper.deleteConnectById(id);
     }
 

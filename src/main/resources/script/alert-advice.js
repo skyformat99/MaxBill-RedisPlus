@@ -13,22 +13,23 @@ layui.use(['form', 'layer', 'jquery'], function () {
 });
 
 function sendMail() {
-    $("#sendMail").text("发送中...").attr("disabled", "disabled").addClass("layui-disabled");
     layer.load(2);
-    var addr = $("#mailAddr").val();
-    var text = $("#mailText").val();
-    var resultJson = otherRouter.sendMail(addr, text);
+    var sendBtn = $("#sendMail");
+    sendBtn.text("发送中...").attr("disabled", "disabled").addClass("layui-disabled");
+    var addr = $("#mailAddr");
+    var text = $("#mailText");
+    var resultJson = otherRouter.sendMail(addr.val(), text.val());
     var result = JSON.parse(resultJson);
-    if (result.code == 200) {
+    if (result.code === 200) {
         layer.msg(result.msgs);
-        $("#mailAddr").val('');
-        $("#mailText").val('');
+        addr.val('');
+        text.val('');
     } else {
         layer.alert(result.msgs, {
             skin: 'layui-layer-lan',
             closeBtn: 0
         });
     }
+    sendBtn.text("发送邮件").removeAttr("disabled").removeClass("layui-disabled");
     layer.closeAll('loading');
-    $("#sendMail").text("发送邮件").removeAttr("disabled").removeClass("layui-disabled");
 }

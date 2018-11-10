@@ -1,31 +1,31 @@
 package com.maxbill.base.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.maxbill.base.bean.ZTreeBean;
 import com.maxbill.core.desktop.Desktop;
 import com.maxbill.tool.DateUtil;
 import com.maxbill.tool.FileUtil;
 import com.maxbill.tool.KeyUtil;
 import com.maxbill.tool.RedisUtil;
-import com.sun.glass.ui.Window;
 import javafx.stage.FileChooser;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import static com.maxbill.base.bean.ResultInfo.*;
 import static com.maxbill.tool.DataUtil.getCurrentJedisObject;
 
 @Component
 public class DataSinglesController {
 
-
     public String treeInit() {
-        List<ZTreeBean> treeList = new ArrayList<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
+                List<ZTreeBean> treeList = new ArrayList<>();
                 String role = jedis.info("server");
                 for (int i = 0; i < 16; i++) {
                     long dbSize = 0l;
@@ -47,194 +47,153 @@ public class DataSinglesController {
                     zTreeBean.setIndex(i);
                     treeList.add(zTreeBean);
                 }
+                return getOkByJson(treeList);
             } else {
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return exception(e);
         }
-        return JSON.toJSONString(treeList);
     }
 
     public String likeInit(int index, String pattern) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 long keysCount = RedisUtil.getKeysCount(jedis, index, pattern);
-                ZTreeBean zTreeBean = new ZTreeBean();
-                zTreeBean.setId(KeyUtil.getUUIDKey());
-                zTreeBean.setName("DB" + index + " (" + keysCount + ")");
-                zTreeBean.setParent(true);
-                zTreeBean.setCount(keysCount);
-                zTreeBean.setPage(1);
-                zTreeBean.setPattern(pattern);
-                zTreeBean.setIndex(index);
-                resultMap.put("code", 200);
-                resultMap.put("data", zTreeBean);
+                ZTreeBean ztreeBean = new ZTreeBean();
+                ztreeBean.setId(KeyUtil.getUUIDKey());
+                ztreeBean.setName("DB" + index + " (" + keysCount + ")");
+                ztreeBean.setParent(true);
+                ztreeBean.setCount(keysCount);
+                ztreeBean.setPage(1);
+                ztreeBean.setPattern(pattern);
+                ztreeBean.setIndex(index);
+                return getOkByJson(ztreeBean);
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "获取数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String treeData(String id, int index, int page, int count, String pattern) {
-        List<ZTreeBean> treeList = new ArrayList<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
-                treeList = RedisUtil.getKeyTree(jedis, index, id, pattern);
+                List<ZTreeBean> treeList = RedisUtil.getKeyTree(jedis, index, id, pattern);
                 int startIndex = (page - 1) * 50;
                 int endIndex = page * 50;
                 if (endIndex > count) {
                     endIndex = count;
                 }
                 treeList = treeList.subList(startIndex, endIndex);
+                return getOkByJson(treeList);
             } else {
-
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            return exception(e);
         }
-        return JSON.toJSONString(treeList);
     }
 
     public String keysData(int index, String keys) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 if (RedisUtil.existsKey(jedis, index, keys)) {
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "打开连接成功");
-                    resultMap.put("data", RedisUtil.getKeyInfo(jedis, index, keys));
+                    return getOkByJson(RedisUtil.getKeyInfo(jedis, index, keys));
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "该key不存在");
+                    return getNoByJson("该KEY不存在");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "获取数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String renameKey(int index, String oldKey, String newKey) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 if (RedisUtil.existsKey(jedis, index, oldKey)) {
                     if (!RedisUtil.existsKey(jedis, index, newKey)) {
                         RedisUtil.renameKey(jedis, index, oldKey, newKey);
-                        resultMap.put("code", 200);
-                        resultMap.put("msgs", "重命名KEY成功");
+                        return getOkByJson("重命名KEY成功");
                     } else {
-                        resultMap.put("code", 500);
-                        resultMap.put("msgs", "该KEY已存在");
+                        return getNoByJson("该KEY已存在");
                     }
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "该KEY不存在");
+                    return getNoByJson("该KEY不存在");
                 }
-                RedisUtil.closeJedis(jedis);
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String retimeKey(int index, String key, int time) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 if (RedisUtil.existsKey(jedis, index, key)) {
                     RedisUtil.retimeKey(jedis, index, key, time);
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "设置TTL成功");
+                    return getOkByJson("设置TTL成功");
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "该KEY不存在");
+                    return getNoByJson("该KEY不存在");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String deleteKey(int index, String key) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 if (RedisUtil.existsKey(jedis, index, key)) {
                     RedisUtil.deleteKey(jedis, index, key);
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "删除KEY成功");
+                    return getOkByJson("删除KEY成功");
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "该KEY不存在");
+                    return getNoByJson("该KEY不存在");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String updateStr(int index, String key, String val) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 if (RedisUtil.existsKey(jedis, index, key)) {
                     RedisUtil.updateStr(jedis, index, key, val);
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "修改数据成功");
+                    return getOkByJson("修改数据成功");
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "该KEY不存在");
+                    return getNoByJson("该KEY不存在");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String insertVal(int type, int index, String key, String val) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -257,26 +216,20 @@ public class DataSinglesController {
                             RedisUtil.insertHash(jedis, index, key, mapKey, mapVal);
                             break;
                     }
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "添加数据成功");
+                    return getOkByJson("添加数据成功");
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "该KEY不存在");
+                    return getNoByJson("该KEY不存在");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "添加数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String deleteVal(int type, int index, String key, String val) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -298,27 +251,20 @@ public class DataSinglesController {
                             RedisUtil.deleteHash(jedis, index, key, mapKey);
                             break;
                     }
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "删除数据成功");
+                    return getOkByJson("删除数据成功");
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "该KEY不存在");
+                    return getNoByJson("该KEY不存在");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "删除数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String insertKey(int type, int index, String key, String val, int time) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
@@ -346,86 +292,66 @@ public class DataSinglesController {
                 if (time != -1) {
                     RedisUtil.retimeKey(jedis, index, key, time);
                 }
-                resultMap.put("code", 200);
-                resultMap.put("msgs", "新增数据成功");
+                return getOkByJson("新增数据成功");
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "添加数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String removeKey(int index) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 jedis.select(index);
                 jedis.flushDB();
-                resultMap.put("code", 200);
-                resultMap.put("msgs", "清空数据成功");
+                return getOkByJson("清空数据成功");
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
     public String backupKey(int index, String pattern) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 String baseUrl = System.getProperty("user.home");
-                String filePath = baseUrl + "/" + "RedisPlus-" + DateUtil.formatDate(new Date(), DateUtil.DATE_STR_FILE) + ".bak";
+                String fileName = "RedisPlus-" + DateUtil.formatDate(new Date(), DateUtil.DATE_STR_FILE) + ".bak";
+                String filePath = baseUrl + "/" + fileName;
                 boolean flag = FileUtil.writeStringToFile(filePath, RedisUtil.backupKey(jedis, index, pattern));
                 if (flag) {
-                    resultMap.put("code", 200);
-                    resultMap.put("msgs", "数据成功导出至当前用户目录中");
+                    return getOkByJson("数据成功导出至当前用户目录中");
                 } else {
-                    resultMap.put("code", 500);
-                    resultMap.put("msgs", "导出数据失败");
+                    return getNoByJson("导出数据失败");
                 }
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 
     public String recoveKey(int index) {
-        Map<String, Object> resultMap = new HashMap<>();
         try {
             Jedis jedis = getCurrentJedisObject();
             if (null != jedis) {
                 FileChooser fileChooser = new FileChooser();
                 File file = fileChooser.showOpenDialog(Desktop.getRootStage());
                 RedisUtil.recoveKey(jedis, index, FileUtil.readFileToString(file.toString()));
-                resultMap.put("code", 200);
-                resultMap.put("msgs", "还原数据成功");
+                return getOkByJson("还原数据成功");
             } else {
-                resultMap.put("code", 500);
-                resultMap.put("msgs", "连接已断开");
+                return disconnect();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            resultMap.put("code", 500);
-            resultMap.put("msgs", "操作数据异常");
+            return exception(e);
         }
-        return JSON.toJSONString(resultMap);
     }
 
 

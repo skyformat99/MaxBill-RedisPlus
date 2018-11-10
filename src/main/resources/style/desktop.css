@@ -13,35 +13,35 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
-    -fx-background-image: url('../image/tops-view-image.png');
+    -fx-background-image: url('../image/tops-view-01.png');
 }
 
 #tops-view-items {
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
-    -fx-background-image: url('../image/tops-view-items.png');
+    -fx-background-image: url('../image/tops-view-02.png');
 }
 
 #tops-view-abate {
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
-    -fx-background-image: url('../image/tops-view-abate.png');
+    -fx-background-image: url('../image/tops-view-03.png');
 }
 
 #tops-view-raise {
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
-    -fx-background-image: url('../image/tops-view-raise.png');
+    -fx-background-image: url('../image/tops-view-04.png');
 }
 
 #tops-view-close {
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch stretch;
     -fx-background-position: center center;
-    -fx-background-image: url('../image/tops-view-close.png');
+    -fx-background-image: url('../image/tops-view-05.png');
 }
 
 #tops-view-items:hover,
