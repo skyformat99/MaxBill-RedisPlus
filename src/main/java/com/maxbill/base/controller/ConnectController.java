@@ -29,9 +29,13 @@ public class ConnectController {
      */
     public void configConnect() {
         try {
-            int tableCount = this.dataService.isExistsTable("T_CONNECT");
-            if (tableCount == 0) {
+            int tableCount1 = this.dataService.isExistsTable("T_CONNECT");
+            if (tableCount1 == 0) {
                 this.dataService.createConnectTable();
+            }
+            int tableCount2 = this.dataService.isExistsTable("T_SETTING");
+            if (tableCount2 == 0) {
+                this.dataService.createSettingTable();
             }
         } catch (Exception e) {
             e.printStackTrace();

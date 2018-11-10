@@ -20,6 +20,10 @@ public class DataServiceImpl implements DataService {
         this.dataMapper.createConnectTable();
     }
 
+    public void createSettingTable() {
+        this.dataMapper.createSettingTable();
+    }
+
     public int isExistsTable(String tableName) {
         return this.dataMapper.isExistsTable(tableName);
     }

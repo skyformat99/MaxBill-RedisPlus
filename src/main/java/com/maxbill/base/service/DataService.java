@@ -9,6 +9,8 @@ public interface DataService {
 
     void createConnectTable();
 
+    void createSettingTable();
+
     int isExistsTable(String tableName);
 
     Connect selectConnectById(String id);

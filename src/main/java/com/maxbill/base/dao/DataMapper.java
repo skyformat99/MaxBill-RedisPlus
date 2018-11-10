@@ -30,4 +30,14 @@ public interface DataMapper {
     @Delete("delete from t_connect where id=#{id}")
     int deleteConnectById(@Param("id") String id);
 
+    @Update("create table t_setting(id varchar(100),keys varchar(100),vals varchar(100),primary key (id))")
+    void createSettingTable();
+
+    @Insert("insert into t_setting(id,keys,vals) values(#{o.id},#{o.keys},#{o.vals})")
+    int insertSetting(@Param("o") Connect obj);
+
+    @Update("update t_setting set keys=#{o.keys},vals=#{o.vals} where id=#{o.id}")
+    int updateSetting(@Param("o") Connect obj);
+
+
 }
