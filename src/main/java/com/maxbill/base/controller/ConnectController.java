@@ -7,6 +7,7 @@ import com.maxbill.base.service.DataService;
 import com.maxbill.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
@@ -199,7 +200,7 @@ public class ConnectController {
     public Integer isopenConnect(String id) {
         Connect connect = getCurrentOpenConnect();
         if (null != connect) {
-            if (null != id && !connect.getId().equals(id)) {
+            if (!StringUtils.isEmpty(id) && !connect.getId().equals(id)) {
                 return 0;
             }
             if (connect.getIsha().equals("0")) {

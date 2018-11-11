@@ -1,5 +1,5 @@
 function toPage(flag, page) {
-    var isOpen = connectRouter.isopenConnect();
+    var isOpen = connectRouter.isopenConnect("");
     if (flag === 1 && isOpen === 0) {
         layer.alert('请先连接一个可用的服务！', {
             skin: 'layui-layer-lan',
