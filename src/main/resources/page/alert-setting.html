@@ -10,17 +10,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" type="text/css" href="../plugin/layui/css/layui.css"/>
     <link rel="stylesheet" type="text/css" href="../style/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../style/alert-setting.css"/>
 </head>
 <body>
 <form class="layui-form">
+    </br>
+    <div class="layui-form-item" style="height: 38px">
+        <label class="layui-form-label">主题颜色:</label>
+        <div class="layui-input-inline" style="width: 250px;">
+            <input id="color-inp" type="text" class="layui-input" readonly/>
+        </div>
+        <div class="layui-inline" style="left: -11px;">
+            <div id="color-box"></div>
+        </div>
+        <div class="layui-inline" style="left: -11px;">
+            <div id="color-btn" class="layui-btn-reset">恢复默认</div>
+        </div>
+    </div>
+    </br>
     <div class="layui-form-item">
-        <label class="layui-form-label">单行选择框</label>
-        <div class="layui-input-block">
-            <select name="interest" lay-filter="aihao">
-                <option value=""></option>
-                <option value="0">写作</option>
-                <option value="1" selected="">阅读</option>
-            </select>
+        <label class="layui-form-label">日志窗口:</label>
+        <div class="layui-input-inline" style="width: 392px;">
+            <input type="text" class="layui-input" value="暂未开发..." disabled/>
+        </div>
+    </div>
+    </br>
+    <div class="layui-form-item">
+        <label class="layui-form-label">任务图标:</label>
+        <div class="layui-input-inline" style="width: 392px;">
+            <input type="text" class="layui-input" value="暂未开发..." disabled/>
         </div>
     </div>
 </form>

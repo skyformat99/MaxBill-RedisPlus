@@ -131,8 +131,8 @@ function saveConnect() {
         "sport": $("#sport").val(),
         "spass": $("#spass").val()
     }
-    var resultJson = parent.connectRouter.updateConnect(JSON.stringify(data));
-    var result = JSON.parse(resultJson);
+    var json = parent.connectRouter.updateConnect(JSON.stringify(data));
+    var result = JSON.parse(json);
     if (result.code === 200) {
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);

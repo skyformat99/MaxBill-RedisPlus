@@ -23,25 +23,6 @@ public class ConnectController {
     @Autowired
     private DataService dataService;
 
-
-    /**
-     * 配置连接信息
-     */
-    public void configConnect() {
-        try {
-            int tableCount1 = this.dataService.isExistsTable("T_CONNECT");
-            if (tableCount1 == 0) {
-                this.dataService.createConnectTable();
-            }
-            int tableCount2 = this.dataService.isExistsTable("T_SETTING");
-            if (tableCount2 == 0) {
-                this.dataService.createSettingTable();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 查询连接列表
      */
@@ -143,6 +124,15 @@ public class ConnectController {
             if (connect.getIsha().equals("0")) {
                 Jedis jedis = RedisUtil.openJedis(connect);
                 if (null != jedis) {
+                    //关闭原来连接
+                    Jedis oldJedis = getCurrentJedisObject();
+                    if (null != oldJedis && oldJedis.isConnected()) {
+                        oldJedis.close();
+                    }
+                    JedisCluster oldCluster = getJedisClusterObject();
+                    if (null != oldCluster) {
+                        oldCluster.close();
+                    }
                     DataUtil.setConfig("currentOpenConnect", connect);
                     DataUtil.setConfig("currentJedisObject", jedis);
                     setEndsViewTitle(ItemUtil.DESKTOP_STATUS_OK + connect.getText(), "ok");
@@ -156,6 +146,15 @@ public class ConnectController {
                 if (null == cluster || cluster.getClusterNodes().size() == 0) {
                     return getNoByJson("打开连接失败");
                 } else {
+                    //关闭原来连接
+                    Jedis oldJedis = getCurrentJedisObject();
+                    if (null != oldJedis && oldJedis.isConnected()) {
+                        oldJedis.close();
+                    }
+                    JedisCluster oldCluster = getJedisClusterObject();
+                    if (null != oldCluster) {
+                        oldCluster.close();
+                    }
                     DataUtil.setConfig("currentOpenConnect", connect);
                     DataUtil.setConfig("jedisClusterObject", cluster);
                     DataUtil.setConfig("currentJedisObject", getMasterSelf());
@@ -197,9 +196,12 @@ public class ConnectController {
     /**
      * 检测连接状态
      */
-    public Integer isopenConnect() {
+    public Integer isopenConnect(String id) {
         Connect connect = getCurrentOpenConnect();
         if (null != connect) {
+            if (null != id && !connect.getId().equals(id)) {
+                return 0;
+            }
             if (connect.getIsha().equals("0")) {
                 Jedis jedis = getCurrentJedisObject();
                 if (null != jedis) {

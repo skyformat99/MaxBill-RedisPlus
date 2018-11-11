@@ -168,7 +168,7 @@
                     <!--允许所有权限-->
                     <allPermissions>true</allPermissions>
                     <!--版本信息-->
-                    <nativeReleaseVersion>v3.0.0 Beta</nativeReleaseVersion>
+                    <nativeReleaseVersion>v3.0.0</nativeReleaseVersion>
                     <!--说明信息-->
                     <description>
                         RedisPlus是为Redis可视化管理开发的一款开源免费的桌面客户端软件

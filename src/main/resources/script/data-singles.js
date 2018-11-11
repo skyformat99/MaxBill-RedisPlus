@@ -20,9 +20,6 @@ function initDataView() {
     layer.msg("双击KEY名称可复制！");
     $("#keys").on({
         mouseover: function () {
-            // layer.tips('双击复制KEY', this, {
-            //     tips: [1, '#3595CC']
-            // });
         },
         dblclick: function () {
             var text = $("#keys").html() + '';

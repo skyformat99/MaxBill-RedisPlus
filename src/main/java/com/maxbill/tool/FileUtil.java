@@ -31,4 +31,12 @@ public class FileUtil {
         reader.close();
         return sb.toString();
     }
+
+
+    public static void existsFile(String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+    }
 }

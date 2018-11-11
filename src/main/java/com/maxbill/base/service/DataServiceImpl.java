@@ -1,6 +1,7 @@
 package com.maxbill.base.service;
 
 import com.maxbill.base.bean.Connect;
+import com.maxbill.base.bean.Setting;
 import com.maxbill.base.dao.DataMapper;
 import com.maxbill.tool.DateUtil;
 import com.maxbill.tool.KeyUtil;
@@ -64,5 +65,19 @@ public class DataServiceImpl implements DataService {
     public int deleteConnectById(String id) {
         return this.dataMapper.deleteConnectById(id);
     }
+
+
+    public void insertSetting(Setting setting) {
+        this.dataMapper.insertSetting(setting);
+    }
+
+    public Setting selectSetting(String keys) {
+        return this.dataMapper.selectSetting(keys);
+    }
+
+    public int updateSetting(Setting setting) {
+        return this.dataMapper.updateSetting(setting);
+    }
+
 
 }

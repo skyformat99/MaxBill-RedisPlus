@@ -307,40 +307,39 @@ public class ClusterUtil {
         for (String json : jsons) {
             KeyBean keyBean = JsonUtil.parseKeyBeanObject(json);
             if (null != keyBean) {
-                String key = keyBean.getKey();
+                String keys = keyBean.getKey();
                 String type = keyBean.getType();
-                Object data = keyBean.getData();
-                String temp = JSON.toJSONString(data);
+                String data = JSON.toJSONString(keyBean.getData());
                 switch (type) {
                     //set (集合)
                     case "set":
-                        List sets = JSON.parseObject(temp, List.class);
+                        List sets = JSON.parseObject(data, List.class);
                         for (Object setTemp : sets) {
-                            jedisCluster.sadd(key, setTemp.toString());
+                            jedisCluster.sadd(keys, setTemp.toString());
                         }
                         break;
                     //list (列表)
                     case "list":
-                        List lists = JSON.parseObject(temp, List.class);
+                        List lists = JSON.parseObject(data, List.class);
                         for (Object listTemp : lists) {
-                            jedisCluster.lpush(key, listTemp.toString());
+                            jedisCluster.lpush(keys, listTemp.toString());
                         }
                         break;
                     //zset (有序集)
                     case "zset":
-                        List zsets = JSON.parseObject(temp, List.class);
+                        List zsets = JSON.parseObject(data, List.class);
                         for (Object zsetTemp : zsets) {
-                            jedisCluster.zadd(key, zsets.indexOf(zsetTemp) + 1, zsetTemp.toString());
+                            jedisCluster.zadd(keys, zsets.indexOf(zsetTemp) + 1, zsetTemp.toString());
                         }
                         break;
                     //hash (哈希表)
                     case "hash":
-                        Map map = JSON.parseObject(temp, Map.class);
-                        jedisCluster.hmset(key, map);
+                        Map map = JSON.parseObject(data, Map.class);
+                        jedisCluster.hmset(keys, map);
                         break;
                     //string (字符串)
                     case "string":
-                        jedisCluster.set(key, data.toString());
+                        jedisCluster.set(keys, keyBean.getData().toString());
                         break;
                 }
             }

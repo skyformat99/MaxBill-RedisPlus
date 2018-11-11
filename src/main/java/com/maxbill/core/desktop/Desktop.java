@@ -2,6 +2,7 @@ package com.maxbill.core.desktop;
 
 import com.maxbill.MainApplication;
 import com.maxbill.base.controller.*;
+import com.maxbill.tool.FileUtil;
 import com.sun.javafx.webkit.WebConsoleListener;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -15,14 +16,12 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.web.WebEngine;
@@ -34,6 +33,8 @@ import netscape.javascript.JSObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
 
 import static com.maxbill.tool.ItemUtil.*;
 
@@ -64,6 +65,7 @@ public class Desktop extends Application {
 
     public static Stage stage;
     private static WebView webView;
+    private static GridPane topsView;
     private static WebEngine webEngine;
     private static BorderPane mainView;
 
@@ -71,17 +73,17 @@ public class Desktop extends Application {
     public static ConfigurableApplicationContext context = null;
 
     //注入的JS对象
+    private static ConfController confController = null;
     private static OtherController otherController = null;
     private static ConnectController connectController = null;
     private static DataSinglesController dataSinglesController = null;
     private static DataClusterController dataClusterController = null;
     private static InfoSinglesController infoSinglesController = null;
     private static InfoClusterController infoClusterController = null;
-    private static ConfController confController = null;
 
 
     @Override
-    public void start(Stage winStage) {
+    public void start(Stage winStage) throws Exception {
 
         //设置窗口信息
         winStage.centerOnScreen();
@@ -94,7 +96,7 @@ public class Desktop extends Application {
         context = SpringApplication.run(MainApplication.class);
         if (null != context) {
             initWebObject();
-            connectController.configConnect();
+            otherController.initSystems();
         } else {
             return;
         }
@@ -116,7 +118,7 @@ public class Desktop extends Application {
     /**
      * 窗口主体
      */
-    public BorderPane getMainView(Stage winStage) {
+    public BorderPane getMainView(Stage winStage) throws Exception {
         BorderPane mainView = new BorderPane();
         mainView.setId("main-view");
         mainView.getStylesheets().add(DESKTOP_STYLE);
@@ -132,7 +134,7 @@ public class Desktop extends Application {
      */
     public GridPane getTopsView(Stage winStage) {
 
-        GridPane topsView = new GridPane();
+        topsView = new GridPane();
         topsView.setId("tops-view");
         topsView.setHgap(10);
 
@@ -143,7 +145,7 @@ public class Desktop extends Application {
         Label topRaise = new Label();
         Label topClose = new Label();
 
-        topTitle.setText("RedisPlus");
+        topTitle.setText(DESKTOP_APP_NAME);
         topImage.setId("tops-view-image");
         topTitle.setId("tops-view-title");
         topItems.setId("tops-view-items");
@@ -167,7 +169,10 @@ public class Desktop extends Application {
         topsView.setPadding(new Insets(5));
         topsView.setAlignment(Pos.CENTER_LEFT);
         GridPane.setHgrow(topTitle, Priority.ALWAYS);
-
+        String themeColor = otherController.getSetting(SETTING_THEME_COLOR);
+        Color backgroundColor = Color.web(themeColor, 1.0);
+        BackgroundFill backgroundFill = new BackgroundFill(backgroundColor, null, null);
+        topsView.setBackground(new Background(backgroundFill));
         //事件监听
         //1.监听操作选项事件
         topItems.setOnMouseClicked(event -> doWinItems(topItems));
@@ -193,13 +198,10 @@ public class Desktop extends Application {
         Image image = new Image("/image/app03.jpg", 1000, 550, false, false);
         imageLable.setGraphic(new ImageView(image));
         //加载提醒
-        //ProgressBar progressBar = new ProgressBar();
-        //progressBar.setProgress(-1.0f);
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setProgress(-1.0f);
-
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setProgress(-1.0f);
         runBox.getChildren().addAll(imageLable);
-        runBox.getChildren().addAll(progressIndicator);
+        runBox.getChildren().addAll(progressBar);
         return runBox;
     }
 
@@ -218,8 +220,10 @@ public class Desktop extends Application {
         webEngine.load(Desktop.class.getResource(PAGE_CONNECT).toExternalForm());
 
         //设置数据目录
-        //String baseUrl = System.getProperty("user.home");
-        //webEngine.setUserDataDirectory(new File(baseUrl + "/.redis_plus/temp"));
+        String basePath = System.getProperty("user.home");
+        String dataPath = basePath + "/.redis_plus/temp";
+        FileUtil.existsFile(dataPath);
+        webEngine.setUserDataDirectory(new File(dataPath));
 
         //监听事件
         Worker<Void> woker = webEngine.getLoadWorker();
@@ -256,7 +260,8 @@ public class Desktop extends Application {
     /**
      * 底部窗体
      */
-    public GridPane getEndsView() {
+    public GridPane getEndsView() throws Exception {
+
         GridPane endsView = new GridPane();
         endsView.setId("ends-view");
         endsView.setHgap(10);
@@ -267,7 +272,7 @@ public class Desktop extends Application {
         Label endOrder = new Label();
 
         endTitle.setMinWidth(200.00);
-        endOrder.setMinWidth(80.00);
+        endOrder.setMinWidth(150.00);
         endTitle.setText(DESKTOP_STATUS_NO);
         endOrder.setText(DESKTOP_VERSION);
 
@@ -290,6 +295,7 @@ public class Desktop extends Application {
         endsView.setAlignment(Pos.BASELINE_RIGHT);
         endTitle.setTextFill(Paint.valueOf("red"));
         endOrder.setTextFill(Paint.valueOf("#1766A2"));
+        endOrder.setAlignment(Pos.CENTER_RIGHT);
         endImage.setGraphic(new ImageView(new Image(DESKTOP_STATUS_IMAGE_NO)));
         GridPane.setHgrow(endTitle, Priority.ALWAYS);
         return endsView;
@@ -500,15 +506,19 @@ public class Desktop extends Application {
         return stage;
     }
 
+    public static GridPane getTopsView() {
+        return topsView;
+    }
+
 
     private void initWebObject() {
+        confController = context.getBean(ConfController.class);
         otherController = context.getBean(OtherController.class);
         connectController = context.getBean(ConnectController.class);
         dataSinglesController = context.getBean(DataSinglesController.class);
         dataClusterController = context.getBean(DataClusterController.class);
         infoSinglesController = context.getBean(InfoSinglesController.class);
         infoClusterController = context.getBean(InfoClusterController.class);
-        confController = context.getBean(ConfController.class);
     }
 
 }

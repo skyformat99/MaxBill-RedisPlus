@@ -10,7 +10,7 @@ layui.use(['jquery', 'form', 'layer'], function () {
     form = layui.form;
     var json = parent.connectRouter.querysConnect(parent.rowDataId);
     connect = JSON.parse(json);
-    flag = parent.connectRouter.isopenConnect();
+    flag = parent.connectRouter.isopenConnect(parent.rowDataId);
     $("#name").text(connect.text);
     $("#addr").text(connect.rhost + ":" + connect.rport);
     var shutBtn = $("#shutBtn");
