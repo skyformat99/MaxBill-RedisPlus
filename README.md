@@ -46,6 +46,35 @@ v3.0.0
 3.修复v2.0.0反馈问题
 
 
+3.0.0 详细更新日志：
+
+<p>1.基于2.0.0版本重构，移除内置web容器，加强性能</p>
+
+<p>2.支持jdk11，基于javafx11重构</p>
+
+<p>3.优化80%的界面布局，支持大家反馈的适配各种分辨率机器</p>
+
+<p>4.增加设置中心，陆续增加更多自定义项(目前支持主题颜色更改)</p>
+
+<p>5.增加集群和单机模式下的数据新增功能</p>
+
+<p>6.增加集群和单机模式下的数据还原、备份功能</p>
+
+<p>7.增加集群和单机模式下的数据清空功能</p>
+
+<p>8.重写单机模式信息模块功能，增加操作日志查看</p>
+
+<p>9.重写集群模式信息模块功能，增加主从节点关系查看</p>
+
+<p>10.重写单机模式数据项目监控模块，支持内存、CPU、键数量、流量实时监控</p>
+
+<p>11.重写集群模式数据项目监控模块，支持内存、CPU、键数量、流量实时监控（连接的主节点，后续会增加查看多所有主节点）</p>
+
+<p>12.修复2.0.0反映的redis4.0高版本集群连接失败问题</p>
+
+<p>13.修复2.0.0反映的其他问题</p>
+
+
 #### 软件交流
 
 1.QQ群：857111033  点击链接加入群聊【RedisPlusj交流群】：https://jq.qq.com/?_wv=1027&k=5nFw9eg
@@ -72,18 +101,18 @@ v3.0.0
 
 #### 应用截图
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1028/191406_af498a20_1252126.png "深度截图_Desktop_20181028190916.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/f2c92653ff4674236ef682f2ae35b0ec859.jpg" /></p>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1028/191422_be701419_1252126.png "深度截图_Desktop_20181028190936.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/5fbe6ddb858d8cbdde5d4103f7765777adf.jpg" /></p>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1028/191433_2221bd19_1252126.png "深度截图_Desktop_20181028191006.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/b333e4e629f6707961c05be130f4f68ceb8.jpg" /></p>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1028/191442_b2f6b2ee_1252126.png "深度截图_Desktop_20181028191021.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/449f6798e64cc444bec4e898194fec33add.jpg" /></p>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1028/191451_38a7e0a1_1252126.png "深度截图_Desktop_20181028191033.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/10571062419240bb9f26a979771674b42c0.jpg" /></p>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1029/090526_74e21183_1252126.png "深度截图_Desktop_20181029090238.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/a08fbfd6c4f5dcf39b7b333ce51751e5f1d.jpg" /></p>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1028/191501_2a51bd57_1252126.png "深度截图_Desktop_20181028191206.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/6ac1a8a4af9766e052fd2bbdecd29d71b08.jpg" /></p>
 
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1028/191511_93417c03_1252126.png "深度截图_Desktop_20181028191227.png")
+<p><img alt="" src="https://oscimg.oschina.net/oscnet/83d6371abe012ffab51333b05841ba23b16.jpg" /></p>
