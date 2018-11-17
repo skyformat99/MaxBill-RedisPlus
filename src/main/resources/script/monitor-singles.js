@@ -1,8 +1,25 @@
 var $;
 var layer;
 var table;
+var step = 0;
+
 
 window.onload = function () {
+
+    function isReady() {
+        if (step < 160 && !window.infoSinglesRouter) {
+            step++;
+            setTimeout(isReady, 10);
+        } else {
+            initPage();
+        }
+    }
+
+    isReady();
+};
+
+
+function initPage() {
     layui.use(['jquery', 'layer'], function () {
         $ = layui.jquery;
         layer = layui.layer;
@@ -12,6 +29,7 @@ window.onload = function () {
         showCharts4();
     });
 }
+
 
 Highcharts.setOptions({
     global: {

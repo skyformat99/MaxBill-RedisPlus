@@ -1,9 +1,26 @@
 var $;
 var layer;
+var step = 0;
 var currNode0;
 var currNode1;
 
+
 window.onload = function () {
+
+    function isReady() {
+        if (step < 160 && !window.dataClusterRouter) {
+            step++;
+            setTimeout(isReady, 10);
+        } else {
+            initPage();
+        }
+    }
+
+    isReady();
+};
+
+
+function initPage() {
     layui.use(['layer', 'jquery'], function () {
         $ = layui.jquery;
         layer = layui.layer;

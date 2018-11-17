@@ -1,10 +1,26 @@
 var $;
 var layer;
+var step = 0;
 var currNode0;
 var currNode1;
 var currNode2;
 
 window.onload = function () {
+
+    function isReady() {
+        if (step < 160 && !window.dataSinglesRouter) {
+            step++;
+            setTimeout(isReady, 10);
+        } else {
+            initPage();
+        }
+    }
+
+    isReady();
+};
+
+
+function initPage() {
     layui.use(['layer', 'jquery'], function () {
         $ = layui.jquery;
         layer = layui.layer;
@@ -13,7 +29,8 @@ window.onload = function () {
         initDataView();
         layer.closeAll('loading');
     });
-};
+}
+
 
 //初始化视图
 function initDataView() {

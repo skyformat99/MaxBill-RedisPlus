@@ -12,15 +12,6 @@ function toPage(flag, page) {
     layer.closeAll('loading');
 }
 
-function outJsObj() {
-    console.log(otherRouter);
-    console.log(connectRouter);
-    console.log(dataSinglesRouter);
-    console.log(dataClusterRouter);
-    console.log(infoRouter);
-    console.log(confRouter);
-}
-
 function formatDate(time) {
     var format = "YY-MM-DD hh:mm:ss";
     var date = new Date(time);

@@ -1,16 +1,36 @@
 var $;
 var form;
 var layer;
+var step = 0;
 
-layui.use(['form', 'layer', 'jquery'], function () {
-    $ = layui.jquery;
-    form = layui.form;
-    layer = layui.layer;
-    form.on('submit(sendMail)', function () {
-        sendMail();
-        return false;
+
+window.onload = function () {
+
+    function isReady() {
+        if (step < 160 && !window.infoClusterRouter) {
+            step++;
+            setTimeout(isReady, 10);
+        } else {
+            initPage();
+        }
+    }
+
+    isReady();
+};
+
+
+function initPage() {
+    layui.use(['form', 'layer', 'jquery'], function () {
+        $ = layui.jquery;
+        form = layui.form;
+        layer = layui.layer;
+        form.on('submit(sendMail)', function () {
+            sendMail();
+            return false;
+        });
     });
-});
+}
+
 
 function sendMail() {
     layer.load(2);

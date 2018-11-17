@@ -1,8 +1,25 @@
 var $;
 var form;
 var layer;
+var step = 0;
+
 
 window.onload = function () {
+
+    function isReady() {
+        if (step < 160 && !window.infoClusterRouter) {
+            step++;
+            setTimeout(isReady, 10);
+        } else {
+            initPage();
+        }
+    }
+
+    isReady();
+};
+
+
+function initPage() {
     layui.use(['form', 'jquery', 'layer'], function () {
         $ = layui.jquery;
         form = layui.form;
@@ -15,6 +32,7 @@ window.onload = function () {
         getRedisInfo();
     });
 }
+
 
 /**获取配置信息*/
 function getRedisInfo() {

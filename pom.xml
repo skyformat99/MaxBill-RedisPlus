@@ -55,7 +55,7 @@
             <version>11</version>
         </dependency>
 
-        <!--graphics依赖-->
+        <!--base依赖-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
@@ -131,6 +131,7 @@
         </dependency>
 
     </dependencies>
+
 
     <build>
         <plugins>

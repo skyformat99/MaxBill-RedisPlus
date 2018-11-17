@@ -1,7 +1,23 @@
 var $;
 var layer;
+var step = 0;
 
 window.onload = function () {
+
+    function isReady() {
+        if (step < 160 && !window.infoClusterRouter) {
+            step++;
+            setTimeout(isReady, 10);
+        } else {
+            initPage();
+        }
+    }
+
+    isReady();
+};
+
+
+function initPage() {
     layui.use(['jquery', 'layer', 'element'], function () {
         $ = layui.jquery;
         layer = layui.layer;
@@ -9,6 +25,7 @@ window.onload = function () {
         initBaseInfo();
     });
 }
+
 
 /**初始化信息*/
 function initBaseInfo() {

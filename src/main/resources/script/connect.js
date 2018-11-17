@@ -1,10 +1,25 @@
 var $;
 var layer;
 var table;
+var step = 0;
 var rowDataId;
 var data = null;
 
 window.onload = function () {
+
+    function isReady() {
+        if (step < 160 && !window.connectRouter) {
+            step++;
+            setTimeout(isReady, 10);
+        } else {
+            initPage();
+        }
+    }
+
+    isReady();
+};
+
+function initPage() {
     layui.use(['jquery', 'table', 'layer'], function () {
         $ = layui.jquery;
         layer = layui.layer;
