@@ -17,6 +17,7 @@ window.onload = function () {
 };
 
 
+/**初始化页面信息*/
 function initPage() {
     layui.use(['jquery', 'layer', 'element'], function () {
         $ = layui.jquery;
@@ -27,7 +28,7 @@ function initPage() {
 }
 
 
-/**初始化信息*/
+/**初始化基础信息*/
 function initBaseInfo() {
     var json = infoClusterRouter.getBaseInfo();
     var data = JSON.parse(json);
@@ -45,7 +46,7 @@ function initBaseInfo() {
 }
 
 
-/**初始化信息*/
+/**初始化节点信息*/
 function initNodeInfo() {
     var json = infoClusterRouter.getNodeInfo();
     var data = JSON.parse(json);

@@ -8,7 +8,7 @@ var colorpicker;
 window.onload = function () {
 
     function isReady() {
-        if (step < 160 && !window.infoClusterRouter) {
+        if (step < 160 && !window.otherRouter) {
             step++;
             setTimeout(isReady, 10);
         } else {
@@ -20,6 +20,7 @@ window.onload = function () {
 };
 
 
+/**初始化页面信息*/
 function initPage() {
     layui.use(['jquery', 'form', 'layer', 'colorpicker'], function () {
         $ = layui.jquery;

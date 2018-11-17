@@ -17,6 +17,7 @@ window.onload = function () {
 };
 
 
+/**初始化页面信息*/
 function initPage() {
     layui.use(['jquery', 'layer', 'element'], function () {
         $ = layui.jquery;
@@ -27,7 +28,7 @@ function initPage() {
 }
 
 
-/**初始化信息*/
+/**初始化基础信息*/
 function initBaseInfo() {
     var json = infoSinglesRouter.getBaseInfo();
     var data = JSON.parse(json);
@@ -78,7 +79,7 @@ function initUserInfo(data) {
 }
 
 
-/**初始化信息*/
+/**初始化日志信息*/
 function initLogsInfo() {
     var json = infoSinglesRouter.getLogsInfo();
     var data = JSON.parse(json);

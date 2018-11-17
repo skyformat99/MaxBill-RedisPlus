@@ -10,7 +10,7 @@ public class ItemUtil {
     public static final String DESKTOP_APP_LOGO = "/image/app02.png";
     public static final String DESKTOP_STATUS_NO = "未连接到服务";
     public static final String DESKTOP_STATUS_OK = "已成功连接到：";
-    public static final String DESKTOP_VERSION = "Version 3.0.0";
+    public static final String DESKTOP_VERSION = "Version 3.0.0 Beta";
     public static final String DESKTOP_STYLE = "/style/desktop.css";
     public static final String ALERTBOX_STYLE = "/style/alertbox.css";
     public static final String DESKTOP_STATUS_IMAGE_NO = "/image/connect-no.png";

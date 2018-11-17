@@ -19,6 +19,7 @@ window.onload = function () {
 };
 
 
+/**初始化页面信息*/
 function initPage() {
     layui.use(['jquery', 'layer'], function () {
         $ = layui.jquery;

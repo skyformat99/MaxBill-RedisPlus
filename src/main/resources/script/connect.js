@@ -19,6 +19,8 @@ window.onload = function () {
     isReady();
 };
 
+
+/**初始化页面信息*/
 function initPage() {
     layui.use(['jquery', 'table', 'layer'], function () {
         $ = layui.jquery;
@@ -30,7 +32,7 @@ function initPage() {
 }
 
 
-/*初始化连接数据*/
+/**初始化连接数据*/
 function initConnectData() {
     table.render({
         id: 'dataList',

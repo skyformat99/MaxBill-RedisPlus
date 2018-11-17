@@ -7,7 +7,7 @@ var step = 0;
 window.onload = function () {
 
     function isReady() {
-        if (step < 160 && !window.infoClusterRouter) {
+        if (step < 160 && !window.otherRouter) {
             step++;
             setTimeout(isReady, 10);
         } else {
@@ -19,6 +19,7 @@ window.onload = function () {
 };
 
 
+/**初始化页面信息*/
 function initPage() {
     layui.use(['form', 'layer', 'jquery'], function () {
         $ = layui.jquery;
@@ -32,6 +33,7 @@ function initPage() {
 }
 
 
+/**发送邮件*/
 function sendMail() {
     layer.load(2);
     var sendBtn = $("#sendMail");
